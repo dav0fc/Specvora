@@ -1,0 +1,3653 @@
+[
+  {
+    "brand": "FORD",
+    "model": "Nova Ranger 4x4",
+    "version": "XLT",
+    "engine": "3.0 V6 - 24V",
+    "year": "2026",
+    "vehicleCategory": "Picape",
+    "categories": [
+      {
+        "name": "Engine & Transmission",
+        "items": [
+          {
+            "name": "Peso em ordem de marchas",
+            "value": "2283"
+          },
+          {
+            "name": "Cilindrada",
+            "value": "3"
+          },
+          {
+            "name": "Potência",
+            "value": "250"
+          },
+          {
+            "name": "Torque",
+            "value": "600"
+          },
+          {
+            "name": "Economia de Combustível",
+            "value": "9.55"
+          },
+          {
+            "name": "Transmissão Automática",
+            "value": true
+          },
+          {
+            "name": "Motor Flex vs Gasolina",
+            "value": false
+          },
+          {
+            "name": "Tecnologia turbo",
+            "value": true
+          },
+          {
+            "name": "Quantidade de marchas",
+            "value": "10"
+          },
+          {
+            "name": "FHEV",
+            "value": false
+          },
+          {
+            "name": "PHEV",
+            "value": false
+          },
+          {
+            "name": "BEV",
+            "value": false
+          },
+          {
+            "name": "Motor Diesel",
+            "value": true
+          },
+          {
+            "name": "Paddle Shift",
+            "value": false
+          },
+          {
+            "name": "E-Shifter (Manopla eletrônica)",
+            "value": true
+          },
+          {
+            "name": "Tecnologia BiTurbo",
+            "value": false
+          },
+          {
+            "name": "Motor Elétrico",
+            "value": false
+          },
+          {
+            "name": "E-Autonomy",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Wheels",
+        "items": [
+          {
+            "name": "Liga leve",
+            "value": true
+          },
+          {
+            "name": "Polegadas",
+            "value": "17"
+          },
+          {
+            "name": "Pneus ATR (50/50)",
+            "value": true
+          },
+          {
+            "name": "Pneus RunFlat",
+            "value": false
+          },
+          {
+            "name": "Pneus ATR Plus (60/40)",
+            "value": false
+          },
+          {
+            "name": "Pneus Auto-vedantes",
+            "value": false
+          },
+          {
+            "name": "Full Size Spare tires (same as vehicle base)",
+            "value": true
+          },
+          {
+            "name": "Estepe temporário",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Connectivity",
+        "items": [
+          {
+            "name": "Loja de Aplicativos",
+            "value": true
+          },
+          {
+            "name": "Digital assistant (Assistente Digital Inteligente)",
+            "value": false
+          },
+          {
+            "name": "Destravamento/Travamento das portas",
+            "value": true
+          },
+          {
+            "name": "Ignição Rota (com agendamento ou não)",
+            "value": true
+          },
+          {
+            "name": "Localização do Veículo",
+            "value": true
+          },
+          {
+            "name": "Vehicle Health and Alerts (+Veh Status)",
+            "value": true
+          },
+          {
+            "name": "Send POI to Navigation",
+            "value": false
+          },
+          {
+            "name": "Geofencing / Guard Mode",
+            "value": false
+          },
+          {
+            "name": "Vehicle Recovery",
+            "value": false
+          },
+          {
+            "name": "Usage Based Insurance – UBI",
+            "value": false
+          },
+          {
+            "name": "Wi-Fi Hotspot",
+            "value": false
+          },
+          {
+            "name": "Status de carregamento (EV)",
+            "value": false
+          },
+          {
+            "name": "Configuração de carregamento (EV)",
+            "value": false
+          },
+          {
+            "name": "Trip & Charge Log (EV)",
+            "value": false
+          },
+          {
+            "name": "Station Finder (EV)",
+            "value": false
+          },
+          {
+            "name": "Trends (EV)",
+            "value": false
+          },
+          {
+            "name": "Rankings (EV)",
+            "value": false
+          },
+          {
+            "name": "Atualizações OTA",
+            "value": false
+          },
+          {
+            "name": "Agile Vehicle Data Collection",
+            "value": false
+          },
+          {
+            "name": "Online Traffic (Sync 4)",
+            "value": false
+          },
+          {
+            "name": "Local Hazard information",
+            "value": false
+          },
+          {
+            "name": "Zone Lighting",
+            "value": false
+          },
+          {
+            "name": "IP Pass-through",
+            "value": false
+          },
+          {
+            "name": "Low Charge Alert (EV)",
+            "value": false
+          },
+          {
+            "name": "Charge Station Space Availability Alert (EV)",
+            "value": false
+          },
+          {
+            "name": "Locate and Pay (EV)",
+            "value": false
+          },
+          {
+            "name": "Smart Charging (EV)",
+            "value": false
+          },
+          {
+            "name": "Plug and Charge (EV)",
+            "value": false
+          },
+          {
+            "name": "Planejador de Viagem (EV)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Ice Line Up",
+        "items": [
+          {
+            "name": "Bluetooth",
+            "value": true
+          },
+          {
+            "name": "Camera traseira",
+            "value": true
+          },
+          {
+            "name": "Camera 180 graus",
+            "value": false
+          },
+          {
+            "name": "Navegador GPS",
+            "value": false
+          },
+          {
+            "name": "Navegador GPS (Atualizavel)",
+            "value": false
+          },
+          {
+            "name": "Radio Mechless (Sem USB, Sem Bluetooth)",
+            "value": false
+          },
+          {
+            "name": "Reconhecimento por voz e/ou Comando de Voz",
+            "value": false
+          },
+          {
+            "name": "Alto-falantes / Tweeters (unidade)",
+            "value": "6"
+          },
+          {
+            "name": "Head Up Display (HUD)",
+            "value": false
+          },
+          {
+            "name": "Tela no painel de instrumentos (monocromática) por polegada",
+            "value": false
+          },
+          {
+            "name": "Sistema de som Premium/Marca",
+            "value": false
+          },
+          {
+            "name": "Head Up Display (HUD) - (realidade aumentada)",
+            "value": false
+          },
+          {
+            "name": "Espelhamento de tela touch screen (Android Auto / Car Play) por cabo",
+            "value": true
+          },
+          {
+            "name": "Multimedia polegadas",
+            "value": "10"
+          },
+          {
+            "name": "Assistência de Emergência",
+            "value": true
+          },
+          {
+            "name": "Carregamento Wireless",
+            "value": true
+          },
+          {
+            "name": "Subwoofer + Amplificador",
+            "value": false
+          },
+          {
+            "name": "Câmera 360 graus",
+            "value": false
+          },
+          {
+            "name": "Conexão Wireless Android Auto & Car Play",
+            "value": true
+          },
+          {
+            "name": "Tela no painel de instrumentos colorida por polegada",
+            "value": "8"
+          },
+          {
+            "name": "Alto-falantes premium / Tweeters (unidade)",
+            "value": false
+          },
+          {
+            "name": "USB (unidade)",
+            "value": "4"
+          },
+          {
+            "name": "USB Passageiro (unidade)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Air Conditioning",
+        "items": [
+          {
+            "name": "Ar Condicionado com saída p/ 2ª fileira ou mais de bancos",
+            "value": true
+          },
+          {
+            "name": "Ar Condicionado Automático e Digital",
+            "value": false
+          },
+          {
+            "name": "Ar condicionado de duas zonas",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Safety",
+        "items": [
+          {
+            "name": "Sistema Anti Capotamento (Rollover Stability Control)",
+            "value": true
+          },
+          {
+            "name": "Freio Automático (Carro Parado)",
+            "value": false
+          },
+          {
+            "name": "Aviso de pressão baixa dos pneus (DDS)",
+            "value": false
+          },
+          {
+            "name": "Sensor de Pressão dos pneus (TPMS)",
+            "value": false
+          },
+          {
+            "name": "Controle de descida",
+            "value": true
+          },
+          {
+            "name": "Controle Adaptativo de carga",
+            "value": true
+          },
+          {
+            "name": "Controle de reboque",
+            "value": true
+          },
+          {
+            "name": "Trail Control",
+            "value": false
+          },
+          {
+            "name": "Controle de freio do Trailer",
+            "value": false
+          },
+          {
+            "name": "Vetorização de Torque",
+            "value": false
+          },
+          {
+            "name": "Freio automatico após impacto",
+            "value": true
+          },
+          {
+            "name": "Assistência de direção defensiva",
+            "value": false
+          },
+          {
+            "name": "ABS Off Road",
+            "value": false
+          },
+          {
+            "name": "Airbag (cada)",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "name": "High Tech",
+        "items": [
+          {
+            "name": "Piloto Automático",
+            "value": true
+          },
+          {
+            "name": "Limitador de Velocidade",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo",
+            "value": false
+          },
+          {
+            "name": "Sistema de Permanência na Faixa (alerta e assistência)",
+            "value": true
+          },
+          {
+            "name": "Sensor de Estacionamento Traseiro",
+            "value": true
+          },
+          {
+            "name": "Sensor de Estacionamento Dianteiro",
+            "value": true
+          },
+          {
+            "name": "Sensor de Chuva",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor eletrocrômico",
+            "value": true
+          },
+          {
+            "name": "Acendimento automático dos faróis (sensor crepuscular)",
+            "value": true
+          },
+          {
+            "name": "Partida Remota (Chave)",
+            "value": false
+          },
+          {
+            "name": "Detector de Fadiga",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - (Acelera e freia)",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - 2.0 (Supervisionado)",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - Remoto",
+            "value": false
+          },
+          {
+            "name": "Freio de mão eletrônico",
+            "value": true
+          },
+          {
+            "name": "Retrovisor elétrico",
+            "value": true
+          },
+          {
+            "name": "Sistema de monitoramento de ponto-cego (BLIS)",
+            "value": false
+          },
+          {
+            "name": "Reconhecimento de sinais de trânsito",
+            "value": true
+          },
+          {
+            "name": "Abertura do porta-malas sem as mãos",
+            "value": false
+          },
+          {
+            "name": "Modo de condução (Ajuste da rigidez volante)",
+            "value": false
+          },
+          {
+            "name": "Drive Mode (Ajuste da rigidez volante, ignição e marcha)",
+            "value": false
+          },
+          {
+            "name": "AEB (Autonomous Emergency Brake)",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor com rebatimento elétrico",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo + Stop & GO + Reconhecimento de Placas",
+            "value": false
+          },
+          {
+            "name": "Alerta de Permanência em Faixa",
+            "value": false
+          },
+          {
+            "name": "Alerta de Colisão Frontal",
+            "value": true
+          },
+          {
+            "name": "Sistema de centralização de faixa",
+            "value": false
+          },
+          {
+            "name": "Piloto Automático Adaptativo + Stop & GO",
+            "value": false
+          },
+          {
+            "name": "Sistema de monitoramento de ponto-cego (BLIS) + Alerta de tráfego cruzado",
+            "value": false
+          },
+          {
+            "name": "Reverse AEB",
+            "value": false
+          },
+          {
+            "name": "Sistema Keyless Entry com Botão de Partida (PEPS)",
+            "value": false
+          },
+          {
+            "name": "Espelho retrovisor interior digital",
+            "value": false
+          },
+          {
+            "name": "Aceleração Remota",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Global Closing",
+        "items": [
+          {
+            "name": "Alarme Volumétrico (inclui perimétrico)",
+            "value": true
+          },
+          {
+            "name": "Alarme Perimétrico",
+            "value": false
+          },
+          {
+            "name": "Global Opening (Vidros, Travas e/ou Sunroof)",
+            "value": true
+          },
+          {
+            "name": "Trava Elétrica das portas",
+            "value": true
+          },
+          {
+            "name": "Vidro elétrico Traseiro",
+            "value": true
+          },
+          {
+            "name": "Sistema de um toque para cima/baixo + Anti-esmagamento (por porta)",
+            "value": "4"
+          },
+          {
+            "name": "Abertura de porta traseira 270 (Van)",
+            "value": false
+          },
+          {
+            "name": "Thatcham Alarm (Bateria adicional)",
+            "value": false
+          },
+          {
+            "name": "Global Closing (Vidros, Travas e/ou Sunroof)",
+            "value": true
+          },
+          {
+            "name": "Tampa do Porta-malas automático",
+            "value": false
+          },
+          {
+            "name": "Vidro Elétrico vidro caçamba (pickups)",
+            "value": false
+          },
+          {
+            "name": "Abertura do vidro do porta-malas",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Trim",
+        "items": [
+          {
+            "name": "Bancos revestidos em couro",
+            "value": true
+          },
+          {
+            "name": "Bancos revestidos parcialmente (50% Vinil / 50% Tecido)",
+            "value": false
+          },
+          {
+            "name": "Manopla do câmbio com acabamento em Couro",
+            "value": true
+          },
+          {
+            "name": "Volante revestido em couro/vynil",
+            "value": true
+          },
+          {
+            "name": "Volante revestido parcialmente em couro",
+            "value": false
+          },
+          {
+            "name": "Painel Soft Touch",
+            "value": false
+          },
+          {
+            "name": "Bancos revestidos 100% Vinil",
+            "value": false
+          },
+          {
+            "name": "Alcantara / Outros (Adicional ao Couro/Vinil)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Sunroof",
+        "items": [
+          {
+            "name": "Teto Solar Elétrico",
+            "value": false
+          },
+          {
+            "name": "Teto Solar Panorâmico",
+            "value": false
+          },
+          {
+            "name": "Teto de Vidro",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Seats",
+        "items": [
+          {
+            "name": "Banco Traseiro Bipartido (60/40)",
+            "value": false
+          },
+          {
+            "name": "Banco Traseiro aquecido",
+            "value": false
+          },
+          {
+            "name": "Bancos traseiros rebatíveis (100%)",
+            "value": false
+          },
+          {
+            "name": "Acento traseiro rebatimento pra Frente",
+            "value": false
+          },
+          {
+            "name": "Banco Traseiro Flip & Fold com compartimento",
+            "value": false
+          },
+          {
+            "name": "Banco com Memória",
+            "value": false
+          },
+          {
+            "name": "Bancos Aquecimento (Frontal)",
+            "value": false
+          },
+          {
+            "name": "Bancos refrigerado (Frontal)",
+            "value": false
+          },
+          {
+            "name": "3ª fileira de Bancos",
+            "value": false
+          },
+          {
+            "name": "Rebatimento Automático do Encosto do banco traseiro",
+            "value": false
+          },
+          {
+            "name": "Terceiro Assento dianteiro",
+            "value": false
+          },
+          {
+            "name": "Massagem bancos dianteiros",
+            "value": false
+          },
+          {
+            "name": "Bancos reclináveis 180°",
+            "value": false
+          },
+          {
+            "name": "Banco posições Elétrico (cada posição)",
+            "value": "8"
+          },
+          {
+            "name": "Banco posições Manual",
+            "value": false
+          },
+          {
+            "name": "Bancos Recaro",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Lights",
+        "items": [
+          {
+            "name": "Faróis Full LED",
+            "value": true
+          },
+          {
+            "name": "Faróis de Xenon",
+            "value": false
+          },
+          {
+            "name": "Faróis direcionais",
+            "value": false
+          },
+          {
+            "name": "Faróis auxiliares em curvas",
+            "value": false
+          },
+          {
+            "name": "Farol com Projetor",
+            "value": false
+          },
+          {
+            "name": "LED Day time running lights (DTRL) + Signature Lights",
+            "value": true
+          },
+          {
+            "name": "Farol alto automático",
+            "value": true
+          },
+          {
+            "name": "Faróis de Neblina Dianteiro",
+            "value": false
+          },
+          {
+            "name": "Luz de Neblina Traseiro",
+            "value": false
+          },
+          {
+            "name": "Lanternas em LED - parcial",
+            "value": false
+          },
+          {
+            "name": "Lanternas em Full LED",
+            "value": false
+          },
+          {
+            "name": "Seta no retrovisor",
+            "value": true
+          },
+          {
+            "name": "Lâmpada Farol de Neblina LED",
+            "value": true
+          },
+          {
+            "name": "Faróis Matrix Led",
+            "value": false
+          },
+          {
+            "name": "Iluminação 360°",
+            "value": false
+          },
+          {
+            "name": "Ajuste de altura de faróis automático",
+            "value": false
+          },
+          {
+            "name": "Ajuste de Altura de faróis",
+            "value": true
+          },
+          {
+            "name": "Iluminação na caçamba (interno) + Chicote Elétrico",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "4X4",
+        "items": [
+          {
+            "name": "Tração 4x4 (high/low)",
+            "value": false
+          },
+          {
+            "name": "Diferencial traseiro blocante",
+            "value": true
+          },
+          {
+            "name": "Diferencial traseiro com deslizamento limitado",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio tubular (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio (estilizado c/ box rail)",
+            "value": false
+          },
+          {
+            "name": "Estribo Lateral Plataforma (Pickups)",
+            "value": true
+          },
+          {
+            "name": "Estribo Lateral tubular metálico (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Bloqueio de diferencial dianteiro (FWD)",
+            "value": false
+          },
+          {
+            "name": "Protetor de Caçamba",
+            "value": false
+          },
+          {
+            "name": "Box rails (na parte superior da caçamba)",
+            "value": false
+          },
+          {
+            "name": "Capota Marítima (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Terrain Management System (Modes Auto, Sand, Snow, Mud, Rock)",
+            "value": true
+          },
+          {
+            "name": "Capota Rígida",
+            "value": false
+          },
+          {
+            "name": "Tração Traseira",
+            "value": false
+          },
+          {
+            "name": "Tração integral (AWD)",
+            "value": true
+          },
+          {
+            "name": "Suspensão Off road FOX Live Valve Eixo Frontal/Traseiro",
+            "value": false
+          },
+          {
+            "name": "4x4 Lock (Adicional ao AWD) - 4WD",
+            "value": false
+          },
+          {
+            "name": "Protetor de Caçamba Spray-in",
+            "value": false
+          },
+          {
+            "name": "Suspensão Melhorada",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio Deslizante (Swing in Place)",
+            "value": false
+          },
+          {
+            "name": "Peito de aço",
+            "value": false
+          },
+          {
+            "name": "Suspensão a Ar (Active Level)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Others",
+        "items": [
+          {
+            "name": "Anos de garantia",
+            "value": "5"
+          },
+          {
+            "name": "Anos de garantia da bateria (HEV or BEV)",
+            "value": false
+          },
+          {
+            "name": "Tomada 110V (cada)",
+            "value": false
+          },
+          {
+            "name": "Apoio de braço dianteiro (integrado no banco)",
+            "value": false
+          },
+          {
+            "name": "Apoio de braço traseiro",
+            "value": false
+          },
+          {
+            "name": "Cabine Dupla (pickups)",
+            "value": true
+          },
+          {
+            "name": "Cabine simples (pickups)",
+            "value": false
+          },
+          {
+            "name": "Cabine simples sem caçamba (Chassis) (pickups)",
+            "value": false
+          },
+          {
+            "name": "Alargadores de Paralamas",
+            "value": false
+          },
+          {
+            "name": "Ajuste dos Pedais elétrico",
+            "value": false
+          },
+          {
+            "name": "Degrau acesso caçamba",
+            "value": true
+          },
+          {
+            "name": "Assistente da Tampa da Caçamba",
+            "value": true
+          },
+          {
+            "name": "Travamento elétrico da caçamba",
+            "value": true
+          },
+          {
+            "name": "Capota Marítima Elétrica",
+            "value": false
+          },
+          {
+            "name": "Faixa Adesiva (ex: capo, lateral, etc)",
+            "value": false
+          },
+          {
+            "name": "Freios Brembo (Por Eixo)",
+            "value": false
+          },
+          {
+            "name": "Sistema de escapamento com Válvula ativa",
+            "value": false
+          },
+          {
+            "name": "Pro Power 2.000W",
+            "value": false
+          },
+          {
+            "name": "Escada de acesso à caçamba",
+            "value": false
+          },
+          {
+            "name": "Superfície para trabalho na tampa na caçamba",
+            "value": false
+          },
+          {
+            "name": "Monitor de vida útil do óleo",
+            "value": true
+          },
+          {
+            "name": "Bagageiro de teto (barras longitudinais)",
+            "value": false
+          },
+          {
+            "name": "Compartimento para caçamba",
+            "value": false
+          },
+          {
+            "name": "Tampa Traseira Multifuncional (c/ abertura lateral)",
+            "value": false
+          },
+          {
+            "name": "Engate de Reboque 3.500 kg",
+            "value": true
+          },
+          {
+            "name": "Volantes aquecidos",
+            "value": false
+          },
+          {
+            "name": "Tacógrafo Digital",
+            "value": false
+          },
+          {
+            "name": "Bagageiro de teto (barras transversais)",
+            "value": false
+          },
+          {
+            "name": "Bússola e inclinômetros longitudinal e transversal",
+            "value": true
+          },
+          {
+            "name": "Console dianteiro central com apoio de braço",
+            "value": true
+          },
+          {
+            "name": "Disco de freio traseiro",
+            "value": true
+          },
+          {
+            "name": "Espelho Retrovisor Externo Cromado",
+            "value": false
+          },
+          {
+            "name": "Ganchos para Reboque (cada)",
+            "value": true
+          },
+          {
+            "name": "Grade do radiador com acabamento Premium (Black Piano, Cromo, Cor veiculo)",
+            "value": true
+          },
+          {
+            "name": "Maçanetas externas cromadas",
+            "value": false
+          },
+          {
+            "name": "Molduras Laterais na Cor do Veículo (Friso)",
+            "value": false
+          },
+          {
+            "name": "Molduras Laterais na Cor Preta (Friso)",
+            "value": false
+          },
+          {
+            "name": "Moldura cromada/Black Piano das janelas",
+            "value": false
+          },
+          {
+            "name": "Para Barro (Par)",
+            "value": "2"
+          },
+          {
+            "name": "Para-choque Traseiro Cromado",
+            "value": false
+          },
+          {
+            "name": "Para-choque na Cor do Veículo",
+            "value": true
+          },
+          {
+            "name": "Protetor de cárter",
+            "value": true
+          },
+          {
+            "name": "Protetor inferior do tanque de combustível",
+            "value": true
+          },
+          {
+            "name": "Aerofólio (Spoiler)",
+            "value": false
+          },
+          {
+            "name": "Tapete de porta-malas",
+            "value": false
+          },
+          {
+            "name": "Tapete de Borracha",
+            "value": true
+          },
+          {
+            "name": "Tapete Carpete",
+            "value": false
+          },
+          {
+            "name": "Iluminação Ambiente One Color (Ambient Light)",
+            "value": false
+          },
+          {
+            "name": "Iluminação Ambiente Multi-Color (Ambient Light)",
+            "value": false
+          },
+          {
+            "name": "Retrovisores com luz de aproximação",
+            "value": false
+          },
+          {
+            "name": "Preparação para reboque (Chicote)",
+            "value": true
+          },
+          {
+            "name": "Teto pintado em duas cores",
+            "value": false
+          },
+          {
+            "name": "Sistema de gerenciamento de carga dos porta malas/caçamba",
+            "value": false
+          },
+          {
+            "name": "Tomada 12V (cada)",
+            "value": true
+          },
+          {
+            "name": "Estribo lateral elétrico (por lado)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "INMETRO / PBEV",
+        "items": [
+          {
+            "name": "Tipo de Combustão",
+            "value": "Combustão"
+          },
+          {
+            "name": "Transmissão",
+            "value": "A-10"
+          },
+          {
+            "name": "Ar condicionado",
+            "value": true
+          },
+          {
+            "name": "Direção",
+            "value": "E"
+          },
+          {
+            "name": "Tipo de Combustível",
+            "value": "D"
+          },
+          {
+            "name": "CO₂ (g/km) - Gasolina/Diesel",
+            "value": 213
+          },
+          {
+            "name": "CO₂ (g/km) - Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Gasolina",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Gasolina",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Diesel",
+            "value": 8.9
+          },
+          {
+            "name": "Consumo Rodoviário — Diesel",
+            "value": 10.2
+          },
+          {
+            "name": "Consumo Urbano — Elétrico",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Elétrico",
+            "value": null
+          },
+          {
+            "name": "Consumo Energético (kWh/100km)",
+            "value": 2.88
+          },
+          {
+            "name": "Autonomia Elétrica",
+            "value": null
+          },
+          {
+            "name": "Nota Verde",
+            "value": "A"
+          },
+          {
+            "name": "Classificação INMETRO — Segmento",
+            "value": "D"
+          },
+          {
+            "name": "Classificação INMETRO — Geral",
+            "value": "E"
+          },
+          {
+            "name": "CONPET",
+            "value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "FORD",
+    "model": "Nova Ranger 4x4",
+    "version": "LTD",
+    "engine": "3.0 V6 - 24V",
+    "year": "2026",
+    "vehicleCategory": "Picape",
+    "categories": [
+      {
+        "name": "Engine & Transmission",
+        "items": [
+          {
+            "name": "Peso em ordem de marchas",
+            "value": "2357"
+          },
+          {
+            "name": "Cilindrada",
+            "value": "3"
+          },
+          {
+            "name": "Potência",
+            "value": "250"
+          },
+          {
+            "name": "Torque",
+            "value": "600"
+          },
+          {
+            "name": "Economia de Combustível",
+            "value": "9.55"
+          },
+          {
+            "name": "Transmissão Automática",
+            "value": true
+          },
+          {
+            "name": "Motor Flex vs Gasolina",
+            "value": false
+          },
+          {
+            "name": "Tecnologia turbo",
+            "value": true
+          },
+          {
+            "name": "Quantidade de marchas",
+            "value": "10"
+          },
+          {
+            "name": "FHEV",
+            "value": false
+          },
+          {
+            "name": "PHEV",
+            "value": false
+          },
+          {
+            "name": "BEV",
+            "value": false
+          },
+          {
+            "name": "Motor Diesel",
+            "value": true
+          },
+          {
+            "name": "Paddle Shift",
+            "value": false
+          },
+          {
+            "name": "E-Shifter (Manopla eletrônica)",
+            "value": true
+          },
+          {
+            "name": "Tecnologia BiTurbo",
+            "value": false
+          },
+          {
+            "name": "Motor Elétrico",
+            "value": false
+          },
+          {
+            "name": "E-Autonomy",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Wheels",
+        "items": [
+          {
+            "name": "Liga leve",
+            "value": true
+          },
+          {
+            "name": "Polegadas",
+            "value": "18"
+          },
+          {
+            "name": "Pneus ATR (50/50)",
+            "value": true
+          },
+          {
+            "name": "Pneus RunFlat",
+            "value": false
+          },
+          {
+            "name": "Pneus ATR Plus (60/40)",
+            "value": false
+          },
+          {
+            "name": "Pneus Auto-vedantes",
+            "value": false
+          },
+          {
+            "name": "Full Size Spare tires (same as vehicle base)",
+            "value": true
+          },
+          {
+            "name": "Estepe temporário",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Connectivity",
+        "items": [
+          {
+            "name": "Loja de Aplicativos",
+            "value": true
+          },
+          {
+            "name": "Digital assistant (Assistente Digital Inteligente)",
+            "value": false
+          },
+          {
+            "name": "Destravamento/Travamento das portas",
+            "value": true
+          },
+          {
+            "name": "Ignição Rota (com agendamento ou não)",
+            "value": true
+          },
+          {
+            "name": "Localização do Veículo",
+            "value": true
+          },
+          {
+            "name": "Vehicle Health and Alerts (+Veh Status)",
+            "value": true
+          },
+          {
+            "name": "Send POI to Navigation",
+            "value": false
+          },
+          {
+            "name": "Geofencing / Guard Mode",
+            "value": false
+          },
+          {
+            "name": "Vehicle Recovery",
+            "value": false
+          },
+          {
+            "name": "Usage Based Insurance – UBI",
+            "value": false
+          },
+          {
+            "name": "Wi-Fi Hotspot",
+            "value": false
+          },
+          {
+            "name": "Status de carregamento (EV)",
+            "value": false
+          },
+          {
+            "name": "Configuração de carregamento (EV)",
+            "value": false
+          },
+          {
+            "name": "Trip & Charge Log (EV)",
+            "value": false
+          },
+          {
+            "name": "Station Finder (EV)",
+            "value": false
+          },
+          {
+            "name": "Trends (EV)",
+            "value": false
+          },
+          {
+            "name": "Rankings (EV)",
+            "value": false
+          },
+          {
+            "name": "Atualizações OTA",
+            "value": false
+          },
+          {
+            "name": "Agile Vehicle Data Collection",
+            "value": false
+          },
+          {
+            "name": "Online Traffic (Sync 4)",
+            "value": false
+          },
+          {
+            "name": "Local Hazard information",
+            "value": false
+          },
+          {
+            "name": "Zone Lighting",
+            "value": false
+          },
+          {
+            "name": "IP Pass-through",
+            "value": false
+          },
+          {
+            "name": "Low Charge Alert (EV)",
+            "value": false
+          },
+          {
+            "name": "Charge Station Space Availability Alert (EV)",
+            "value": false
+          },
+          {
+            "name": "Locate and Pay (EV)",
+            "value": false
+          },
+          {
+            "name": "Smart Charging (EV)",
+            "value": false
+          },
+          {
+            "name": "Plug and Charge (EV)",
+            "value": false
+          },
+          {
+            "name": "Planejador de Viagem (EV)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Ice Line Up",
+        "items": [
+          {
+            "name": "Bluetooth",
+            "value": true
+          },
+          {
+            "name": "Camera traseira",
+            "value": true
+          },
+          {
+            "name": "Camera 180 graus",
+            "value": false
+          },
+          {
+            "name": "Navegador GPS",
+            "value": false
+          },
+          {
+            "name": "Navegador GPS (Atualizavel)",
+            "value": false
+          },
+          {
+            "name": "Radio Mechless (Sem USB, Sem Bluetooth)",
+            "value": false
+          },
+          {
+            "name": "Reconhecimento por voz e/ou Comando de Voz",
+            "value": true
+          },
+          {
+            "name": "Alto-falantes / Tweeters (unidade)",
+            "value": "6"
+          },
+          {
+            "name": "Head Up Display (HUD)",
+            "value": false
+          },
+          {
+            "name": "Tela no painel de instrumentos (monocromática) por polegada",
+            "value": false
+          },
+          {
+            "name": "Sistema de som Premium/Marca",
+            "value": false
+          },
+          {
+            "name": "Head Up Display (HUD) - (realidade aumentada)",
+            "value": false
+          },
+          {
+            "name": "Espelhamento de tela touch screen (Android Auto / Car Play) por cabo",
+            "value": true
+          },
+          {
+            "name": "Multimedia polegadas",
+            "value": "12"
+          },
+          {
+            "name": "Assistência de Emergência",
+            "value": true
+          },
+          {
+            "name": "Carregamento Wireless",
+            "value": true
+          },
+          {
+            "name": "Subwoofer + Amplificador",
+            "value": false
+          },
+          {
+            "name": "Câmera 360 graus",
+            "value": false
+          },
+          {
+            "name": "Conexão Wireless Android Auto & Car Play",
+            "value": true
+          },
+          {
+            "name": "Tela no painel de instrumentos colorida por polegada",
+            "value": "8"
+          },
+          {
+            "name": "Alto-falantes premium / Tweeters (unidade)",
+            "value": false
+          },
+          {
+            "name": "USB (unidade)",
+            "value": "4"
+          },
+          {
+            "name": "USB Passageiro (unidade)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Air Conditioning",
+        "items": [
+          {
+            "name": "Ar Condicionado com saída p/ 2ª fileira ou mais de bancos",
+            "value": true
+          },
+          {
+            "name": "Ar Condicionado Automático e Digital",
+            "value": true
+          },
+          {
+            "name": "Ar condicionado de duas zonas",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "Safety",
+        "items": [
+          {
+            "name": "Sistema Anti Capotamento (Rollover Stability Control)",
+            "value": true
+          },
+          {
+            "name": "Freio Automático (Carro Parado)",
+            "value": false
+          },
+          {
+            "name": "Aviso de pressão baixa dos pneus (DDS)",
+            "value": false
+          },
+          {
+            "name": "Sensor de Pressão dos pneus (TPMS)",
+            "value": true
+          },
+          {
+            "name": "Controle de descida",
+            "value": true
+          },
+          {
+            "name": "Controle Adaptativo de carga",
+            "value": true
+          },
+          {
+            "name": "Controle de reboque",
+            "value": true
+          },
+          {
+            "name": "Trail Control",
+            "value": false
+          },
+          {
+            "name": "Controle de freio do Trailer",
+            "value": false
+          },
+          {
+            "name": "Vetorização de Torque",
+            "value": false
+          },
+          {
+            "name": "Freio automatico após impacto",
+            "value": true
+          },
+          {
+            "name": "Assistência de direção defensiva",
+            "value": false
+          },
+          {
+            "name": "ABS Off Road",
+            "value": false
+          },
+          {
+            "name": "Airbag (cada)",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "name": "High Tech",
+        "items": [
+          {
+            "name": "Piloto Automático",
+            "value": true
+          },
+          {
+            "name": "Limitador de Velocidade",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo",
+            "value": false
+          },
+          {
+            "name": "Sistema de Permanência na Faixa (alerta e assistência)",
+            "value": true
+          },
+          {
+            "name": "Sensor de Estacionamento Traseiro",
+            "value": true
+          },
+          {
+            "name": "Sensor de Estacionamento Dianteiro",
+            "value": true
+          },
+          {
+            "name": "Sensor de Chuva",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor eletrocrômico",
+            "value": true
+          },
+          {
+            "name": "Acendimento automático dos faróis (sensor crepuscular)",
+            "value": true
+          },
+          {
+            "name": "Partida Remota (Chave)",
+            "value": false
+          },
+          {
+            "name": "Detector de Fadiga",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - (Acelera e freia)",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - 2.0 (Supervisionado)",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - Remoto",
+            "value": false
+          },
+          {
+            "name": "Freio de mão eletrônico",
+            "value": true
+          },
+          {
+            "name": "Retrovisor elétrico",
+            "value": true
+          },
+          {
+            "name": "Sistema de monitoramento de ponto-cego (BLIS)",
+            "value": false
+          },
+          {
+            "name": "Reconhecimento de sinais de trânsito",
+            "value": true
+          },
+          {
+            "name": "Abertura do porta-malas sem as mãos",
+            "value": false
+          },
+          {
+            "name": "Modo de condução (Ajuste da rigidez volante)",
+            "value": false
+          },
+          {
+            "name": "Drive Mode (Ajuste da rigidez volante, ignição e marcha)",
+            "value": false
+          },
+          {
+            "name": "AEB (Autonomous Emergency Brake)",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor com rebatimento elétrico",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo + Stop & GO + Reconhecimento de Placas",
+            "value": false
+          },
+          {
+            "name": "Alerta de Permanência em Faixa",
+            "value": false
+          },
+          {
+            "name": "Alerta de Colisão Frontal",
+            "value": true
+          },
+          {
+            "name": "Sistema de centralização de faixa",
+            "value": false
+          },
+          {
+            "name": "Piloto Automático Adaptativo + Stop & GO",
+            "value": false
+          },
+          {
+            "name": "Sistema de monitoramento de ponto-cego (BLIS) + Alerta de tráfego cruzado",
+            "value": false
+          },
+          {
+            "name": "Reverse AEB",
+            "value": false
+          },
+          {
+            "name": "Sistema Keyless Entry com Botão de Partida (PEPS)",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor interior digital",
+            "value": false
+          },
+          {
+            "name": "Aceleração Remota",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Global Closing",
+        "items": [
+          {
+            "name": "Alarme Volumétrico (inclui perimétrico)",
+            "value": true
+          },
+          {
+            "name": "Alarme Perimétrico",
+            "value": false
+          },
+          {
+            "name": "Global Opening (Vidros, Travas e/ou Sunroof)",
+            "value": true
+          },
+          {
+            "name": "Trava Elétrica das portas",
+            "value": true
+          },
+          {
+            "name": "Vidro elétrico Traseiro",
+            "value": true
+          },
+          {
+            "name": "Sistema de um toque para cima/baixo + Anti-esmagamento (por porta)",
+            "value": "4"
+          },
+          {
+            "name": "Abertura de porta traseira 270 (Van)",
+            "value": false
+          },
+          {
+            "name": "Thatcham Alarm (Bateria adicional)",
+            "value": false
+          },
+          {
+            "name": "Global Closing (Vidros, Travas e/ou Sunroof)",
+            "value": true
+          },
+          {
+            "name": "Tampa do Porta-malas automático",
+            "value": false
+          },
+          {
+            "name": "Vidro Elétrico vidro caçamba (pickups)",
+            "value": false
+          },
+          {
+            "name": "Abertura do vidro do porta-malas",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Trim",
+        "items": [
+          {
+            "name": "Bancos revestidos em couro",
+            "value": true
+          },
+          {
+            "name": "Bancos revestidos parcialmente (50% Vinil / 50% Tecido)",
+            "value": false
+          },
+          {
+            "name": "Manopla do câmbio com acabamento em Couro",
+            "value": true
+          },
+          {
+            "name": "Volante revestido em couro/vynil",
+            "value": true
+          },
+          {
+            "name": "Volante revestido parcialmente em couro",
+            "value": false
+          },
+          {
+            "name": "Painel Soft Touch",
+            "value": true
+          },
+          {
+            "name": "Bancos revestidos 100% Vinil",
+            "value": false
+          },
+          {
+            "name": "Alcantara / Outros (Adicional ao Couro/Vinil)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Sunroof",
+        "items": [
+          {
+            "name": "Teto Solar Elétrico",
+            "value": false
+          },
+          {
+            "name": "Teto Solar Panorâmico",
+            "value": false
+          },
+          {
+            "name": "Teto de Vidro",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Seats",
+        "items": [
+          {
+            "name": "Banco Traseiro Bipartido (60/40)",
+            "value": false
+          },
+          {
+            "name": "Banco Traseiro aquecido",
+            "value": false
+          },
+          {
+            "name": "Bancos traseiros rebatíveis (100%)",
+            "value": false
+          },
+          {
+            "name": "Acento traseiro rebatimento pra Frente",
+            "value": false
+          },
+          {
+            "name": "Banco Traseiro Flip & Fold com compartimento",
+            "value": false
+          },
+          {
+            "name": "Banco com Memória",
+            "value": false
+          },
+          {
+            "name": "Bancos Aquecimento (Frontal)",
+            "value": false
+          },
+          {
+            "name": "Bancos refrigerado (Frontal)",
+            "value": false
+          },
+          {
+            "name": "3ª fileira de Bancos",
+            "value": false
+          },
+          {
+            "name": "Rebatimento Automático do Encosto do banco traseiro",
+            "value": false
+          },
+          {
+            "name": "Terceiro Assento dianteiro",
+            "value": false
+          },
+          {
+            "name": "Massagem bancos dianteiros",
+            "value": false
+          },
+          {
+            "name": "Bancos reclináveis 180°",
+            "value": false
+          },
+          {
+            "name": "Banco posições Elétrico (cada posição)",
+            "value": "8"
+          },
+          {
+            "name": "Banco posições Manual",
+            "value": false
+          },
+          {
+            "name": "Bancos Recaro",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Lights",
+        "items": [
+          {
+            "name": "Faróis Full LED",
+            "value": true
+          },
+          {
+            "name": "Faróis de Xenon",
+            "value": false
+          },
+          {
+            "name": "Faróis direcionais",
+            "value": false
+          },
+          {
+            "name": "Faróis auxiliares em curvas",
+            "value": false
+          },
+          {
+            "name": "Farol com Projetor",
+            "value": false
+          },
+          {
+            "name": "LED Day time running lights (DTRL) + Signature Lights",
+            "value": true
+          },
+          {
+            "name": "Farol alto automático",
+            "value": true
+          },
+          {
+            "name": "Faróis de Neblina Dianteiro",
+            "value": false
+          },
+          {
+            "name": "Luz de Neblina Traseiro",
+            "value": false
+          },
+          {
+            "name": "Lanternas em LED - parcial",
+            "value": true
+          },
+          {
+            "name": "Lanternas em Full LED",
+            "value": false
+          },
+          {
+            "name": "Seta no retrovisor",
+            "value": true
+          },
+          {
+            "name": "Lâmpada Farol de Neblina LED",
+            "value": true
+          },
+          {
+            "name": "Faróis Matrix Led",
+            "value": false
+          },
+          {
+            "name": "Iluminação 360°",
+            "value": false
+          },
+          {
+            "name": "Ajuste de altura de faróis automático",
+            "value": false
+          },
+          {
+            "name": "Ajuste de Altura de faróis",
+            "value": true
+          },
+          {
+            "name": "Iluminação na caçamba (interno) + Chicote Elétrico",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "4X4",
+        "items": [
+          {
+            "name": "Tração 4x4 (high/low)",
+            "value": false
+          },
+          {
+            "name": "Diferencial traseiro blocante",
+            "value": true
+          },
+          {
+            "name": "Diferencial traseiro com deslizamento limitado",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio tubular (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio (estilizado c/ box rail)",
+            "value": true
+          },
+          {
+            "name": "Estribo Lateral Plataforma (Pickups)",
+            "value": true
+          },
+          {
+            "name": "Estribo Lateral tubular metálico (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Bloqueio de diferencial dianteiro (FWD)",
+            "value": false
+          },
+          {
+            "name": "Protetor de Caçamba",
+            "value": true
+          },
+          {
+            "name": "Box rails (na parte superior da caçamba)",
+            "value": true
+          },
+          {
+            "name": "Capota Marítima (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Terrain Management System (Modes Auto, Sand, Snow, Mud, Rock)",
+            "value": true
+          },
+          {
+            "name": "Capota Rígida",
+            "value": false
+          },
+          {
+            "name": "Tração Traseira",
+            "value": false
+          },
+          {
+            "name": "Tração integral (AWD)",
+            "value": true
+          },
+          {
+            "name": "Suspensão Off road FOX Live Valve Eixo Frontal/Traseiro",
+            "value": false
+          },
+          {
+            "name": "4x4 Lock (Adicional ao AWD) - 4WD",
+            "value": false
+          },
+          {
+            "name": "Protetor de Caçamba Spray-in",
+            "value": false
+          },
+          {
+            "name": "Suspensão Melhorada",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio Deslizante (Swing in Place)",
+            "value": false
+          },
+          {
+            "name": "Peito de aço",
+            "value": false
+          },
+          {
+            "name": "Suspensão a Ar (Active Level)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Others",
+        "items": [
+          {
+            "name": "Anos de garantia",
+            "value": "5"
+          },
+          {
+            "name": "Anos de garantia da bateria (HEV or BEV)",
+            "value": false
+          },
+          {
+            "name": "Tomada 110V (cada)",
+            "value": false
+          },
+          {
+            "name": "Apoio de braço dianteiro (integrado no banco)",
+            "value": false
+          },
+          {
+            "name": "Apoio de braço traseiro",
+            "value": true
+          },
+          {
+            "name": "Cabine Dupla (pickups)",
+            "value": true
+          },
+          {
+            "name": "Cabine simples (pickups)",
+            "value": false
+          },
+          {
+            "name": "Cabine simples sem caçamba (Chassis) (pickups)",
+            "value": false
+          },
+          {
+            "name": "Alargadores de Paralamas",
+            "value": false
+          },
+          {
+            "name": "Ajuste dos Pedais elétrico",
+            "value": false
+          },
+          {
+            "name": "Degrau acesso caçamba",
+            "value": true
+          },
+          {
+            "name": "Assistente da Tampa da Caçamba",
+            "value": true
+          },
+          {
+            "name": "Travamento elétrico da caçamba",
+            "value": true
+          },
+          {
+            "name": "Capota Marítima Elétrica",
+            "value": false
+          },
+          {
+            "name": "Faixa Adesiva (ex: capo, lateral, etc)",
+            "value": false
+          },
+          {
+            "name": "Freios Brembo (Por Eixo)",
+            "value": false
+          },
+          {
+            "name": "Sistema de escapamento com Válvula ativa",
+            "value": false
+          },
+          {
+            "name": "Pro Power 2.000W",
+            "value": false
+          },
+          {
+            "name": "Escada de acesso à caçamba",
+            "value": false
+          },
+          {
+            "name": "Superfície para trabalho na tampa na caçamba",
+            "value": false
+          },
+          {
+            "name": "Monitor de vida útil do óleo",
+            "value": true
+          },
+          {
+            "name": "Bagageiro de teto (barras longitudinais)",
+            "value": true
+          },
+          {
+            "name": "Compartimento para caçamba",
+            "value": false
+          },
+          {
+            "name": "Tampa Traseira Multifuncional (c/ abertura lateral)",
+            "value": false
+          },
+          {
+            "name": "Engate de Reboque 3.500 kg",
+            "value": true
+          },
+          {
+            "name": "Volantes aquecidos",
+            "value": false
+          },
+          {
+            "name": "Tacógrafo Digital",
+            "value": false
+          },
+          {
+            "name": "Bagageiro de teto (barras transversais)",
+            "value": false
+          },
+          {
+            "name": "Bússola e inclinômetros longitudinal e transversal",
+            "value": true
+          },
+          {
+            "name": "Console dianteiro central com apoio de braço",
+            "value": true
+          },
+          {
+            "name": "Disco de freio traseiro",
+            "value": true
+          },
+          {
+            "name": "Espelho Retrovisor Externo Cromado",
+            "value": true
+          },
+          {
+            "name": "Ganchos para Reboque (cada)",
+            "value": "2"
+          },
+          {
+            "name": "Grade do radiador com acabamento Premium (Black Piano, Cromo, Cor veiculo)",
+            "value": true
+          },
+          {
+            "name": "Maçanetas externas cromadas",
+            "value": true
+          },
+          {
+            "name": "Molduras Laterais na Cor do Veículo (Friso)",
+            "value": false
+          },
+          {
+            "name": "Molduras Laterais na Cor Preta (Friso)",
+            "value": false
+          },
+          {
+            "name": "Moldura cromada/Black Piano das janelas",
+            "value": false
+          },
+          {
+            "name": "Para Barro (Par)",
+            "value": "2"
+          },
+          {
+            "name": "Para-choque Traseiro Cromado",
+            "value": false
+          },
+          {
+            "name": "Para-choque na Cor do Veículo",
+            "value": true
+          },
+          {
+            "name": "Protetor de cárter",
+            "value": true
+          },
+          {
+            "name": "Protetor inferior do tanque de combustível",
+            "value": true
+          },
+          {
+            "name": "Aerofólio (Spoiler)",
+            "value": false
+          },
+          {
+            "name": "Tapete de porta-malas",
+            "value": false
+          },
+          {
+            "name": "Tapete de Borracha",
+            "value": true
+          },
+          {
+            "name": "Tapete Carpete",
+            "value": false
+          },
+          {
+            "name": "Iluminação Ambiente One Color (Ambient Light)",
+            "value": true
+          },
+          {
+            "name": "Iluminação Ambiente Multi-Color (Ambient Light)",
+            "value": false
+          },
+          {
+            "name": "Retrovisores com luz de aproximação",
+            "value": false
+          },
+          {
+            "name": "Preparação para reboque (Chicote)",
+            "value": true
+          },
+          {
+            "name": "Teto pintado em duas cores",
+            "value": false
+          },
+          {
+            "name": "Sistema de gerenciamento de carga dos porta malas/caçamba",
+            "value": false
+          },
+          {
+            "name": "Tomada 12V (cada)",
+            "value": true
+          },
+          {
+            "name": "Estribo lateral elétrico (por lado)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "INMETRO / PBEV",
+        "items": [
+          {
+            "name": "Tipo de Combustão",
+            "value": "Combustão"
+          },
+          {
+            "name": "Transmissão",
+            "value": "A-10"
+          },
+          {
+            "name": "Ar condicionado",
+            "value": true
+          },
+          {
+            "name": "Direção",
+            "value": "E"
+          },
+          {
+            "name": "Tipo de Combustível",
+            "value": "D"
+          },
+          {
+            "name": "CO₂ (g/km) - Gasolina/Diesel",
+            "value": 213
+          },
+          {
+            "name": "CO₂ (g/km) - Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Gasolina",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Gasolina",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Diesel",
+            "value": 8.9
+          },
+          {
+            "name": "Consumo Rodoviário — Diesel",
+            "value": 10.2
+          },
+          {
+            "name": "Consumo Urbano — Elétrico",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Elétrico",
+            "value": null
+          },
+          {
+            "name": "Consumo Energético (kWh/100km)",
+            "value": 2.88
+          },
+          {
+            "name": "Autonomia Elétrica",
+            "value": null
+          },
+          {
+            "name": "Nota Verde",
+            "value": "A"
+          },
+          {
+            "name": "Classificação INMETRO — Segmento",
+            "value": "D"
+          },
+          {
+            "name": "Classificação INMETRO — Geral",
+            "value": "E"
+          },
+          {
+            "name": "CONPET",
+            "value": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "brand": "FORD",
+    "model": "Nova Ranger 4x4",
+    "version": "LTD+",
+    "engine": "3.0 V6 - 24V",
+    "year": "2026",
+    "vehicleCategory": "Picape",
+    "categories": [
+      {
+        "name": "Engine & Transmission",
+        "items": [
+          {
+            "name": "Peso em ordem de marchas",
+            "value": "2357"
+          },
+          {
+            "name": "Cilindrada",
+            "value": "3"
+          },
+          {
+            "name": "Potência",
+            "value": "250"
+          },
+          {
+            "name": "Torque",
+            "value": "600"
+          },
+          {
+            "name": "Economia de Combustível",
+            "value": "9.55"
+          },
+          {
+            "name": "Transmissão Automática",
+            "value": true
+          },
+          {
+            "name": "Motor Flex vs Gasolina",
+            "value": false
+          },
+          {
+            "name": "Tecnologia turbo",
+            "value": true
+          },
+          {
+            "name": "Quantidade de marchas",
+            "value": "10"
+          },
+          {
+            "name": "FHEV",
+            "value": false
+          },
+          {
+            "name": "PHEV",
+            "value": false
+          },
+          {
+            "name": "BEV",
+            "value": false
+          },
+          {
+            "name": "Motor Diesel",
+            "value": true
+          },
+          {
+            "name": "Paddle Shift",
+            "value": false
+          },
+          {
+            "name": "E-Shifter (Manopla eletrônica)",
+            "value": true
+          },
+          {
+            "name": "Tecnologia BiTurbo",
+            "value": false
+          },
+          {
+            "name": "Motor Elétrico",
+            "value": false
+          },
+          {
+            "name": "E-Autonomy",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Wheels",
+        "items": [
+          {
+            "name": "Liga leve",
+            "value": true
+          },
+          {
+            "name": "Polegadas",
+            "value": "20"
+          },
+          {
+            "name": "Pneus ATR (50/50)",
+            "value": false
+          },
+          {
+            "name": "Pneus RunFlat",
+            "value": false
+          },
+          {
+            "name": "Pneus ATR Plus (60/40)",
+            "value": false
+          },
+          {
+            "name": "Pneus Auto-vedantes",
+            "value": false
+          },
+          {
+            "name": "Full Size Spare tires (same as vehicle base)",
+            "value": true
+          },
+          {
+            "name": "Estepe temporário",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Connectivity",
+        "items": [
+          {
+            "name": "Loja de Aplicativos",
+            "value": true
+          },
+          {
+            "name": "Digital assistant (Assistente Digital Inteligente)",
+            "value": false
+          },
+          {
+            "name": "Destravamento/Travamento das portas",
+            "value": true
+          },
+          {
+            "name": "Ignição Rota (com agendamento ou não)",
+            "value": true
+          },
+          {
+            "name": "Localização do Veículo",
+            "value": true
+          },
+          {
+            "name": "Vehicle Health and Alerts (+Veh Status)",
+            "value": true
+          },
+          {
+            "name": "Send POI to Navigation",
+            "value": false
+          },
+          {
+            "name": "Geofencing / Guard Mode",
+            "value": false
+          },
+          {
+            "name": "Vehicle Recovery",
+            "value": false
+          },
+          {
+            "name": "Usage Based Insurance – UBI",
+            "value": false
+          },
+          {
+            "name": "Wi-Fi Hotspot",
+            "value": false
+          },
+          {
+            "name": "Status de carregamento (EV)",
+            "value": false
+          },
+          {
+            "name": "Configuração de carregamento (EV)",
+            "value": false
+          },
+          {
+            "name": "Trip & Charge Log (EV)",
+            "value": false
+          },
+          {
+            "name": "Station Finder (EV)",
+            "value": false
+          },
+          {
+            "name": "Trends (EV)",
+            "value": false
+          },
+          {
+            "name": "Rankings (EV)",
+            "value": false
+          },
+          {
+            "name": "Atualizações OTA",
+            "value": false
+          },
+          {
+            "name": "Agile Vehicle Data Collection",
+            "value": false
+          },
+          {
+            "name": "Online Traffic (Sync 4)",
+            "value": false
+          },
+          {
+            "name": "Local Hazard information",
+            "value": false
+          },
+          {
+            "name": "Zone Lighting",
+            "value": false
+          },
+          {
+            "name": "IP Pass-through",
+            "value": false
+          },
+          {
+            "name": "Low Charge Alert (EV)",
+            "value": false
+          },
+          {
+            "name": "Charge Station Space Availability Alert (EV)",
+            "value": false
+          },
+          {
+            "name": "Locate and Pay (EV)",
+            "value": false
+          },
+          {
+            "name": "Smart Charging (EV)",
+            "value": false
+          },
+          {
+            "name": "Plug and Charge (EV)",
+            "value": false
+          },
+          {
+            "name": "Planejador de Viagem (EV)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Ice Line Up",
+        "items": [
+          {
+            "name": "Bluetooth",
+            "value": true
+          },
+          {
+            "name": "Camera traseira",
+            "value": false
+          },
+          {
+            "name": "Camera 180 graus",
+            "value": false
+          },
+          {
+            "name": "Navegador GPS",
+            "value": false
+          },
+          {
+            "name": "Navegador GPS (Atualizavel)",
+            "value": false
+          },
+          {
+            "name": "Radio Mechless (Sem USB, Sem Bluetooth)",
+            "value": false
+          },
+          {
+            "name": "Reconhecimento por voz e/ou Comando de Voz",
+            "value": true
+          },
+          {
+            "name": "Alto-falantes / Tweeters (unidade)",
+            "value": "6"
+          },
+          {
+            "name": "Head Up Display (HUD)",
+            "value": false
+          },
+          {
+            "name": "Tela no painel de instrumentos (monocromática) por polegada",
+            "value": false
+          },
+          {
+            "name": "Sistema de som Premium/Marca",
+            "value": false
+          },
+          {
+            "name": "Head Up Display (HUD) - (realidade aumentada)",
+            "value": false
+          },
+          {
+            "name": "Espelhamento de tela touch screen (Android Auto / Car Play) por cabo",
+            "value": true
+          },
+          {
+            "name": "Multimedia polegadas",
+            "value": "12"
+          },
+          {
+            "name": "Assistência de Emergência",
+            "value": true
+          },
+          {
+            "name": "Carregamento Wireless",
+            "value": true
+          },
+          {
+            "name": "Subwoofer + Amplificador",
+            "value": false
+          },
+          {
+            "name": "Câmera 360 graus",
+            "value": true
+          },
+          {
+            "name": "Conexão Wireless Android Auto & Car Play",
+            "value": true
+          },
+          {
+            "name": "Tela no painel de instrumentos colorida por polegada",
+            "value": "12.4"
+          },
+          {
+            "name": "Alto-falantes premium / Tweeters (unidade)",
+            "value": false
+          },
+          {
+            "name": "USB (unidade)",
+            "value": "4"
+          },
+          {
+            "name": "USB Passageiro (unidade)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Air Conditioning",
+        "items": [
+          {
+            "name": "Ar Condicionado com saída p/ 2ª fileira ou mais de bancos",
+            "value": true
+          },
+          {
+            "name": "Ar Condicionado Automático e Digital",
+            "value": true
+          },
+          {
+            "name": "Ar condicionado de duas zonas",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "Safety",
+        "items": [
+          {
+            "name": "Sistema Anti Capotamento (Rollover Stability Control)",
+            "value": true
+          },
+          {
+            "name": "Freio Automático (Carro Parado)",
+            "value": false
+          },
+          {
+            "name": "Aviso de pressão baixa dos pneus (DDS)",
+            "value": false
+          },
+          {
+            "name": "Sensor de Pressão dos pneus (TPMS)",
+            "value": true
+          },
+          {
+            "name": "Controle de descida",
+            "value": true
+          },
+          {
+            "name": "Controle Adaptativo de carga",
+            "value": true
+          },
+          {
+            "name": "Controle de reboque",
+            "value": true
+          },
+          {
+            "name": "Trail Control",
+            "value": false
+          },
+          {
+            "name": "Controle de freio do Trailer",
+            "value": false
+          },
+          {
+            "name": "Vetorização de Torque",
+            "value": false
+          },
+          {
+            "name": "Freio automatico após impacto",
+            "value": true
+          },
+          {
+            "name": "Assistência de direção defensiva",
+            "value": true
+          },
+          {
+            "name": "ABS Off Road",
+            "value": false
+          },
+          {
+            "name": "Airbag (cada)",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "name": "High Tech",
+        "items": [
+          {
+            "name": "Piloto Automático",
+            "value": false
+          },
+          {
+            "name": "Limitador de Velocidade",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo",
+            "value": false
+          },
+          {
+            "name": "Sistema de Permanência na Faixa (alerta e assistência)",
+            "value": false
+          },
+          {
+            "name": "Sensor de Estacionamento Traseiro",
+            "value": true
+          },
+          {
+            "name": "Sensor de Estacionamento Dianteiro",
+            "value": true
+          },
+          {
+            "name": "Sensor de Chuva",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor eletrocrômico",
+            "value": true
+          },
+          {
+            "name": "Acendimento automático dos faróis (sensor crepuscular)",
+            "value": true
+          },
+          {
+            "name": "Partida Remota (Chave)",
+            "value": false
+          },
+          {
+            "name": "Detector de Fadiga",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - (Acelera e freia)",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - 2.0 (Supervisionado)",
+            "value": false
+          },
+          {
+            "name": "Sistema de Estacionamento Automático - Remoto",
+            "value": false
+          },
+          {
+            "name": "Freio de mão eletrônico",
+            "value": true
+          },
+          {
+            "name": "Retrovisor elétrico",
+            "value": true
+          },
+          {
+            "name": "Sistema de monitoramento de ponto-cego (BLIS)",
+            "value": false
+          },
+          {
+            "name": "Reconhecimento de sinais de trânsito",
+            "value": true
+          },
+          {
+            "name": "Abertura do porta-malas sem as mãos",
+            "value": false
+          },
+          {
+            "name": "Modo de condução (Ajuste da rigidez volante)",
+            "value": false
+          },
+          {
+            "name": "Drive Mode (Ajuste da rigidez volante, ignição e marcha)",
+            "value": false
+          },
+          {
+            "name": "AEB (Autonomous Emergency Brake)",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor com rebatimento elétrico",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo + Stop & GO + Reconhecimento de Placas",
+            "value": false
+          },
+          {
+            "name": "Alerta de Permanência em Faixa",
+            "value": false
+          },
+          {
+            "name": "Alerta de Colisão Frontal",
+            "value": true
+          },
+          {
+            "name": "Sistema de centralização de faixa",
+            "value": true
+          },
+          {
+            "name": "Piloto Automático Adaptativo + Stop & GO",
+            "value": true
+          },
+          {
+            "name": "Sistema de monitoramento de ponto-cego (BLIS) + Alerta de tráfego cruzado",
+            "value": true
+          },
+          {
+            "name": "Reverse AEB",
+            "value": true
+          },
+          {
+            "name": "Sistema Keyless Entry com Botão de Partida (PEPS)",
+            "value": true
+          },
+          {
+            "name": "Espelho retrovisor interior digital",
+            "value": false
+          },
+          {
+            "name": "Aceleração Remota",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Global Closing",
+        "items": [
+          {
+            "name": "Alarme Volumétrico (inclui perimétrico)",
+            "value": true
+          },
+          {
+            "name": "Alarme Perimétrico",
+            "value": false
+          },
+          {
+            "name": "Global Opening (Vidros, Travas e/ou Sunroof)",
+            "value": true
+          },
+          {
+            "name": "Trava Elétrica das portas",
+            "value": true
+          },
+          {
+            "name": "Vidro elétrico Traseiro",
+            "value": true
+          },
+          {
+            "name": "Sistema de um toque para cima/baixo + Anti-esmagamento (por porta)",
+            "value": "4"
+          },
+          {
+            "name": "Abertura de porta traseira 270 (Van)",
+            "value": false
+          },
+          {
+            "name": "Thatcham Alarm (Bateria adicional)",
+            "value": false
+          },
+          {
+            "name": "Global Closing (Vidros, Travas e/ou Sunroof)",
+            "value": true
+          },
+          {
+            "name": "Tampa do Porta-malas automático",
+            "value": false
+          },
+          {
+            "name": "Vidro Elétrico vidro caçamba (pickups)",
+            "value": false
+          },
+          {
+            "name": "Abertura do vidro do porta-malas",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Trim",
+        "items": [
+          {
+            "name": "Bancos revestidos em couro",
+            "value": true
+          },
+          {
+            "name": "Bancos revestidos parcialmente (50% Vinil / 50% Tecido)",
+            "value": false
+          },
+          {
+            "name": "Manopla do câmbio com acabamento em Couro",
+            "value": true
+          },
+          {
+            "name": "Volante revestido em couro/vynil",
+            "value": true
+          },
+          {
+            "name": "Volante revestido parcialmente em couro",
+            "value": false
+          },
+          {
+            "name": "Painel Soft Touch",
+            "value": true
+          },
+          {
+            "name": "Bancos revestidos 100% Vinil",
+            "value": false
+          },
+          {
+            "name": "Alcantara / Outros (Adicional ao Couro/Vinil)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Sunroof",
+        "items": [
+          {
+            "name": "Teto Solar Elétrico",
+            "value": false
+          },
+          {
+            "name": "Teto Solar Panorâmico",
+            "value": false
+          },
+          {
+            "name": "Teto de Vidro",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Seats",
+        "items": [
+          {
+            "name": "Banco Traseiro Bipartido (60/40)",
+            "value": false
+          },
+          {
+            "name": "Banco Traseiro aquecido",
+            "value": false
+          },
+          {
+            "name": "Bancos traseiros rebatíveis (100%)",
+            "value": false
+          },
+          {
+            "name": "Acento traseiro rebatimento pra Frente",
+            "value": false
+          },
+          {
+            "name": "Banco Traseiro Flip & Fold com compartimento",
+            "value": false
+          },
+          {
+            "name": "Banco com Memória",
+            "value": false
+          },
+          {
+            "name": "Bancos Aquecimento (Frontal)",
+            "value": false
+          },
+          {
+            "name": "Bancos refrigerado (Frontal)",
+            "value": false
+          },
+          {
+            "name": "3ª fileira de Bancos",
+            "value": false
+          },
+          {
+            "name": "Rebatimento Automático do Encosto do banco traseiro",
+            "value": false
+          },
+          {
+            "name": "Terceiro Assento dianteiro",
+            "value": false
+          },
+          {
+            "name": "Massagem bancos dianteiros",
+            "value": false
+          },
+          {
+            "name": "Bancos reclináveis 180°",
+            "value": false
+          },
+          {
+            "name": "Banco posições Elétrico (cada posição)",
+            "value": "8"
+          },
+          {
+            "name": "Banco posições Manual",
+            "value": false
+          },
+          {
+            "name": "Bancos Recaro",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Lights",
+        "items": [
+          {
+            "name": "Faróis Full LED",
+            "value": true
+          },
+          {
+            "name": "Faróis de Xenon",
+            "value": false
+          },
+          {
+            "name": "Faróis direcionais",
+            "value": false
+          },
+          {
+            "name": "Faróis auxiliares em curvas",
+            "value": false
+          },
+          {
+            "name": "Farol com Projetor",
+            "value": false
+          },
+          {
+            "name": "LED Day time running lights (DTRL) + Signature Lights",
+            "value": true
+          },
+          {
+            "name": "Farol alto automático",
+            "value": true
+          },
+          {
+            "name": "Faróis de Neblina Dianteiro",
+            "value": false
+          },
+          {
+            "name": "Luz de Neblina Traseiro",
+            "value": false
+          },
+          {
+            "name": "Lanternas em LED - parcial",
+            "value": true
+          },
+          {
+            "name": "Lanternas em Full LED",
+            "value": false
+          },
+          {
+            "name": "Seta no retrovisor",
+            "value": true
+          },
+          {
+            "name": "Lâmpada Farol de Neblina LED",
+            "value": true
+          },
+          {
+            "name": "Faróis Matrix Led",
+            "value": false
+          },
+          {
+            "name": "Iluminação 360°",
+            "value": false
+          },
+          {
+            "name": "Ajuste de altura de faróis automático",
+            "value": false
+          },
+          {
+            "name": "Ajuste de Altura de faróis",
+            "value": true
+          },
+          {
+            "name": "Iluminação na caçamba (interno) + Chicote Elétrico",
+            "value": true
+          }
+        ]
+      },
+      {
+        "name": "4X4",
+        "items": [
+          {
+            "name": "Tração 4x4 (high/low)",
+            "value": false
+          },
+          {
+            "name": "Diferencial traseiro blocante",
+            "value": true
+          },
+          {
+            "name": "Diferencial traseiro com deslizamento limitado",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio tubular (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio (estilizado c/ box rail)",
+            "value": true
+          },
+          {
+            "name": "Estribo Lateral Plataforma (Pickups)",
+            "value": true
+          },
+          {
+            "name": "Estribo Lateral tubular metálico (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Bloqueio de diferencial dianteiro (FWD)",
+            "value": false
+          },
+          {
+            "name": "Protetor de Caçamba",
+            "value": true
+          },
+          {
+            "name": "Box rails (na parte superior da caçamba)",
+            "value": true
+          },
+          {
+            "name": "Capota Marítima (Pickups)",
+            "value": false
+          },
+          {
+            "name": "Terrain Management System (Modes Auto, Sand, Snow, Mud, Rock)",
+            "value": true
+          },
+          {
+            "name": "Capota Rígida",
+            "value": false
+          },
+          {
+            "name": "Tração Traseira",
+            "value": false
+          },
+          {
+            "name": "Tração integral (AWD)",
+            "value": true
+          },
+          {
+            "name": "Suspensão Off road FOX Live Valve Eixo Frontal/Traseiro",
+            "value": false
+          },
+          {
+            "name": "4x4 Lock (Adicional ao AWD) - 4WD",
+            "value": false
+          },
+          {
+            "name": "Protetor de Caçamba Spray-in",
+            "value": false
+          },
+          {
+            "name": "Suspensão Melhorada",
+            "value": false
+          },
+          {
+            "name": "Santo Antônio Deslizante (Swing in Place)",
+            "value": false
+          },
+          {
+            "name": "Peito de aço",
+            "value": false
+          },
+          {
+            "name": "Suspensão a Ar (Active Level)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "Others",
+        "items": [
+          {
+            "name": "Anos de garantia",
+            "value": "5"
+          },
+          {
+            "name": "Anos de garantia da bateria (HEV or BEV)",
+            "value": false
+          },
+          {
+            "name": "Tomada 110V (cada)",
+            "value": false
+          },
+          {
+            "name": "Apoio de braço dianteiro (integrado no banco)",
+            "value": false
+          },
+          {
+            "name": "Apoio de braço traseiro",
+            "value": true
+          },
+          {
+            "name": "Cabine Dupla (pickups)",
+            "value": true
+          },
+          {
+            "name": "Cabine simples (pickups)",
+            "value": false
+          },
+          {
+            "name": "Cabine simples sem caçamba (Chassis) (pickups)",
+            "value": false
+          },
+          {
+            "name": "Alargadores de Paralamas",
+            "value": false
+          },
+          {
+            "name": "Ajuste dos Pedais elétrico",
+            "value": false
+          },
+          {
+            "name": "Degrau acesso caçamba",
+            "value": true
+          },
+          {
+            "name": "Assistente da Tampa da Caçamba",
+            "value": true
+          },
+          {
+            "name": "Travamento elétrico da caçamba",
+            "value": true
+          },
+          {
+            "name": "Capota Marítima Elétrica",
+            "value": false
+          },
+          {
+            "name": "Faixa Adesiva (ex: capo, lateral, etc)",
+            "value": false
+          },
+          {
+            "name": "Freios Brembo (Por Eixo)",
+            "value": false
+          },
+          {
+            "name": "Sistema de escapamento com Válvula ativa",
+            "value": false
+          },
+          {
+            "name": "Pro Power 2.000W",
+            "value": false
+          },
+          {
+            "name": "Escada de acesso à caçamba",
+            "value": false
+          },
+          {
+            "name": "Superfície para trabalho na tampa na caçamba",
+            "value": false
+          },
+          {
+            "name": "Monitor de vida útil do óleo",
+            "value": true
+          },
+          {
+            "name": "Bagageiro de teto (barras longitudinais)",
+            "value": true
+          },
+          {
+            "name": "Compartimento para caçamba",
+            "value": false
+          },
+          {
+            "name": "Tampa Traseira Multifuncional (c/ abertura lateral)",
+            "value": false
+          },
+          {
+            "name": "Engate de Reboque 3.500 kg",
+            "value": true
+          },
+          {
+            "name": "Volantes aquecidos",
+            "value": false
+          },
+          {
+            "name": "Tacógrafo Digital",
+            "value": false
+          },
+          {
+            "name": "Bagageiro de teto (barras transversais)",
+            "value": false
+          },
+          {
+            "name": "Bússola e inclinômetros longitudinal e transversal",
+            "value": true
+          },
+          {
+            "name": "Console dianteiro central com apoio de braço",
+            "value": true
+          },
+          {
+            "name": "Disco de freio traseiro",
+            "value": true
+          },
+          {
+            "name": "Espelho Retrovisor Externo Cromado",
+            "value": true
+          },
+          {
+            "name": "Ganchos para Reboque (cada)",
+            "value": "2"
+          },
+          {
+            "name": "Grade do radiador com acabamento Premium (Black Piano, Cromo, Cor veiculo)",
+            "value": true
+          },
+          {
+            "name": "Maçanetas externas cromadas",
+            "value": true
+          },
+          {
+            "name": "Molduras Laterais na Cor do Veículo (Friso)",
+            "value": false
+          },
+          {
+            "name": "Molduras Laterais na Cor Preta (Friso)",
+            "value": false
+          },
+          {
+            "name": "Moldura cromada/Black Piano das janelas",
+            "value": false
+          },
+          {
+            "name": "Para Barro (Par)",
+            "value": "2"
+          },
+          {
+            "name": "Para-choque Traseiro Cromado",
+            "value": false
+          },
+          {
+            "name": "Para-choque na Cor do Veículo",
+            "value": true
+          },
+          {
+            "name": "Protetor de cárter",
+            "value": true
+          },
+          {
+            "name": "Protetor inferior do tanque de combustível",
+            "value": true
+          },
+          {
+            "name": "Aerofólio (Spoiler)",
+            "value": false
+          },
+          {
+            "name": "Tapete de porta-malas",
+            "value": false
+          },
+          {
+            "name": "Tapete de Borracha",
+            "value": true
+          },
+          {
+            "name": "Tapete Carpete",
+            "value": false
+          },
+          {
+            "name": "Iluminação Ambiente One Color (Ambient Light)",
+            "value": true
+          },
+          {
+            "name": "Iluminação Ambiente Multi-Color (Ambient Light)",
+            "value": false
+          },
+          {
+            "name": "Retrovisores com luz de aproximação",
+            "value": false
+          },
+          {
+            "name": "Preparação para reboque (Chicote)",
+            "value": true
+          },
+          {
+            "name": "Teto pintado em duas cores",
+            "value": false
+          },
+          {
+            "name": "Sistema de gerenciamento de carga dos porta malas/caçamba",
+            "value": false
+          },
+          {
+            "name": "Tomada 12V (cada)",
+            "value": true
+          },
+          {
+            "name": "Estribo lateral elétrico (por lado)",
+            "value": false
+          }
+        ]
+      },
+      {
+        "name": "INMETRO / PBEV",
+        "items": [
+          {
+            "name": "Tipo de Combustão",
+            "value": "Combustão"
+          },
+          {
+            "name": "Transmissão",
+            "value": "A-10"
+          },
+          {
+            "name": "Ar condicionado",
+            "value": true
+          },
+          {
+            "name": "Direção",
+            "value": "E"
+          },
+          {
+            "name": "Tipo de Combustível",
+            "value": "D"
+          },
+          {
+            "name": "CO₂ (g/km) - Gasolina/Diesel",
+            "value": 213
+          },
+          {
+            "name": "CO₂ (g/km) - Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Gasolina",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Gasolina",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Etanol",
+            "value": null
+          },
+          {
+            "name": "Consumo Urbano — Diesel",
+            "value": 8.9
+          },
+          {
+            "name": "Consumo Rodoviário — Diesel",
+            "value": 10.2
+          },
+          {
+            "name": "Consumo Urbano — Elétrico",
+            "value": null
+          },
+          {
+            "name": "Consumo Rodoviário — Elétrico",
+            "value": null
+          },
+          {
+            "name": "Consumo Energético (kWh/100km)",
+            "value": 2.88
+          },
+          {
+            "name": "Autonomia Elétrica",
+            "value": null
+          },
+          {
+            "name": "Nota Verde",
+            "value": "A"
+          },
+          {
+            "name": "Classificação INMETRO — Segmento",
+            "value": "D"
+          },
+          {
+            "name": "Classificação INMETRO — Geral",
+            "value": "E"
+          },
+          {
+            "name": "CONPET",
+            "value": false
+          }
+        ]
+      }
+    ]
+  }
+]
