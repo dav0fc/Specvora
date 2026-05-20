@@ -1,28 +1,30 @@
 import vehiclesRaw from './merged_output.json';
 
-// ---------- Tipos do JSON real ----------
-interface RawSpecItem {
+export type SpecValue = string | number | boolean | null;
+
+export type RawSpecItem = {
   name: string;
-  value: string | boolean | number | null;
-}
+  value: SpecValue;
+};
 
-interface RawCategory {
-  name: string;          // corresponde a "category" no app
-  items: RawSpecItem[];  // corresponde a "specs" no app
-}
+export type RawCategory = {
+  name: string;
+  items?: RawSpecItem[];
+};
 
-interface RawVehicle {
+export type RawVehicle = {
   brand: string;
   model: string;
   version: string;
+  engine?: string;
+  year?: string;
+  vehicleCategory?: string;
   categories: RawCategory[];
-  // outros campos como engine, year etc. são ignorados aqui
-}
+};
 
-// ---------- Tipos usados pelo app ----------
 export type SpecItem = {
   name: string;
-  value: string | boolean | null;   // convertemos números para string
+  value: SpecValue;
 };
 
 export type SpecCategory = {
@@ -34,39 +36,269 @@ export type Vehicle = {
   brand: string;
   model: string;
   version: string;
+  engine?: string;
+  year?: string;
+  vehicleCategory?: string;
   categories: SpecCategory[];
 };
 
-// ---------- Conversão ----------
+export type VehicleSearchParams = {
+  brand: string;
+  model: string;
+  version: string;
+};
+
+export type ComparisonSlot = {
+  id: string;
+  label: string;
+  brand: string | null;
+  model: string | null;
+  version: string | null;
+};
+
+export type RadarMetric = {
+  key: string;
+  label: string;
+  value: number;
+};
+
+export type ComparisonRow = {
+  category?: string;
+  label: string;
+  values: string[];
+};
+
+function normalize(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function specKey(category: string, name: string) {
+  return `${normalize(category)}::${normalize(name)}`;
+}
+
 function rawToVehicle(raw: RawVehicle): Vehicle {
   return {
     brand: raw.brand,
     model: raw.model,
     version: raw.version,
-    categories: raw.categories.map((cat) => ({
-      category: cat.name,
-      specs: (cat.items || []).map((item) => ({
+    engine: raw.engine,
+    year: raw.year,
+    vehicleCategory: raw.vehicleCategory,
+    categories: raw.categories.map((category) => ({
+      category: category.name,
+      specs: (category.items ?? []).map((item) => ({
         name: item.name,
-        value: typeof item.value === 'number' ? String(item.value) : item.value,
+        value: item.value,
       })),
     })),
   };
 }
 
-// Dados já convertidos
-const vehicles: Vehicle[] = (vehiclesRaw as RawVehicle[]).map(rawToVehicle);
+export const vehicles: Vehicle[] = (vehiclesRaw as RawVehicle[]).map(rawToVehicle);
 
-// ---------- Funções auxiliares ----------
-export const BRANDS = [...new Set(vehicles.map(v => v.brand))].sort();
+function filterByCategory(category?: string | null) {
+  if (!category) return vehicles;
 
-export const getModels = (brand: string): string[] => {
-  return [...new Set(vehicles.filter(v => v.brand === brand).map(v => v.model))].sort();
-};
+  return vehicles.filter(
+    (vehicle) => normalize(vehicle.vehicleCategory ?? '') === normalize(category)
+  );
+}
 
-export const getVersions = (brand: string, model: string): string[] => {
-  return [...new Set(vehicles.filter(v => v.brand === brand && v.model === model).map(v => v.version))].sort();
-};
+export function getVehicleCategories() {
+  return Array.from(
+    new Set(
+      vehicles
+        .map((vehicle) => vehicle.vehicleCategory)
+        .filter((category): category is string => Boolean(category))
+    )
+  ).sort();
+}
 
-export const findVariant = (brand: string, model: string, version: string): Vehicle | undefined => {
-  return vehicles.find(v => v.brand === brand && v.model === model && v.version === version);
-};
+export function getBrands(category?: string | null) {
+  return Array.from(new Set(filterByCategory(category).map((vehicle) => vehicle.brand))).sort();
+}
+
+export function getModels(brand: string, category?: string | null) {
+  return Array.from(
+    new Set(
+      filterByCategory(category)
+        .filter((vehicle) => normalize(vehicle.brand) === normalize(brand))
+        .map((vehicle) => vehicle.model)
+    )
+  ).sort();
+}
+
+export function getVersions(brand: string, model: string, category?: string | null) {
+  return Array.from(
+    new Set(
+      filterByCategory(category)
+        .filter(
+          (vehicle) =>
+            normalize(vehicle.brand) === normalize(brand) &&
+            normalize(vehicle.model) === normalize(model)
+        )
+        .map((vehicle) => vehicle.version)
+    )
+  ).sort();
+}
+
+export function findVariant({ brand, model, version }: VehicleSearchParams) {
+  return (
+    vehicles.find(
+      (vehicle) =>
+        normalize(vehicle.brand) === normalize(brand) &&
+        normalize(vehicle.model) === normalize(model) &&
+        normalize(vehicle.version) === normalize(version)
+    ) ?? null
+  );
+}
+
+export function displaySpecValue(value: SpecValue | undefined) {
+  if (value === null || value === undefined || value === '') return 'N/A';
+  if (typeof value === 'boolean') return value ? 'Sim' : 'Não';
+
+  return String(value);
+}
+
+function isAvailable(value: SpecValue) {
+  if (typeof value === 'boolean') return value;
+
+  return value !== null && value !== undefined && value !== '';
+}
+
+function findSpec(vehicle: Vehicle, specName: string) {
+  for (const category of vehicle.categories) {
+    const spec = category.specs.find((item) => normalize(item.name) === normalize(specName));
+
+    if (spec) return spec;
+  }
+
+  return null;
+}
+
+function findSpecByCategory(vehicle: Vehicle, categoryName: string, specName: string) {
+  const category = vehicle.categories.find(
+    (item) => normalize(item.category) === normalize(categoryName)
+  );
+
+  return category?.specs.find((item) => normalize(item.name) === normalize(specName));
+}
+
+function specNumber(vehicle: Vehicle, specName: string) {
+  const value = findSpec(vehicle, specName)?.value;
+
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    const parsed = Number(value.replace(',', '.'));
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  return 0;
+}
+
+function maxSpec(specName: string) {
+  return Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specName)), 1);
+}
+
+function normalizeNumber(value: number, max: number) {
+  return Math.round(Math.min(100, Math.max(0, (value / max) * 100)));
+}
+
+function categoryScore(vehicle: Vehicle, categoryNames: string[]) {
+  const specs = vehicle.categories
+    .filter((category) => categoryNames.includes(category.category))
+    .flatMap((category) => category.specs);
+
+  if (specs.length === 0) return 0;
+
+  const availableSpecs = specs.filter((spec) => isAvailable(spec.value)).length;
+
+  return Math.round((availableSpecs / specs.length) * 100);
+}
+
+export function getRadarMetrics(vehicle: Vehicle): RadarMetric[] {
+  const performance = Math.round(
+    (normalizeNumber(specNumber(vehicle, 'Potência'), maxSpec('Potência')) +
+      normalizeNumber(specNumber(vehicle, 'Torque'), maxSpec('Torque'))) /
+      2
+  );
+
+  const efficiency = Math.round(
+    (normalizeNumber(specNumber(vehicle, 'Economia de Combustível'), maxSpec('Economia de Combustível')) +
+      normalizeNumber(specNumber(vehicle, 'Consumo Rodoviário — Diesel'), maxSpec('Consumo Rodoviário — Diesel'))) /
+      2
+  );
+
+  return [
+    { key: 'performance', label: 'Perf.', value: performance },
+    { key: 'efficiency', label: 'Eficiência', value: efficiency },
+    { key: 'safety', label: 'Segurança', value: categoryScore(vehicle, ['Safety']) },
+    {
+      key: 'technology',
+      label: 'Tech',
+      value: categoryScore(vehicle, ['Connectivity', 'High Tech', 'Ice Line Up']),
+    },
+    {
+      key: 'comfort',
+      label: 'Conforto',
+      value: categoryScore(vehicle, ['Air Conditioning', 'Seats', 'Trim', 'Sunroof']),
+    },
+    {
+      key: 'utility',
+      label: 'Uso',
+      value: categoryScore(vehicle, ['4X4', 'Wheels', 'Others']),
+    },
+  ];
+}
+
+function getAllSpecRows(selectedVehicles: Vehicle[]) {
+  const rows: Array<{ category: string; label: string }> = [];
+  const usedKeys = new Set<string>();
+
+  selectedVehicles.forEach((vehicle) => {
+    vehicle.categories.forEach((category) => {
+      category.specs.forEach((spec) => {
+        const key = specKey(category.category, spec.name);
+
+        if (!usedKeys.has(key)) {
+          usedKeys.add(key);
+          rows.push({
+            category: category.category,
+            label: spec.name,
+          });
+        }
+      });
+    });
+  });
+
+  return rows;
+}
+
+export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] {
+  if (selectedVehicles.length < 2) return [];
+
+  const fixedRows: ComparisonRow[] = [
+    {
+      label: 'Ano',
+      values: selectedVehicles.map((vehicle) => vehicle.year ?? 'N/A'),
+    },
+    {
+      label: 'Categoria',
+      values: selectedVehicles.map((vehicle) => vehicle.vehicleCategory ?? 'N/A'),
+    },
+    {
+      label: 'Motor',
+      values: selectedVehicles.map((vehicle) => vehicle.engine ?? 'N/A'),
+    },
+  ];
+
+  const specRows = getAllSpecRows(selectedVehicles).map((row) => ({
+    category: row.category,
+    label: row.label,
+    values: selectedVehicles.map((vehicle) =>
+      displaySpecValue(findSpecByCategory(vehicle, row.category, row.label)?.value)
+    ),
+  }));
+
+  return [...fixedRows, ...specRows];
+}

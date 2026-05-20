@@ -1,49 +1,81 @@
-import { useState, useMemo } from 'react';
-import { View, Text, TextInput, SectionList, TouchableOpacity } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  SectionList,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { findVariant, SpecItem } from '../data/vehicles';
 
-function displayValue(value: string | boolean | null): string {
-  if (value === null || value === '' || value === undefined) return 'N/A';
-  if (typeof value === 'boolean') return value ? 'Sim' : 'Não';
-  return value.toString();
+import { displaySpecValue, SpecItem, Vehicle } from '../data/vehicles';
+import { findVehicle } from '../services/vehicleService';
+import { colors } from '../styles/colors';
+
+function getParam(value: string | string[] | undefined) {
+  if (Array.isArray(value)) return value[0] ?? '';
+  return value ?? '';
 }
 
 export default function DetailsScreen() {
-  const { brand, model, version } = useLocalSearchParams<{
-    brand: string;
-    model: string;
-    version: string;
-  }>();
   const router = useRouter();
-  const [filter, setFilter] = useState('');
+  const params = useLocalSearchParams<{
+    brand?: string;
+    model?: string;
+    version?: string;
+  }>();
 
-  const variant = useMemo(
-    () => findVariant(brand, model, version),
-    [brand, model, version]
-  );
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [filter, setFilter] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  const brand = getParam(params.brand);
+  const model = getParam(params.model);
+  const version = getParam(params.version);
+
+  useEffect(() => {
+    async function loadVehicle() {
+      setLoading(true);
+      setVehicle(await findVehicle({ brand, model, version }));
+      setLoading(false);
+    }
+
+    loadVehicle();
+  }, [brand, model, version]);
 
   const sections = useMemo(() => {
-    if (!variant) return [];
-    const filteredCategories = variant.categories.map((cat) => {
-      const filteredSpecs = cat.specs.filter((spec) =>
-        spec.name.toLowerCase().includes(filter.toLowerCase())
-      );
-      return { ...cat, specs: filteredSpecs };
-    }).filter((cat) => cat.specs.length > 0);
+    if (!vehicle) return [];
 
-    return filteredCategories.map((cat) => ({
-      title: cat.category,
-      data: cat.specs,
-    }));
-  }, [variant, filter]);
+    const term = filter.trim().toLowerCase();
 
-  if (!variant) {
+    return vehicle.categories
+      .map((category) => ({
+        title: category.category,
+        data: category.specs.filter((spec) =>
+          term
+            ? spec.name.toLowerCase().includes(term) ||
+              category.category.toLowerCase().includes(term)
+            : true
+        ),
+      }))
+      .filter((section) => section.data.length > 0);
+  }, [vehicle, filter]);
+
+  if (loading) {
     return (
-      <View className="flex-1 bg-[#133a7c] justify-center items-center">
-        <Text className="text-[#e0e0e0] text-lg mb-3">Vehicle not found.</Text>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text className="text-[#e94560] text-base">Go back</Text>
+      <View className="flex-1 items-center justify-center bg-[#F5F8FC]">
+        <ActivityIndicator color={colors.fordBlue} />
+      </View>
+    );
+  }
+
+  if (!vehicle) {
+    return (
+      <View className="flex-1 items-center justify-center bg-[#F5F8FC] px-6">
+        <Text className="mb-5 text-xl font-bold text-[#00142E]">Não encontrado</Text>
+        <TouchableOpacity className="rounded-2xl bg-[#00095B] px-6 py-3" onPress={router.back}>
+          <Text className="font-bold text-white">Voltar</Text>
         </TouchableOpacity>
       </View>
     );
@@ -51,57 +83,54 @@ export default function DetailsScreen() {
 
   return (
     <SectionList
-      className="flex-1 bg-[#133a7c]"
+      className="flex-1 bg-[#F5F8FC]"
       sections={sections}
-      keyExtractor={(item, index) => item.name + index}
       stickySectionHeadersEnabled={false}
+      keyExtractor={(item, index) => `${item.name}-${index}`}
+      contentContainerStyle={{ paddingBottom: 32 }}
       ListHeaderComponent={
-        <>
-          <TouchableOpacity
-            className="bg-[#16213e] rounded-2xl border border-[#0f3460] px-7 py-4.5 mb-6 items-center shadow-lg shadow-black/20"
-            onPress={() => router.back()}
-            activeOpacity={0.7}
-          >
-            <Text className="text-[#a0a0b0] text-xs font-semibold tracking-wider mb-1">
-              {variant.brand}
-            </Text>
-            <Text className="text-[#e94560] text-base font-bold text-center">
-              {variant.model} — {variant.version}
-            </Text>
+        <View className="px-5 pb-4 pt-12">
+          <TouchableOpacity className="mb-5 self-start rounded-2xl bg-white px-4 py-3" onPress={router.back}>
+            <Text className="font-bold text-[#00095B]">Voltar</Text>
           </TouchableOpacity>
 
-          <View className="mb-5 px-6">
-            <TextInput
-              className="bg-[#16213e] rounded-lg border border-[#0f3460] px-4 py-3 text-[#e0e0e0] text-sm"
-              placeholder="Filter specs..."
-              placeholderTextColor="#606070"
-              value={filter}
-              onChangeText={setFilter}
-            />
+          <Text className="text-3xl font-bold text-[#00142E]">{vehicle.model}</Text>
+          <Text className="mt-1 text-base font-semibold text-[#517198]">
+            {vehicle.brand} • {vehicle.version}
+          </Text>
+
+          <View className="mt-5 flex-row flex-wrap gap-2">
+            {[vehicle.year, vehicle.engine, vehicle.vehicleCategory]
+              .filter((item): item is string => Boolean(item))
+              .map((item) => (
+                <Text key={item} className="rounded-full bg-white px-3 py-2 text-xs font-bold text-[#00095B]">
+                  {item}
+                </Text>
+              ))}
           </View>
-        </>
+
+          <TextInput
+            className="mt-6 rounded-2xl border border-[#D8E3F2] bg-white px-4 py-4 text-base text-[#00142E]"
+            placeholder="Filtrar"
+            placeholderTextColor="#7C93AF"
+            value={filter}
+            onChangeText={setFilter}
+          />
+        </View>
       }
       renderSectionHeader={({ section }) => (
-        <View className="bg-[#0f3460] rounded-lg px-3.5 py-2 mb-2 mt-1 mx-6">
-          <Text className="text-[#e94560] text-xs font-bold tracking-wider uppercase">
+        <View className="mx-5 mb-2 mt-5 rounded-2xl bg-[#00095B] px-4 py-3">
+          <Text className="text-sm font-bold uppercase tracking-[2px] text-white">
             {section.title}
           </Text>
         </View>
       )}
       renderItem={({ item }: { item: SpecItem }) => (
-        <View className="bg-[#16213e] rounded-lg border border-[#0f3460] px-4.5 py-3.5 mb-2 mx-6 flex-row justify-between items-center">
-          <Text className="text-[#a0a0b0] text-sm flex-1 pr-3">{item.name}</Text>
-          <Text className="text-[#e0e0e0] text-sm font-semibold text-right">
-            {displayValue(item.value)}
-          </Text>
+        <View className="mx-5 mb-2 flex-row items-center justify-between rounded-2xl border border-[#D8E3F2] bg-white px-4 py-4">
+          <Text className="flex-1 pr-4 text-sm font-medium text-[#00142E]">{item.name}</Text>
+          <Text className="text-sm font-bold text-[#00095B]">{displaySpecValue(item.value)}</Text>
         </View>
       )}
-      ListEmptyComponent={
-        <Text className="text-[#606070] text-sm mt-5 text-center">
-          No specs match your search.
-        </Text>
-      }
-      contentContainerStyle={{ paddingVertical: 24 }}
     />
   );
 }
