@@ -25,21 +25,16 @@ export function VehicleTypeDrawer({
 }: VehicleTypeDrawerProps) {
   const { width } = useWindowDimensions();
   const isTablet = width >= 768;
-  const drawerWidth = isTablet ? Math.round(width * 0.5) : Math.round(width * 0.86);
+  const drawerWidth = isTablet ? Math.round(width * 0.35) : Math.round(width * 0.86);
 
   const options = [null, ...categories];
 
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View className="flex-1 flex-row bg-black/25">
-        <View className="h-full bg-white p-6" style={{ width: drawerWidth }}>
+        <View className="h-full bg-white px-6 pt-7" style={{ width: drawerWidth }}>
           <View className="mb-6 flex-row items-center justify-between">
-            <View>
-              <Text className="text-xs font-bold uppercase tracking-[3px] text-[#517198]">
-                Menu
-              </Text>
-              <Text className="mt-1 text-2xl font-bold text-[#00142E]">Tipo</Text>
-            </View>
+            <Text className="text-2xl font-bold text-[#00142E]">Tipo</Text>
 
             <TouchableOpacity onPress={onClose}>
               <Text className="text-sm font-bold text-[#00095B]">Fechar</Text>

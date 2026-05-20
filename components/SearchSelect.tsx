@@ -10,8 +10,6 @@ import {
   View,
 } from 'react-native';
 
-import { colors } from '../styles/colors';
-
 type SearchSelectProps = {
   label: string;
   value: string | null;
@@ -84,8 +82,8 @@ export function SearchSelect({
       <Modal visible={visible} transparent animationType="fade">
         <View className="flex-1 items-center justify-center bg-black/25 px-4">
           <View
-            className="rounded-3xl bg-white p-5"
-            style={{ width: isTablet ? 520 : '100%', maxHeight: '76%' }}
+            className="max-h-[76%] rounded-3xl bg-white p-5"
+            style={{ width: isTablet ? 520 : '100%' }}
           >
             <View className="mb-4 flex-row items-center justify-between">
               <Text className="text-lg font-bold text-[#00142E]">{label}</Text>
@@ -113,22 +111,27 @@ export function SearchSelect({
                   Nenhum item
                 </Text>
               }
-              renderItem={({ item }) => (
-                <Pressable
-                  className="py-4"
-                  onPress={() => {
-                    onSelect(item);
-                    close();
-                  }}
-                >
-                  <Text
-                    className="text-base font-semibold"
-                    style={{ color: item === value ? colors.fordBlue : colors.twilight }}
+              renderItem={({ item }) => {
+                const selected = item === value;
+
+                return (
+                  <Pressable
+                    className="py-4"
+                    onPress={() => {
+                      onSelect(item);
+                      close();
+                    }}
                   >
-                    {item}
-                  </Text>
-                </Pressable>
-              )}
+                    <Text
+                      className={`text-base font-semibold ${
+                        selected ? 'text-[#00095B]' : 'text-[#00142E]'
+                      }`}
+                    >
+                      {item}
+                    </Text>
+                  </Pressable>
+                );
+              }}
             />
           </View>
         </View>

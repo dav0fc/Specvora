@@ -3,11 +3,11 @@ import { Text, View } from 'react-native';
 import Svg, { Circle, Line, Polygon, Text as SvgText } from 'react-native-svg';
 
 import { RadarMetric } from '../data/vehicles';
-import { colors } from '../styles/colors';
 
 type RadarSeries = {
   name: string;
   color: string;
+  dotClassName: string;
   values: RadarMetric[];
 };
 
@@ -39,7 +39,7 @@ function polygonPoints(values: RadarMetric[], center: number, maxRadius: number)
 export function RadarChart({ series, size = 300 }: RadarChartProps) {
   const metrics = series[0]?.values ?? [];
   const center = size / 2;
-  const maxRadius = size * 0.33;
+  const maxRadius = size * 0.31;
   const levels = [0.25, 0.5, 0.75, 1];
 
   if (series.length < 2 || metrics.length === 0) {
@@ -67,7 +67,7 @@ export function RadarChart({ series, size = 300 }: RadarChartProps) {
 
         {metrics.map((metric, index) => {
           const outerPoint = point(center, maxRadius, index, metrics.length);
-          const labelPoint = point(center, maxRadius + 28, index, metrics.length);
+          const labelPoint = point(center, maxRadius + 30, index, metrics.length);
 
           return (
             <Fragment key={metric.key}>
@@ -82,7 +82,7 @@ export function RadarChart({ series, size = 300 }: RadarChartProps) {
               <SvgText
                 x={labelPoint.x}
                 y={labelPoint.y}
-                fill={colors.muted}
+                fill="#517198"
                 fontSize={10}
                 fontWeight="700"
                 textAnchor="middle"
@@ -104,17 +104,6 @@ export function RadarChart({ series, size = 300 }: RadarChartProps) {
           />
         ))}
       </Svg>
-
-      <View className="mt-2 flex-row flex-wrap justify-center gap-3">
-        {series.map((item) => (
-          <View key={item.name} className="flex-row items-center gap-2">
-            <View className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
-            <Text className="max-w-36 text-xs font-bold text-[#00142E]" numberOfLines={1}>
-              {item.name}
-            </Text>
-          </View>
-        ))}
-      </View>
     </View>
   );
 }

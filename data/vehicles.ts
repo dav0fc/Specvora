@@ -63,27 +63,17 @@ export type RadarMetric = {
 };
 
 export type ComparisonRow = {
+  category?: string;
   label: string;
   values: string[];
 };
 
-const KEY_SPECS = [
-  'Potência',
-  'Torque',
-  'Economia de Combustível',
-  'Consumo Urbano — Diesel',
-  'Consumo Rodoviário — Diesel',
-  'CO₂ (g/km) - Gasolina/Diesel',
-  'Airbag (cada)',
-  'Multimedia polegadas',
-  'Câmera 360 graus',
-  'Piloto Automático Adaptativo',
-  'AEB (Autonomous Emergency Brake)',
-  'Tração integral (AWD)',
-];
-
 function normalize(value: string) {
   return value.trim().toLowerCase();
+}
+
+function specKey(category: string, name: string) {
+  return `${normalize(category)}::${normalize(name)}`;
 }
 
 function rawToVehicle(raw: RawVehicle): Vehicle {
@@ -186,6 +176,14 @@ function findSpec(vehicle: Vehicle, specName: string) {
   return null;
 }
 
+function findSpecByCategory(vehicle: Vehicle, categoryName: string, specName: string) {
+  const category = vehicle.categories.find(
+    (item) => normalize(item.category) === normalize(categoryName)
+  );
+
+  return category?.specs.find((item) => normalize(item.name) === normalize(specName));
+}
+
 function specNumber(vehicle: Vehicle, specName: string) {
   const value = findSpec(vehicle, specName)?.value;
 
@@ -253,6 +251,29 @@ export function getRadarMetrics(vehicle: Vehicle): RadarMetric[] {
   ];
 }
 
+function getAllSpecRows(selectedVehicles: Vehicle[]) {
+  const rows: Array<{ category: string; label: string }> = [];
+  const usedKeys = new Set<string>();
+
+  selectedVehicles.forEach((vehicle) => {
+    vehicle.categories.forEach((category) => {
+      category.specs.forEach((spec) => {
+        const key = specKey(category.category, spec.name);
+
+        if (!usedKeys.has(key)) {
+          usedKeys.add(key);
+          rows.push({
+            category: category.category,
+            label: spec.name,
+          });
+        }
+      });
+    });
+  });
+
+  return rows;
+}
+
 export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] {
   if (selectedVehicles.length < 2) return [];
 
@@ -271,9 +292,12 @@ export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] 
     },
   ];
 
-  const specRows = KEY_SPECS.map((specName) => ({
-    label: specName,
-    values: selectedVehicles.map((vehicle) => displaySpecValue(findSpec(vehicle, specName)?.value)),
+  const specRows = getAllSpecRows(selectedVehicles).map((row) => ({
+    category: row.category,
+    label: row.label,
+    values: selectedVehicles.map((vehicle) =>
+      displaySpecValue(findSpecByCategory(vehicle, row.category, row.label)?.value)
+    ),
   }));
 
   return [...fixedRows, ...specRows];
