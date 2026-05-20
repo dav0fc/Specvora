@@ -9,6 +9,7 @@ type VehicleSelectorProps = {
   slot: ComparisonSlot;
   category: string | null;
   canRemove: boolean;
+  compact?: boolean;
   onChange: (slot: ComparisonSlot) => void;
   onRemove: () => void;
 };
@@ -17,6 +18,7 @@ export function VehicleSelector({
   slot,
   category,
   canRemove,
+  compact = false,
   onChange,
   onRemove,
 }: VehicleSelectorProps) {
@@ -59,9 +61,15 @@ export function VehicleSelector({
   }, [slot.brand, slot.model, category]);
 
   return (
-    <View className="rounded-3xl border border-[#D8E3F2] bg-white p-4">
-      <View className="mb-4 flex-row items-center justify-between">
-        <Text className="text-lg font-bold text-[#00142E]">{slot.label}</Text>
+    <View
+      className={`rounded-3xl border border-[#D8E3F2] bg-[#F8FAFD] ${
+        compact ? 'p-3' : 'p-4'
+      }`}
+    >
+      <View className={`${compact ? 'mb-2' : 'mb-4'} flex-row items-center justify-between`}>
+        <Text className={`${compact ? 'text-base' : 'text-lg'} font-bold text-[#00142E]`}>
+          {slot.label}
+        </Text>
 
         {canRemove && (
           <TouchableOpacity onPress={onRemove}>
@@ -71,6 +79,7 @@ export function VehicleSelector({
       </View>
 
       <SearchSelect
+        compact={compact}
         label="Marca"
         value={slot.brand}
         options={brands}
@@ -78,6 +87,7 @@ export function VehicleSelector({
       />
 
       <SearchSelect
+        compact={compact}
         label="Modelo"
         value={slot.model}
         options={models}
@@ -86,6 +96,7 @@ export function VehicleSelector({
       />
 
       <SearchSelect
+        compact={compact}
         label="Versão"
         value={slot.version}
         options={versions}

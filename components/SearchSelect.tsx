@@ -17,6 +17,7 @@ type SearchSelectProps = {
   value: string | null;
   options: string[];
   disabled?: boolean;
+  compact?: boolean;
   onSelect: (value: string) => void;
 };
 
@@ -25,6 +26,7 @@ export function SearchSelect({
   value,
   options,
   disabled = false,
+  compact = false,
   onSelect,
 }: SearchSelectProps) {
   const { width } = useWindowDimensions();
@@ -52,7 +54,7 @@ export function SearchSelect({
   }
 
   return (
-    <View className="mb-3">
+    <View className={compact ? 'mb-2' : 'mb-3'}>
       <Text className="mb-2 text-xs font-bold uppercase tracking-[2px] text-[#517198]">
         {label}
       </Text>
@@ -60,15 +62,17 @@ export function SearchSelect({
       <TouchableOpacity
         activeOpacity={disabled ? 1 : 0.82}
         onPress={open}
-        className={`rounded-2xl border px-4 py-4 ${
+        className={`rounded-2xl border px-4 ${
+          compact ? 'py-3' : 'py-4'
+        } ${
           disabled ? 'border-[#E2E8F0] bg-[#F1F5F9]' : 'border-[#D8E3F2] bg-white'
         }`}
       >
         <View className="flex-row items-center justify-between gap-3">
           <Text
-            className={`flex-1 text-base ${
-              value ? 'font-bold text-[#00142E]' : 'font-semibold text-[#7C93AF]'
-            }`}
+            className={`flex-1 ${
+              compact ? 'text-sm' : 'text-base'
+            } ${value ? 'font-bold text-[#00142E]' : 'font-semibold text-[#7C93AF]'}`}
             numberOfLines={1}
           >
             {value ?? 'Selecionar'}
@@ -81,7 +85,7 @@ export function SearchSelect({
         <View className="flex-1 items-center justify-center bg-black/25 px-4">
           <View
             className="rounded-3xl bg-white p-5"
-            style={{ width: isTablet ? 460 : '100%', maxHeight: '72%' }}
+            style={{ width: isTablet ? 520 : '100%', maxHeight: '76%' }}
           >
             <View className="mb-4 flex-row items-center justify-between">
               <Text className="text-lg font-bold text-[#00142E]">{label}</Text>
