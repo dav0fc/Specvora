@@ -1,21 +1,13 @@
 import {
-  BRANDS,
   findVariant,
+  getBrands,
   getModels,
+  getVehicleCategories,
   getVersions,
   Vehicle,
   VehicleSearchParams,
 } from '../data/vehicles';
 
-/**
- * Deixe vazio enquanto estiver usando o JSON mockado.
- *
- * Quando o back-end estiver rodando, você pode trocar para:
- * const API_BASE_URL = 'http://SEU_IP_LOCAL:8080';
- *
- * No Android Emulator, localhost do computador costuma ser:
- * http://10.0.2.2:8080
- */
 const API_BASE_URL = '';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T | null> {
@@ -36,17 +28,20 @@ async function request<T>(path: string, options?: RequestInit): Promise<T | null
   return response.json() as Promise<T>;
 }
 
-export async function listBrands() {
-  // Mantém comportamento assíncrono para simular API e facilitar troca futura.
-  return BRANDS;
+export async function listVehicleCategories() {
+  return getVehicleCategories();
 }
 
-export async function listModels(brand: string) {
-  return getModels(brand);
+export async function listBrands(category?: string | null) {
+  return getBrands(category);
 }
 
-export async function listVersions(brand: string, model: string) {
-  return getVersions(brand, model);
+export async function listModels(brand: string, category?: string | null) {
+  return getModels(brand, category);
+}
+
+export async function listVersions(brand: string, model: string, category?: string | null) {
+  return getVersions(brand, model, category);
 }
 
 export async function findVehicle(params: VehicleSearchParams): Promise<Vehicle | null> {
@@ -58,8 +53,7 @@ export async function findVehicle(params: VehicleSearchParams): Promise<Vehicle 
 
     if (vehicleFromApi) return vehicleFromApi;
   } catch {
-    // Em sala, é melhor o app continuar funcionando com a base mockada.
-    // Quando a API estiver estável, você pode mostrar o erro para o usuário.
+    return findVariant(params);
   }
 
   return findVariant(params);

@@ -4,180 +4,211 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
 
-import { Dropdown } from '../components/Dropdown';
+import { ComparisonTable } from '../components/ComparisonTable';
+import { RadarChart } from '../components/RadarChart';
+import { VehicleSelector } from '../components/VehicleSelector';
+import { VehicleTypeDrawer } from '../components/VehicleTypeDrawer';
 import {
-  findVehicle,
-  listBrands,
-  listModels,
-  listVersions,
-} from '../services/vehicleService';
+  ComparisonSlot,
+  getComparisonRows,
+  getRadarMetrics,
+  Vehicle,
+} from '../data/vehicles';
+import { colors } from '../styles/colors';
+import { findVehicle, listVehicleCategories } from '../services/vehicleService';
 
-export default function SearchScreen() {
-  const router = useRouter();
+const MAX_VEHICLES = 3;
 
-  const [brands, setBrands] = useState<string[]>([]);
-  const [models, setModels] = useState<string[]>([]);
-  const [versions, setVersions] = useState<string[]>([]);
+function createSlot(index: number): ComparisonSlot {
+  return {
+    id: `vehicle-${index + 1}`,
+    label: `Veículo ${String.fromCharCode(65 + index)}`,
+    brand: null,
+    model: null,
+    version: null,
+  };
+}
 
-  const [brand, setBrand] = useState<string | null>(null);
-  const [model, setModel] = useState<string | null>(null);
-  const [version, setVersion] = useState<string | null>(null);
+function vehicleTitle(vehicle: Vehicle) {
+  return `${vehicle.model} ${vehicle.version}`;
+}
 
+export default function CompareScreen() {
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [slots, setSlots] = useState<ComparisonSlot[]>([createSlot(0), createSlot(1)]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const canSearch = useMemo(
-    () => Boolean(brand && model && version && !loading),
-    [brand, model, version, loading]
-  );
 
   useEffect(() => {
-    async function loadInitialData() {
-      try {
-        setLoading(true);
-        setBrands(await listBrands());
-      } catch {
-        setError('Não foi possível carregar os dados dos veículos.');
-      } finally {
-        setLoading(false);
-      }
+    async function loadCategories() {
+      setLoading(true);
+      setCategories(await listVehicleCategories());
+      setLoading(false);
     }
 
-    loadInitialData();
+    loadCategories();
   }, []);
 
-  async function handleBrandSelect(selectedBrand: string) {
-    setBrand(selectedBrand);
-    setModel(null);
-    setVersion(null);
-    setVersions([]);
-    setError(null);
-    setModels(await listModels(selectedBrand));
-  }
+  useEffect(() => {
+    async function loadVehicles() {
+      const selectedVehicles = await Promise.all(
+        slots.map((slot) => {
+          if (!slot.brand || !slot.model || !slot.version) return null;
 
-  async function handleModelSelect(selectedModel: string) {
-    if (!brand) return;
+          return findVehicle({
+            brand: slot.brand,
+            model: slot.model,
+            version: slot.version,
+          });
+        })
+      );
 
-    setModel(selectedModel);
-    setVersion(null);
-    setError(null);
-    setVersions(await listVersions(brand, selectedModel));
-  }
-
-  async function handleSearch() {
-    if (!brand || !model || !version) {
-      setError('Selecione marca, modelo e versão para continuar.');
-      return;
+      setVehicles(selectedVehicles.filter(Boolean) as Vehicle[]);
     }
 
-    const vehicle = await findVehicle({ brand, model, version });
+    loadVehicles();
+  }, [slots]);
 
-    if (!vehicle) {
-      setError('Veículo não encontrado na base de dados.');
-      return;
-    }
+  const radarSeries = useMemo(
+    () =>
+      vehicles.map((vehicle, index) => ({
+        name: vehicleTitle(vehicle),
+        color: [colors.fordBlue, colors.fordGrabber, colors.sky][index],
+        values: getRadarMetrics(vehicle),
+      })),
+    [vehicles]
+  );
 
-    router.push({
-      pathname: '/details',
-      params: { brand, model, version },
-    });
+  const comparisonRows = useMemo(() => getComparisonRows(vehicles), [vehicles]);
+
+  function updateSlot(slotId: string, nextSlot: ComparisonSlot) {
+    setSlots((currentSlots) =>
+      currentSlots.map((slot) => (slot.id === slotId ? nextSlot : slot))
+    );
+  }
+
+  function addVehicle() {
+    if (slots.length >= MAX_VEHICLES) return;
+    setSlots((currentSlots) => [...currentSlots, createSlot(currentSlots.length)]);
+  }
+
+  function removeVehicle(slotId: string) {
+    if (slots.length <= 2) return;
+    setSlots((currentSlots) => currentSlots.filter((slot) => slot.id !== slotId));
+  }
+
+  function handleCategorySelect(category: string | null) {
+    setSelectedCategory(category);
+    setSlots([createSlot(0), createSlot(1)]);
+    setDrawerVisible(false);
+  }
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-[#F5F8FC]">
+        <ActivityIndicator color={colors.fordBlue} />
+      </View>
+    );
   }
 
   return (
-    <ScrollView className="flex-1 bg-[#0b1f3a]">
-      <View className="px-6 pb-10 pt-14">
-        <View className="mb-8">
-          <Text className="text-sm font-semibold uppercase tracking-[3px] text-[#8fb3ff]">
-            Specvora
-          </Text>
+    <View className={`flex-1 bg-[#F5F8FC] ${isTablet ? 'flex-row' : 'flex-col'}`}>
+      <View
+        className={`border-[#D8E3F2] bg-white ${
+          isTablet ? 'w-32 border-r px-4 py-6' : 'border-b px-4 py-3'
+        }`}
+      >
+        <View className={isTablet ? 'gap-4' : 'flex-row items-center justify-between'}>
+          <View>
+            <Text className="text-xs font-bold uppercase tracking-[3px] text-[#00095B]">
+              FORD
+            </Text>
+            <Text className="mt-1 text-lg font-bold text-[#00142E]">Specvora</Text>
+          </View>
 
-          <Text className="mt-2 text-3xl font-bold text-white">
-            Inteligência competitiva automotiva
-          </Text>
-
-          <Text className="mt-3 text-base leading-6 text-[#c7d2fe]">
-            Consulte versões de veículos, visualize especificações técnicas e
-            apoie decisões de produto com dados organizados.
-          </Text>
-        </View>
-
-        <View className="mb-6 rounded-3xl border border-[#1d4ed8] bg-[#102a4c] p-5">
-          <Text className="mb-4 text-lg font-bold text-white">
-            Buscar veículo
-          </Text>
-
-          {loading ? (
-            <View className="items-center py-8">
-              <ActivityIndicator color="#60a5fa" />
-              <Text className="mt-3 text-sm text-[#c7d2fe]">
-                Carregando base de veículos...
-              </Text>
-            </View>
-          ) : (
-            <>
-              <Dropdown
-                label="Marca"
-                value={brand}
-                options={brands}
-                onSelect={handleBrandSelect}
-              />
-
-              <Dropdown
-                label="Modelo"
-                value={model}
-                options={models}
-                onSelect={handleModelSelect}
-                disabled={!brand}
-              />
-
-              <Dropdown
-                label="Versão"
-                value={version}
-                options={versions}
-                onSelect={(selectedVersion) => {
-                  setVersion(selectedVersion);
-                  setError(null);
-                }}
-                disabled={!model}
-              />
-
-              {error && (
-                <Text className="mb-4 rounded-xl bg-[#3b0d1d] px-4 py-3 text-sm text-[#fecdd3]">
-                  {error}
-                </Text>
-              )}
-
-              <TouchableOpacity
-                activeOpacity={0.85}
-                disabled={!canSearch}
-                onPress={handleSearch}
-                className={`mt-2 rounded-2xl px-5 py-4 ${
-                  canSearch ? 'bg-[#2563eb]' : 'bg-[#334155]'
-                }`}
-              >
-                <Text className="text-center text-base font-bold uppercase tracking-[2px] text-white">
-                  Ver análise
-                </Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-
-        <View className="rounded-3xl border border-[#1e3a8a] bg-[#0f172a] p-5">
-          <Text className="text-base font-bold text-white">
-            Valor para a Ford
-          </Text>
-          <Text className="mt-2 text-sm leading-6 text-[#cbd5e1]">
-            O app transforma uma base técnica em uma experiência simples para
-            analistas compararem versões, identificarem recursos disponíveis e
-            entenderem diferenças de produto com mais velocidade.
-          </Text>
+          <TouchableOpacity
+            activeOpacity={0.82}
+            onPress={() => setDrawerVisible(true)}
+            className="rounded-2xl border border-[#D8E3F2] bg-[#F5F8FC] px-4 py-3"
+          >
+            <Text className="text-xs font-bold uppercase tracking-[2px] text-[#00095B]">
+              Tipo
+            </Text>
+            <Text className="mt-1 text-sm font-semibold text-[#00142E]" numberOfLines={1}>
+              {selectedCategory ?? 'Todos'}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
-    </ScrollView>
+
+      <ScrollView className="flex-1" contentContainerStyle={{ padding: isTablet ? 24 : 16 }}>
+        <View className={isTablet ? 'mb-6 flex-row items-center justify-between' : 'mb-5'}>
+          <View>
+            <Text className="text-3xl font-bold text-[#00142E]">Comparativo</Text>
+            <Text className="mt-1 text-sm font-semibold uppercase tracking-[2px] text-[#517198]">
+              {vehicles.length} selecionado(s)
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            activeOpacity={0.82}
+            disabled={slots.length >= MAX_VEHICLES}
+            onPress={addVehicle}
+            className={`mt-4 rounded-2xl px-5 py-3 ${
+              isTablet ? 'mt-0' : ''
+            } ${slots.length >= MAX_VEHICLES ? 'bg-[#CBD5E1]' : 'bg-[#00095B]'}`}
+          >
+            <Text className="text-sm font-bold text-white">Adicionar</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View className={isTablet ? 'flex-row gap-5' : 'flex-col gap-4'}>
+          <View style={{ flex: isTablet ? 0.42 : undefined }} className="gap-4">
+            {slots.map((slot) => (
+              <VehicleSelector
+                key={slot.id}
+                slot={slot}
+                category={selectedCategory}
+                canRemove={slots.length > 2}
+                onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
+                onRemove={() => removeVehicle(slot.id)}
+              />
+            ))}
+          </View>
+
+          <View style={{ flex: 1 }} className="gap-4">
+            <View className="rounded-3xl border border-[#D8E3F2] bg-white p-5">
+              <View className="mb-4 flex-row items-center justify-between">
+                <Text className="text-lg font-bold text-[#00142E]">Radar</Text>
+                <Text className="text-xs font-bold uppercase tracking-[2px] text-[#517198]">
+                  0 - 100
+                </Text>
+              </View>
+
+              <RadarChart series={radarSeries} size={isTablet ? 330 : 280} />
+            </View>
+
+            <ComparisonTable vehicles={vehicles} rows={comparisonRows} />
+          </View>
+        </View>
+      </ScrollView>
+
+      <VehicleTypeDrawer
+        visible={drawerVisible}
+        categories={categories}
+        selectedCategory={selectedCategory}
+        onClose={() => setDrawerVisible(false)}
+        onSelect={handleCategorySelect}
+      />
+    </View>
   );
 }
