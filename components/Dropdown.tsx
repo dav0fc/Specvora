@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native';
+import {
+  FlatList,
+  Modal,
+  Pressable,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 type DropdownProps = {
   label: string;
@@ -9,51 +16,86 @@ type DropdownProps = {
   disabled?: boolean;
 };
 
-export function Dropdown({ label, value, options, onSelect, disabled = false }: DropdownProps) {
+export function Dropdown({
+  label,
+  value,
+  options,
+  onSelect,
+  disabled = false,
+}: DropdownProps) {
   const [open, setOpen] = useState(false);
 
+  function handleOpen() {
+    if (!disabled && options.length > 0) {
+      setOpen(true);
+    }
+  }
+
   return (
-    <View className="w-full mb-5">
-      <Text className="text-[#a0a0b0] text-xs font-semibold tracking-wider mb-1.5">
+    <View className="mb-4">
+      <Text className="mb-2 text-xs font-bold uppercase tracking-[2px] text-[#93c5fd]">
         {label}
       </Text>
+
       <TouchableOpacity
-        className={`bg-[#16213e] rounded-lg border border-[#0f3460] px-4 py-3.5 flex-row justify-between items-center ${disabled ? 'opacity-40' : ''}`}
-        onPress={() => !disabled && setOpen(true)}
-        activeOpacity={disabled ? 1 : 0.7}
+        activeOpacity={disabled ? 1 : 0.8}
+        onPress={handleOpen}
+        className={`flex-row items-center justify-between rounded-2xl border px-4 py-4 ${
+          disabled
+            ? 'border-[#334155] bg-[#1e293b]'
+            : 'border-[#1d4ed8] bg-[#0f172a]'
+        }`}
       >
-        <Text className={`text-sm ${value ? 'text-[#e0e0e0]' : 'text-[#606070]'}`}>
-          {value ?? 'Select...'}
+        <Text
+          className={`text-base ${
+            value ? 'font-semibold text-white' : 'text-[#64748b]'
+          }`}
+        >
+          {value ?? (disabled ? 'Selecione a etapa anterior' : 'Selecionar')}
         </Text>
-        <Text className="text-[#e94560] text-base">▾</Text>
+
+        <Text className="text-lg text-[#93c5fd]">⌄</Text>
       </TouchableOpacity>
 
       <Modal visible={open} transparent animationType="fade">
-        <TouchableOpacity
-          className="flex-1 bg-black/60 justify-center p-8"
+        <Pressable
+          className="flex-1 justify-end bg-black/60"
           onPress={() => setOpen(false)}
         >
-          <View className="bg-[#16213e] rounded-2xl max-h-96 overflow-hidden border border-[#0f3460]">
-            <Text className="text-[#e94560] text-sm font-bold tracking-wider px-4 py-4 border-b border-[#0f3460]">
-              {label}
-            </Text>
+          <Pressable className="max-h-[70%] rounded-t-3xl bg-[#0f172a] p-5">
+            <View className="mb-4 flex-row items-center justify-between">
+              <Text className="text-lg font-bold text-white">
+                Selecione {label.toLowerCase()}
+              </Text>
+
+              <TouchableOpacity onPress={() => setOpen(false)}>
+                <Text className="text-base font-bold text-[#93c5fd]">
+                  Fechar
+                </Text>
+              </TouchableOpacity>
+            </View>
+
             <FlatList
               data={options}
               keyExtractor={(item) => item}
+              ItemSeparatorComponent={() => (
+                <View className="h-px bg-[#1e293b]" />
+              )}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  className="px-5 py-3.5 border-b border-[#133a7c]"
+                  className="py-4"
+                  activeOpacity={0.75}
                   onPress={() => {
                     onSelect(item);
                     setOpen(false);
                   }}
                 >
-                  <Text className="text-[#e0e0e0] text-sm">{item}</Text>
+                  <Text className="text-base text-[#e2e8f0]">{item}</Text>
                 </TouchableOpacity>
               )}
             />
-          </View>
-        </TouchableOpacity>
+          </Pressable>
+        </Pressable>
       </Modal>
     </View>
   );
