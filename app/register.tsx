@@ -6,44 +6,53 @@ import {
   Platform,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
-import { loginUser } from '../services/authService';
+import { registerUser } from '../services/authService';
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
   const router = useRouter();
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  async function handleLogin() {
-    if (!email.trim() || !password.trim()) {
-      Alert.alert('Atenção', 'Preencha email e senha.');
+  async function handleRegister() {
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      Alert.alert('Atenção', 'Preencha nome, email e senha.');
       return;
     }
 
     try {
-      await loginUser(email.trim(), password);
-      router.replace('/home');
+      await registerUser(email.trim(), password);
+      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso.');
+      router.back();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Não foi possível realizar o login.';
+        error instanceof Error ? error.message : 'Não foi possível cadastrar.';
 
-      Alert.alert('Erro ao entrar', message);
+      Alert.alert('Erro ao cadastrar', message);
     }
   }
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-[#F5F8FC] w-"
+      className="flex-1 bg-[#F5F8FC]"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View className="flex-1 justify-center px-6">
         <View className="rounded-3xl border border-[#D8E3F2] bg-white p-6">
-          <Text className="mb-6 text-3xl font-bold text-[#00142E]">Login</Text>
+          <Text className="mb-6 text-3xl font-bold text-[#00142E]">Cadastro</Text>
+
+          <TextInput
+            placeholder="Nome"
+            value={name}
+            onChangeText={setName}
+            className="mb-3 rounded-2xl border border-[#D8E3F2] bg-[#F5F8FC] px-4 py-4 text-base text-[#00142E]"
+            placeholderTextColor="#7C93AF"
+          />
 
           <TextInput
             placeholder="Email"
@@ -64,19 +73,7 @@ export default function LoginScreen() {
             placeholderTextColor="#7C93AF"
           />
 
-          <Button title="Entrar" onPress={handleLogin} color="#00095B" />
-
-          <TouchableOpacity onPress={() => router.push('/register')}>
-            <Text className="mt-5 text-base font-semibold text-[#00095B]">
-              Criar conta?
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => router.push('/forgot-password')}>
-            <Text className="mt-3 text-base font-semibold text-[#00095B]">
-              Esqueci minha senha
-            </Text>
-          </TouchableOpacity>
+          <Button title="Cadastrar" onPress={handleRegister} color="#00095B" />
         </View>
       </View>
     </KeyboardAvoidingView>
