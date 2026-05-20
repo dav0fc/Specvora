@@ -58,6 +58,9 @@ export function getCurrentUser() {
 }
 
 /**
+ * Quando for ligar no Firebase, mantenha as telas iguais e troque as funções
+ * acima por este padrão do professor:
+ *
  * import {
  *   createUserWithEmailAndPassword,
  *   signInWithEmailAndPassword,

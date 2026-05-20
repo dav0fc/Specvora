@@ -6,6 +6,7 @@ import {
   Platform,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -14,6 +15,8 @@ import { registerUser } from '../services/authService';
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -42,8 +45,8 @@ export default function RegisterScreen() {
       className="flex-1 bg-[#F5F8FC]"
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View className="flex-1 justify-center px-6">
-        <View className="rounded-3xl border border-[#D8E3F2] bg-white p-6">
+      <View className="flex-1 items-center justify-center px-6">
+        <View className={`${isTablet ? 'w-3/5' : 'w-full'} rounded-3xl border border-[#D8E3F2] bg-white p-6`}>
           <Text className="mb-6 text-3xl font-bold text-[#00142E]">Cadastro</Text>
 
           <TextInput
