@@ -23,7 +23,7 @@ Transformar uma base de dados técnica em uma ferramenta clara para consulta, co
 - Versão
 - Tipo de veículo
 - Lista livre de atributos técnicos/equipamentos desejados
-- 
+  
 ## Saída da aplicação
 - Lista padronizada de especificações técnicas
 - Campos claros, organizados e comparáveis
@@ -46,11 +46,9 @@ Transformar uma base de dados técnica em uma ferramenta clara para consulta, co
 - Cadastro de usuário
 - Recuperação de senha
 - Proteção da tela principal por autenticação
-- Seleção de veículos por marca, modelo e versão
 - Filtro por tipo de veículo
 - Seleção livre de atributos técnicos
 - Comparação de especificações técnicas em tabela padronizada
-- Radar chart comparativo
 - Interface responsiva para celular e tablet
 
 ### Pré-requisitos
