@@ -1,0 +1,1511 @@
+{
+  "schemaVersion": 1,
+  "description": "Catálogo único de atributos técnicos. Para adicionar um novo atributo, cadastre aqui uma vez e depois preencha o valor em vehicles.json.",
+  "categories": [
+    {
+      "id": "engine_transmission",
+      "name": "Engine & Transmission",
+      "specs": [
+        {
+          "key": "peso_em_ordem_de_marchas",
+          "label": "Peso em ordem de marchas",
+          "type": "number"
+        },
+        {
+          "key": "cilindrada",
+          "label": "Cilindrada",
+          "type": "number"
+        },
+        {
+          "key": "potencia",
+          "label": "Potência",
+          "type": "number"
+        },
+        {
+          "key": "torque",
+          "label": "Torque",
+          "type": "number"
+        },
+        {
+          "key": "economia_de_combustivel",
+          "label": "Economia de Combustível",
+          "type": "number"
+        },
+        {
+          "key": "transmissao_automatica",
+          "label": "Transmissão Automática",
+          "type": "boolean"
+        },
+        {
+          "key": "motor_flex_vs_gasolina",
+          "label": "Motor Flex vs Gasolina",
+          "type": "boolean"
+        },
+        {
+          "key": "tecnologia_turbo",
+          "label": "Tecnologia turbo",
+          "type": "boolean"
+        },
+        {
+          "key": "quantidade_de_marchas",
+          "label": "Quantidade de marchas",
+          "type": "number"
+        },
+        {
+          "key": "fhev",
+          "label": "FHEV",
+          "type": "boolean"
+        },
+        {
+          "key": "phev",
+          "label": "PHEV",
+          "type": "boolean"
+        },
+        {
+          "key": "bev",
+          "label": "BEV",
+          "type": "boolean"
+        },
+        {
+          "key": "motor_diesel",
+          "label": "Motor Diesel",
+          "type": "boolean"
+        },
+        {
+          "key": "paddle_shift",
+          "label": "Paddle Shift",
+          "type": "boolean"
+        },
+        {
+          "key": "e_shifter_manopla_eletronica",
+          "label": "E-Shifter (Manopla eletrônica)",
+          "type": "boolean"
+        },
+        {
+          "key": "tecnologia_biturbo",
+          "label": "Tecnologia BiTurbo",
+          "type": "boolean"
+        },
+        {
+          "key": "motor_eletrico",
+          "label": "Motor Elétrico",
+          "type": "boolean"
+        },
+        {
+          "key": "e_autonomy",
+          "label": "E-Autonomy",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "wheels",
+      "name": "Wheels",
+      "specs": [
+        {
+          "key": "liga_leve",
+          "label": "Liga leve",
+          "type": "boolean"
+        },
+        {
+          "key": "polegadas",
+          "label": "Polegadas",
+          "type": "number"
+        },
+        {
+          "key": "pneus_atr_50_50",
+          "label": "Pneus ATR (50/50)",
+          "type": "boolean"
+        },
+        {
+          "key": "pneus_runflat",
+          "label": "Pneus RunFlat",
+          "type": "boolean"
+        },
+        {
+          "key": "pneus_atr_plus_60_40",
+          "label": "Pneus ATR Plus (60/40)",
+          "type": "boolean"
+        },
+        {
+          "key": "pneus_auto_vedantes",
+          "label": "Pneus Auto-vedantes",
+          "type": "boolean"
+        },
+        {
+          "key": "full_size_spare_tires_same_as_vehicle_base",
+          "label": "Full Size Spare tires (same as vehicle base)",
+          "type": "boolean"
+        },
+        {
+          "key": "estepe_temporario",
+          "label": "Estepe temporário",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "connectivity",
+      "name": "Connectivity",
+      "specs": [
+        {
+          "key": "loja_de_aplicativos",
+          "label": "Loja de Aplicativos",
+          "type": "boolean"
+        },
+        {
+          "key": "digital_assistant_assistente_digital_inteligente",
+          "label": "Digital assistant (Assistente Digital Inteligente)",
+          "type": "boolean"
+        },
+        {
+          "key": "destravamento_travamento_das_portas",
+          "label": "Destravamento/Travamento das portas",
+          "type": "boolean"
+        },
+        {
+          "key": "ignicao_rota_com_agendamento_ou_nao",
+          "label": "Ignição Rota (com agendamento ou não)",
+          "type": "boolean"
+        },
+        {
+          "key": "localizacao_do_veiculo",
+          "label": "Localização do Veículo",
+          "type": "boolean"
+        },
+        {
+          "key": "vehicle_health_and_alerts_veh_status",
+          "label": "Vehicle Health and Alerts (+Veh Status)",
+          "type": "boolean"
+        },
+        {
+          "key": "send_poi_to_navigation",
+          "label": "Send POI to Navigation",
+          "type": "boolean"
+        },
+        {
+          "key": "geofencing_guard_mode",
+          "label": "Geofencing / Guard Mode",
+          "type": "boolean"
+        },
+        {
+          "key": "vehicle_recovery",
+          "label": "Vehicle Recovery",
+          "type": "boolean"
+        },
+        {
+          "key": "usage_based_insurance_ubi",
+          "label": "Usage Based Insurance – UBI",
+          "type": "boolean"
+        },
+        {
+          "key": "wi_fi_hotspot",
+          "label": "Wi-Fi Hotspot",
+          "type": "boolean"
+        },
+        {
+          "key": "status_de_carregamento_ev",
+          "label": "Status de carregamento (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "configuracao_de_carregamento_ev",
+          "label": "Configuração de carregamento (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "trip_charge_log_ev",
+          "label": "Trip & Charge Log (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "station_finder_ev",
+          "label": "Station Finder (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "trends_ev",
+          "label": "Trends (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "rankings_ev",
+          "label": "Rankings (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "atualizacoes_ota",
+          "label": "Atualizações OTA",
+          "type": "boolean"
+        },
+        {
+          "key": "agile_vehicle_data_collection",
+          "label": "Agile Vehicle Data Collection",
+          "type": "boolean"
+        },
+        {
+          "key": "online_traffic_sync_4",
+          "label": "Online Traffic (Sync 4)",
+          "type": "boolean"
+        },
+        {
+          "key": "local_hazard_information",
+          "label": "Local Hazard information",
+          "type": "boolean"
+        },
+        {
+          "key": "zone_lighting",
+          "label": "Zone Lighting",
+          "type": "boolean"
+        },
+        {
+          "key": "ip_pass_through",
+          "label": "IP Pass-through",
+          "type": "boolean"
+        },
+        {
+          "key": "low_charge_alert_ev",
+          "label": "Low Charge Alert (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "charge_station_space_availability_alert_ev",
+          "label": "Charge Station Space Availability Alert (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "locate_and_pay_ev",
+          "label": "Locate and Pay (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "smart_charging_ev",
+          "label": "Smart Charging (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "plug_and_charge_ev",
+          "label": "Plug and Charge (EV)",
+          "type": "boolean"
+        },
+        {
+          "key": "planejador_de_viagem_ev",
+          "label": "Planejador de Viagem (EV)",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "ice_line_up",
+      "name": "Ice Line Up",
+      "specs": [
+        {
+          "key": "bluetooth",
+          "label": "Bluetooth",
+          "type": "boolean"
+        },
+        {
+          "key": "camera_traseira",
+          "label": "Camera traseira",
+          "type": "boolean"
+        },
+        {
+          "key": "camera_180_graus",
+          "label": "Camera 180 graus",
+          "type": "boolean"
+        },
+        {
+          "key": "navegador_gps",
+          "label": "Navegador GPS",
+          "type": "boolean"
+        },
+        {
+          "key": "navegador_gps_atualizavel",
+          "label": "Navegador GPS (Atualizavel)",
+          "type": "boolean"
+        },
+        {
+          "key": "radio_mechless_sem_usb_sem_bluetooth",
+          "label": "Radio Mechless (Sem USB, Sem Bluetooth)",
+          "type": "boolean"
+        },
+        {
+          "key": "reconhecimento_por_voz_e_ou_comando_de_voz",
+          "label": "Reconhecimento por voz e/ou Comando de Voz",
+          "type": "boolean"
+        },
+        {
+          "key": "alto_falantes_tweeters_unidade",
+          "label": "Alto-falantes / Tweeters (unidade)",
+          "type": "number"
+        },
+        {
+          "key": "head_up_display_hud",
+          "label": "Head Up Display (HUD)",
+          "type": "boolean"
+        },
+        {
+          "key": "tela_no_painel_de_instrumentos_monocromatica_por_polegada",
+          "label": "Tela no painel de instrumentos (monocromática) por polegada",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_som_premium_marca",
+          "label": "Sistema de som Premium/Marca",
+          "type": "boolean"
+        },
+        {
+          "key": "head_up_display_hud_realidade_aumentada",
+          "label": "Head Up Display (HUD) - (realidade aumentada)",
+          "type": "boolean"
+        },
+        {
+          "key": "espelhamento_de_tela_touch_screen_android_auto_car_play_por_cabo",
+          "label": "Espelhamento de tela touch screen (Android Auto / Car Play) por cabo",
+          "type": "boolean"
+        },
+        {
+          "key": "multimedia_polegadas",
+          "label": "Multimedia polegadas",
+          "type": "number"
+        },
+        {
+          "key": "assistencia_de_emergencia",
+          "label": "Assistência de Emergência",
+          "type": "boolean"
+        },
+        {
+          "key": "carregamento_wireless",
+          "label": "Carregamento Wireless",
+          "type": "boolean"
+        },
+        {
+          "key": "subwoofer_amplificador",
+          "label": "Subwoofer + Amplificador",
+          "type": "boolean"
+        },
+        {
+          "key": "camera_360_graus",
+          "label": "Câmera 360 graus",
+          "type": "boolean"
+        },
+        {
+          "key": "conexao_wireless_android_auto_car_play",
+          "label": "Conexão Wireless Android Auto & Car Play",
+          "type": "boolean"
+        },
+        {
+          "key": "tela_no_painel_de_instrumentos_colorida_por_polegada",
+          "label": "Tela no painel de instrumentos colorida por polegada",
+          "type": "number"
+        },
+        {
+          "key": "alto_falantes_premium_tweeters_unidade",
+          "label": "Alto-falantes premium / Tweeters (unidade)",
+          "type": "boolean"
+        },
+        {
+          "key": "usb_unidade",
+          "label": "USB (unidade)",
+          "type": "number"
+        },
+        {
+          "key": "usb_passageiro_unidade",
+          "label": "USB Passageiro (unidade)",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "air_conditioning",
+      "name": "Air Conditioning",
+      "specs": [
+        {
+          "key": "ar_condicionado_com_saida_p_2a_fileira_ou_mais_de_bancos",
+          "label": "Ar Condicionado com saída p/ 2ª fileira ou mais de bancos",
+          "type": "boolean"
+        },
+        {
+          "key": "ar_condicionado_automatico_e_digital",
+          "label": "Ar Condicionado Automático e Digital",
+          "type": "boolean"
+        },
+        {
+          "key": "ar_condicionado_de_duas_zonas",
+          "label": "Ar condicionado de duas zonas",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "name": "Safety",
+      "specs": [
+        {
+          "key": "sistema_anti_capotamento_rollover_stability_control",
+          "label": "Sistema Anti Capotamento (Rollover Stability Control)",
+          "type": "boolean"
+        },
+        {
+          "key": "freio_automatico_carro_parado",
+          "label": "Freio Automático (Carro Parado)",
+          "type": "boolean"
+        },
+        {
+          "key": "aviso_de_pressao_baixa_dos_pneus_dds",
+          "label": "Aviso de pressão baixa dos pneus (DDS)",
+          "type": "boolean"
+        },
+        {
+          "key": "sensor_de_pressao_dos_pneus_tpms",
+          "label": "Sensor de Pressão dos pneus (TPMS)",
+          "type": "boolean"
+        },
+        {
+          "key": "controle_de_descida",
+          "label": "Controle de descida",
+          "type": "boolean"
+        },
+        {
+          "key": "controle_adaptativo_de_carga",
+          "label": "Controle Adaptativo de carga",
+          "type": "boolean"
+        },
+        {
+          "key": "controle_de_reboque",
+          "label": "Controle de reboque",
+          "type": "boolean"
+        },
+        {
+          "key": "trail_control",
+          "label": "Trail Control",
+          "type": "boolean"
+        },
+        {
+          "key": "controle_de_freio_do_trailer",
+          "label": "Controle de freio do Trailer",
+          "type": "boolean"
+        },
+        {
+          "key": "vetorizacao_de_torque",
+          "label": "Vetorização de Torque",
+          "type": "boolean"
+        },
+        {
+          "key": "freio_automatico_apos_impacto",
+          "label": "Freio automatico após impacto",
+          "type": "boolean"
+        },
+        {
+          "key": "assistencia_de_direcao_defensiva",
+          "label": "Assistência de direção defensiva",
+          "type": "boolean"
+        },
+        {
+          "key": "abs_off_road",
+          "label": "ABS Off Road",
+          "type": "boolean"
+        },
+        {
+          "key": "airbag_cada",
+          "label": "Airbag (cada)",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "id": "high_tech",
+      "name": "High Tech",
+      "specs": [
+        {
+          "key": "piloto_automatico",
+          "label": "Piloto Automático",
+          "type": "boolean"
+        },
+        {
+          "key": "limitador_de_velocidade",
+          "label": "Limitador de Velocidade",
+          "type": "boolean"
+        },
+        {
+          "key": "piloto_automatico_adaptativo",
+          "label": "Piloto Automático Adaptativo",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_permanencia_na_faixa_alerta_e_assistencia",
+          "label": "Sistema de Permanência na Faixa (alerta e assistência)",
+          "type": "boolean"
+        },
+        {
+          "key": "sensor_de_estacionamento_traseiro",
+          "label": "Sensor de Estacionamento Traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "sensor_de_estacionamento_dianteiro",
+          "label": "Sensor de Estacionamento Dianteiro",
+          "type": "boolean"
+        },
+        {
+          "key": "sensor_de_chuva",
+          "label": "Sensor de Chuva",
+          "type": "boolean"
+        },
+        {
+          "key": "espelho_retrovisor_eletrocromico",
+          "label": "Espelho retrovisor eletrocrômico",
+          "type": "boolean"
+        },
+        {
+          "key": "acendimento_automatico_dos_farois_sensor_crepuscular",
+          "label": "Acendimento automático dos faróis (sensor crepuscular)",
+          "type": "boolean"
+        },
+        {
+          "key": "partida_remota_chave",
+          "label": "Partida Remota (Chave)",
+          "type": "boolean"
+        },
+        {
+          "key": "detector_de_fadiga",
+          "label": "Detector de Fadiga",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_estacionamento_automatico_acelera_e_freia",
+          "label": "Sistema de Estacionamento Automático - (Acelera e freia)",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_estacionamento_automatico_2_0_supervisionado",
+          "label": "Sistema de Estacionamento Automático - 2.0 (Supervisionado)",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_estacionamento_automatico_remoto",
+          "label": "Sistema de Estacionamento Automático - Remoto",
+          "type": "boolean"
+        },
+        {
+          "key": "freio_de_mao_eletronico",
+          "label": "Freio de mão eletrônico",
+          "type": "boolean"
+        },
+        {
+          "key": "retrovisor_eletrico",
+          "label": "Retrovisor elétrico",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_monitoramento_de_ponto_cego_blis",
+          "label": "Sistema de monitoramento de ponto-cego (BLIS)",
+          "type": "boolean"
+        },
+        {
+          "key": "reconhecimento_de_sinais_de_transito",
+          "label": "Reconhecimento de sinais de trânsito",
+          "type": "boolean"
+        },
+        {
+          "key": "abertura_do_porta_malas_sem_as_maos",
+          "label": "Abertura do porta-malas sem as mãos",
+          "type": "boolean"
+        },
+        {
+          "key": "modo_de_conducao_ajuste_da_rigidez_volante",
+          "label": "Modo de condução (Ajuste da rigidez volante)",
+          "type": "boolean"
+        },
+        {
+          "key": "drive_mode_ajuste_da_rigidez_volante_ignicao_e_marcha",
+          "label": "Drive Mode (Ajuste da rigidez volante, ignição e marcha)",
+          "type": "boolean"
+        },
+        {
+          "key": "aeb_autonomous_emergency_brake",
+          "label": "AEB (Autonomous Emergency Brake)",
+          "type": "boolean"
+        },
+        {
+          "key": "espelho_retrovisor_com_rebatimento_eletrico",
+          "label": "Espelho retrovisor com rebatimento elétrico",
+          "type": "boolean"
+        },
+        {
+          "key": "piloto_automatico_adaptativo_stop_go_reconhecimento_de_placas",
+          "label": "Piloto Automático Adaptativo + Stop & GO + Reconhecimento de Placas",
+          "type": "boolean"
+        },
+        {
+          "key": "alerta_de_permanencia_em_faixa",
+          "label": "Alerta de Permanência em Faixa",
+          "type": "boolean"
+        },
+        {
+          "key": "alerta_de_colisao_frontal",
+          "label": "Alerta de Colisão Frontal",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_centralizacao_de_faixa",
+          "label": "Sistema de centralização de faixa",
+          "type": "boolean"
+        },
+        {
+          "key": "piloto_automatico_adaptativo_stop_go",
+          "label": "Piloto Automático Adaptativo + Stop & GO",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_monitoramento_de_ponto_cego_blis_alerta_de_trafego_cruzado",
+          "label": "Sistema de monitoramento de ponto-cego (BLIS) + Alerta de tráfego cruzado",
+          "type": "boolean"
+        },
+        {
+          "key": "reverse_aeb",
+          "label": "Reverse AEB",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_keyless_entry_com_botao_de_partida_peps",
+          "label": "Sistema Keyless Entry com Botão de Partida (PEPS)",
+          "type": "boolean"
+        },
+        {
+          "key": "espelho_retrovisor_interior_digital",
+          "label": "Espelho retrovisor interior digital",
+          "type": "boolean"
+        },
+        {
+          "key": "aceleracao_remota",
+          "label": "Aceleração Remota",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "global_closing",
+      "name": "Global Closing",
+      "specs": [
+        {
+          "key": "alarme_volumetrico_inclui_perimetrico",
+          "label": "Alarme Volumétrico (inclui perimétrico)",
+          "type": "boolean"
+        },
+        {
+          "key": "alarme_perimetrico",
+          "label": "Alarme Perimétrico",
+          "type": "boolean"
+        },
+        {
+          "key": "global_opening_vidros_travas_e_ou_sunroof",
+          "label": "Global Opening (Vidros, Travas e/ou Sunroof)",
+          "type": "boolean"
+        },
+        {
+          "key": "trava_eletrica_das_portas",
+          "label": "Trava Elétrica das portas",
+          "type": "boolean"
+        },
+        {
+          "key": "vidro_eletrico_traseiro",
+          "label": "Vidro elétrico Traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_um_toque_para_cima_baixo_anti_esmagamento_por_porta",
+          "label": "Sistema de um toque para cima/baixo + Anti-esmagamento (por porta)",
+          "type": "number"
+        },
+        {
+          "key": "abertura_de_porta_traseira_270_van",
+          "label": "Abertura de porta traseira 270 (Van)",
+          "type": "boolean"
+        },
+        {
+          "key": "thatcham_alarm_bateria_adicional",
+          "label": "Thatcham Alarm (Bateria adicional)",
+          "type": "boolean"
+        },
+        {
+          "key": "global_closing_vidros_travas_e_ou_sunroof",
+          "label": "Global Closing (Vidros, Travas e/ou Sunroof)",
+          "type": "boolean"
+        },
+        {
+          "key": "tampa_do_porta_malas_automatico",
+          "label": "Tampa do Porta-malas automático",
+          "type": "boolean"
+        },
+        {
+          "key": "vidro_eletrico_vidro_cacamba_pickups",
+          "label": "Vidro Elétrico vidro caçamba (pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "abertura_do_vidro_do_porta_malas",
+          "label": "Abertura do vidro do porta-malas",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "trim",
+      "name": "Trim",
+      "specs": [
+        {
+          "key": "bancos_revestidos_em_couro",
+          "label": "Bancos revestidos em couro",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_revestidos_parcialmente_50_vinil_50_tecido",
+          "label": "Bancos revestidos parcialmente (50% Vinil / 50% Tecido)",
+          "type": "boolean"
+        },
+        {
+          "key": "manopla_do_cambio_com_acabamento_em_couro",
+          "label": "Manopla do câmbio com acabamento em Couro",
+          "type": "boolean"
+        },
+        {
+          "key": "volante_revestido_em_couro_vynil",
+          "label": "Volante revestido em couro/vynil",
+          "type": "boolean"
+        },
+        {
+          "key": "volante_revestido_parcialmente_em_couro",
+          "label": "Volante revestido parcialmente em couro",
+          "type": "boolean"
+        },
+        {
+          "key": "painel_soft_touch",
+          "label": "Painel Soft Touch",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_revestidos_100_vinil",
+          "label": "Bancos revestidos 100% Vinil",
+          "type": "boolean"
+        },
+        {
+          "key": "alcantara_outros_adicional_ao_couro_vinil",
+          "label": "Alcantara / Outros (Adicional ao Couro/Vinil)",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "sunroof",
+      "name": "Sunroof",
+      "specs": [
+        {
+          "key": "teto_solar_eletrico",
+          "label": "Teto Solar Elétrico",
+          "type": "boolean"
+        },
+        {
+          "key": "teto_solar_panoramico",
+          "label": "Teto Solar Panorâmico",
+          "type": "boolean"
+        },
+        {
+          "key": "teto_de_vidro",
+          "label": "Teto de Vidro",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "seats",
+      "name": "Seats",
+      "specs": [
+        {
+          "key": "banco_traseiro_bipartido_60_40",
+          "label": "Banco Traseiro Bipartido (60/40)",
+          "type": "boolean"
+        },
+        {
+          "key": "banco_traseiro_aquecido",
+          "label": "Banco Traseiro aquecido",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_traseiros_rebativeis_100",
+          "label": "Bancos traseiros rebatíveis (100%)",
+          "type": "boolean"
+        },
+        {
+          "key": "acento_traseiro_rebatimento_pra_frente",
+          "label": "Acento traseiro rebatimento pra Frente",
+          "type": "boolean"
+        },
+        {
+          "key": "banco_traseiro_flip_fold_com_compartimento",
+          "label": "Banco Traseiro Flip & Fold com compartimento",
+          "type": "boolean"
+        },
+        {
+          "key": "banco_com_memoria",
+          "label": "Banco com Memória",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_aquecimento_frontal",
+          "label": "Bancos Aquecimento (Frontal)",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_refrigerado_frontal",
+          "label": "Bancos refrigerado (Frontal)",
+          "type": "boolean"
+        },
+        {
+          "key": "3a_fileira_de_bancos",
+          "label": "3ª fileira de Bancos",
+          "type": "boolean"
+        },
+        {
+          "key": "rebatimento_automatico_do_encosto_do_banco_traseiro",
+          "label": "Rebatimento Automático do Encosto do banco traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "terceiro_assento_dianteiro",
+          "label": "Terceiro Assento dianteiro",
+          "type": "boolean"
+        },
+        {
+          "key": "massagem_bancos_dianteiros",
+          "label": "Massagem bancos dianteiros",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_reclinaveis_180",
+          "label": "Bancos reclináveis 180°",
+          "type": "boolean"
+        },
+        {
+          "key": "banco_posicoes_eletrico_cada_posicao",
+          "label": "Banco posições Elétrico (cada posição)",
+          "type": "number"
+        },
+        {
+          "key": "banco_posicoes_manual",
+          "label": "Banco posições Manual",
+          "type": "boolean"
+        },
+        {
+          "key": "bancos_recaro",
+          "label": "Bancos Recaro",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "lights",
+      "name": "Lights",
+      "specs": [
+        {
+          "key": "farois_full_led",
+          "label": "Faróis Full LED",
+          "type": "boolean"
+        },
+        {
+          "key": "farois_de_xenon",
+          "label": "Faróis de Xenon",
+          "type": "boolean"
+        },
+        {
+          "key": "farois_direcionais",
+          "label": "Faróis direcionais",
+          "type": "boolean"
+        },
+        {
+          "key": "farois_auxiliares_em_curvas",
+          "label": "Faróis auxiliares em curvas",
+          "type": "boolean"
+        },
+        {
+          "key": "farol_com_projetor",
+          "label": "Farol com Projetor",
+          "type": "boolean"
+        },
+        {
+          "key": "led_day_time_running_lights_dtrl_signature_lights",
+          "label": "LED Day time running lights (DTRL) + Signature Lights",
+          "type": "boolean"
+        },
+        {
+          "key": "farol_alto_automatico",
+          "label": "Farol alto automático",
+          "type": "boolean"
+        },
+        {
+          "key": "farois_de_neblina_dianteiro",
+          "label": "Faróis de Neblina Dianteiro",
+          "type": "boolean"
+        },
+        {
+          "key": "luz_de_neblina_traseiro",
+          "label": "Luz de Neblina Traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "lanternas_em_led_parcial",
+          "label": "Lanternas em LED - parcial",
+          "type": "boolean"
+        },
+        {
+          "key": "lanternas_em_full_led",
+          "label": "Lanternas em Full LED",
+          "type": "boolean"
+        },
+        {
+          "key": "seta_no_retrovisor",
+          "label": "Seta no retrovisor",
+          "type": "boolean"
+        },
+        {
+          "key": "lampada_farol_de_neblina_led",
+          "label": "Lâmpada Farol de Neblina LED",
+          "type": "boolean"
+        },
+        {
+          "key": "farois_matrix_led",
+          "label": "Faróis Matrix Led",
+          "type": "boolean"
+        },
+        {
+          "key": "iluminacao_360",
+          "label": "Iluminação 360°",
+          "type": "boolean"
+        },
+        {
+          "key": "ajuste_de_altura_de_farois_automatico",
+          "label": "Ajuste de altura de faróis automático",
+          "type": "boolean"
+        },
+        {
+          "key": "ajuste_de_altura_de_farois",
+          "label": "Ajuste de Altura de faróis",
+          "type": "boolean"
+        },
+        {
+          "key": "iluminacao_na_cacamba_interno_chicote_eletrico",
+          "label": "Iluminação na caçamba (interno) + Chicote Elétrico",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "4x4",
+      "name": "4X4",
+      "specs": [
+        {
+          "key": "tracao_4x4_high_low",
+          "label": "Tração 4x4 (high/low)",
+          "type": "boolean"
+        },
+        {
+          "key": "diferencial_traseiro_blocante",
+          "label": "Diferencial traseiro blocante",
+          "type": "boolean"
+        },
+        {
+          "key": "diferencial_traseiro_com_deslizamento_limitado",
+          "label": "Diferencial traseiro com deslizamento limitado",
+          "type": "boolean"
+        },
+        {
+          "key": "santo_antonio_tubular_pickups",
+          "label": "Santo Antônio tubular (Pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "santo_antonio_estilizado_c_box_rail",
+          "label": "Santo Antônio (estilizado c/ box rail)",
+          "type": "boolean"
+        },
+        {
+          "key": "estribo_lateral_plataforma_pickups",
+          "label": "Estribo Lateral Plataforma (Pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "estribo_lateral_tubular_metalico_pickups",
+          "label": "Estribo Lateral tubular metálico (Pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "bloqueio_de_diferencial_dianteiro_fwd",
+          "label": "Bloqueio de diferencial dianteiro (FWD)",
+          "type": "boolean"
+        },
+        {
+          "key": "protetor_de_cacamba",
+          "label": "Protetor de Caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "box_rails_na_parte_superior_da_cacamba",
+          "label": "Box rails (na parte superior da caçamba)",
+          "type": "boolean"
+        },
+        {
+          "key": "capota_maritima_pickups",
+          "label": "Capota Marítima (Pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "terrain_management_system_modes_auto_sand_snow_mud_rock",
+          "label": "Terrain Management System (Modes Auto, Sand, Snow, Mud, Rock)",
+          "type": "boolean"
+        },
+        {
+          "key": "capota_rigida",
+          "label": "Capota Rígida",
+          "type": "boolean"
+        },
+        {
+          "key": "tracao_traseira",
+          "label": "Tração Traseira",
+          "type": "boolean"
+        },
+        {
+          "key": "tracao_integral_awd",
+          "label": "Tração integral (AWD)",
+          "type": "boolean"
+        },
+        {
+          "key": "suspensao_off_road_fox_live_valve_eixo_frontal_traseiro",
+          "label": "Suspensão Off road FOX Live Valve Eixo Frontal/Traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "4x4_lock_adicional_ao_awd_4wd",
+          "label": "4x4 Lock (Adicional ao AWD) - 4WD",
+          "type": "boolean"
+        },
+        {
+          "key": "protetor_de_cacamba_spray_in",
+          "label": "Protetor de Caçamba Spray-in",
+          "type": "boolean"
+        },
+        {
+          "key": "suspensao_melhorada",
+          "label": "Suspensão Melhorada",
+          "type": "boolean"
+        },
+        {
+          "key": "santo_antonio_deslizante_swing_in_place",
+          "label": "Santo Antônio Deslizante (Swing in Place)",
+          "type": "boolean"
+        },
+        {
+          "key": "peito_de_aco",
+          "label": "Peito de aço",
+          "type": "boolean"
+        },
+        {
+          "key": "suspensao_a_ar_active_level",
+          "label": "Suspensão a Ar (Active Level)",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "others",
+      "name": "Others",
+      "specs": [
+        {
+          "key": "anos_de_garantia",
+          "label": "Anos de garantia",
+          "type": "number"
+        },
+        {
+          "key": "anos_de_garantia_da_bateria_hev_or_bev",
+          "label": "Anos de garantia da bateria (HEV or BEV)",
+          "type": "boolean"
+        },
+        {
+          "key": "tomada_110v_cada",
+          "label": "Tomada 110V (cada)",
+          "type": "boolean"
+        },
+        {
+          "key": "apoio_de_braco_dianteiro_integrado_no_banco",
+          "label": "Apoio de braço dianteiro (integrado no banco)",
+          "type": "boolean"
+        },
+        {
+          "key": "apoio_de_braco_traseiro",
+          "label": "Apoio de braço traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "cabine_dupla_pickups",
+          "label": "Cabine Dupla (pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "cabine_simples_pickups",
+          "label": "Cabine simples (pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "cabine_simples_sem_cacamba_chassis_pickups",
+          "label": "Cabine simples sem caçamba (Chassis) (pickups)",
+          "type": "boolean"
+        },
+        {
+          "key": "alargadores_de_paralamas",
+          "label": "Alargadores de Paralamas",
+          "type": "boolean"
+        },
+        {
+          "key": "ajuste_dos_pedais_eletrico",
+          "label": "Ajuste dos Pedais elétrico",
+          "type": "boolean"
+        },
+        {
+          "key": "degrau_acesso_cacamba",
+          "label": "Degrau acesso caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "assistente_da_tampa_da_cacamba",
+          "label": "Assistente da Tampa da Caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "travamento_eletrico_da_cacamba",
+          "label": "Travamento elétrico da caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "capota_maritima_eletrica",
+          "label": "Capota Marítima Elétrica",
+          "type": "boolean"
+        },
+        {
+          "key": "faixa_adesiva_ex_capo_lateral_etc",
+          "label": "Faixa Adesiva (ex: capo, lateral, etc)",
+          "type": "boolean"
+        },
+        {
+          "key": "freios_brembo_por_eixo",
+          "label": "Freios Brembo (Por Eixo)",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_escapamento_com_valvula_ativa",
+          "label": "Sistema de escapamento com Válvula ativa",
+          "type": "boolean"
+        },
+        {
+          "key": "pro_power_2_000w",
+          "label": "Pro Power 2.000W",
+          "type": "boolean"
+        },
+        {
+          "key": "escada_de_acesso_a_cacamba",
+          "label": "Escada de acesso à caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "superficie_para_trabalho_na_tampa_na_cacamba",
+          "label": "Superfície para trabalho na tampa na caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "monitor_de_vida_util_do_oleo",
+          "label": "Monitor de vida útil do óleo",
+          "type": "boolean"
+        },
+        {
+          "key": "bagageiro_de_teto_barras_longitudinais",
+          "label": "Bagageiro de teto (barras longitudinais)",
+          "type": "boolean"
+        },
+        {
+          "key": "compartimento_para_cacamba",
+          "label": "Compartimento para caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "tampa_traseira_multifuncional_c_abertura_lateral",
+          "label": "Tampa Traseira Multifuncional (c/ abertura lateral)",
+          "type": "boolean"
+        },
+        {
+          "key": "engate_de_reboque_3_500_kg",
+          "label": "Engate de Reboque 3.500 kg",
+          "type": "boolean"
+        },
+        {
+          "key": "volantes_aquecidos",
+          "label": "Volantes aquecidos",
+          "type": "boolean"
+        },
+        {
+          "key": "tacografo_digital",
+          "label": "Tacógrafo Digital",
+          "type": "boolean"
+        },
+        {
+          "key": "bagageiro_de_teto_barras_transversais",
+          "label": "Bagageiro de teto (barras transversais)",
+          "type": "boolean"
+        },
+        {
+          "key": "bussola_e_inclinometros_longitudinal_e_transversal",
+          "label": "Bússola e inclinômetros longitudinal e transversal",
+          "type": "boolean"
+        },
+        {
+          "key": "console_dianteiro_central_com_apoio_de_braco",
+          "label": "Console dianteiro central com apoio de braço",
+          "type": "boolean"
+        },
+        {
+          "key": "disco_de_freio_traseiro",
+          "label": "Disco de freio traseiro",
+          "type": "boolean"
+        },
+        {
+          "key": "espelho_retrovisor_externo_cromado",
+          "label": "Espelho Retrovisor Externo Cromado",
+          "type": "boolean"
+        },
+        {
+          "key": "ganchos_para_reboque_cada",
+          "label": "Ganchos para Reboque (cada)",
+          "type": "text"
+        },
+        {
+          "key": "grade_do_radiador_com_acabamento_premium_black_piano_cromo_cor_veiculo",
+          "label": "Grade do radiador com acabamento Premium (Black Piano, Cromo, Cor veiculo)",
+          "type": "boolean"
+        },
+        {
+          "key": "macanetas_externas_cromadas",
+          "label": "Maçanetas externas cromadas",
+          "type": "boolean"
+        },
+        {
+          "key": "molduras_laterais_na_cor_do_veiculo_friso",
+          "label": "Molduras Laterais na Cor do Veículo (Friso)",
+          "type": "boolean"
+        },
+        {
+          "key": "molduras_laterais_na_cor_preta_friso",
+          "label": "Molduras Laterais na Cor Preta (Friso)",
+          "type": "boolean"
+        },
+        {
+          "key": "moldura_cromada_black_piano_das_janelas",
+          "label": "Moldura cromada/Black Piano das janelas",
+          "type": "boolean"
+        },
+        {
+          "key": "para_barro_par",
+          "label": "Para Barro (Par)",
+          "type": "number"
+        },
+        {
+          "key": "para_choque_traseiro_cromado",
+          "label": "Para-choque Traseiro Cromado",
+          "type": "boolean"
+        },
+        {
+          "key": "para_choque_na_cor_do_veiculo",
+          "label": "Para-choque na Cor do Veículo",
+          "type": "boolean"
+        },
+        {
+          "key": "protetor_de_carter",
+          "label": "Protetor de cárter",
+          "type": "boolean"
+        },
+        {
+          "key": "protetor_inferior_do_tanque_de_combustivel",
+          "label": "Protetor inferior do tanque de combustível",
+          "type": "boolean"
+        },
+        {
+          "key": "aerofolio_spoiler",
+          "label": "Aerofólio (Spoiler)",
+          "type": "boolean"
+        },
+        {
+          "key": "tapete_de_porta_malas",
+          "label": "Tapete de porta-malas",
+          "type": "boolean"
+        },
+        {
+          "key": "tapete_de_borracha",
+          "label": "Tapete de Borracha",
+          "type": "boolean"
+        },
+        {
+          "key": "tapete_carpete",
+          "label": "Tapete Carpete",
+          "type": "boolean"
+        },
+        {
+          "key": "iluminacao_ambiente_one_color_ambient_light",
+          "label": "Iluminação Ambiente One Color (Ambient Light)",
+          "type": "boolean"
+        },
+        {
+          "key": "iluminacao_ambiente_multi_color_ambient_light",
+          "label": "Iluminação Ambiente Multi-Color (Ambient Light)",
+          "type": "boolean"
+        },
+        {
+          "key": "retrovisores_com_luz_de_aproximacao",
+          "label": "Retrovisores com luz de aproximação",
+          "type": "boolean"
+        },
+        {
+          "key": "preparacao_para_reboque_chicote",
+          "label": "Preparação para reboque (Chicote)",
+          "type": "boolean"
+        },
+        {
+          "key": "teto_pintado_em_duas_cores",
+          "label": "Teto pintado em duas cores",
+          "type": "boolean"
+        },
+        {
+          "key": "sistema_de_gerenciamento_de_carga_dos_porta_malas_cacamba",
+          "label": "Sistema de gerenciamento de carga dos porta malas/caçamba",
+          "type": "boolean"
+        },
+        {
+          "key": "tomada_12v_cada",
+          "label": "Tomada 12V (cada)",
+          "type": "boolean"
+        },
+        {
+          "key": "estribo_lateral_eletrico_por_lado",
+          "label": "Estribo lateral elétrico (por lado)",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "id": "inmetro_pbev",
+      "name": "INMETRO / PBEV",
+      "specs": [
+        {
+          "key": "tipo_de_combustao",
+          "label": "Tipo de Combustão",
+          "type": "text"
+        },
+        {
+          "key": "transmissao",
+          "label": "Transmissão",
+          "type": "text"
+        },
+        {
+          "key": "ar_condicionado",
+          "label": "Ar condicionado",
+          "type": "boolean"
+        },
+        {
+          "key": "direcao",
+          "label": "Direção",
+          "type": "text"
+        },
+        {
+          "key": "tipo_de_combustivel",
+          "label": "Tipo de Combustível",
+          "type": "text"
+        },
+        {
+          "key": "co2_g_km_gasolina_diesel",
+          "label": "CO₂ (g/km) - Gasolina/Diesel",
+          "type": "number"
+        },
+        {
+          "key": "co2_g_km_etanol",
+          "label": "CO₂ (g/km) - Etanol",
+          "type": "text"
+        },
+        {
+          "key": "consumo_urbano_gasolina",
+          "label": "Consumo Urbano — Gasolina",
+          "type": "text"
+        },
+        {
+          "key": "consumo_rodoviario_gasolina",
+          "label": "Consumo Rodoviário — Gasolina",
+          "type": "text"
+        },
+        {
+          "key": "consumo_urbano_etanol",
+          "label": "Consumo Urbano — Etanol",
+          "type": "text"
+        },
+        {
+          "key": "consumo_rodoviario_etanol",
+          "label": "Consumo Rodoviário — Etanol",
+          "type": "text"
+        },
+        {
+          "key": "consumo_urbano_diesel",
+          "label": "Consumo Urbano — Diesel",
+          "type": "number"
+        },
+        {
+          "key": "consumo_rodoviario_diesel",
+          "label": "Consumo Rodoviário — Diesel",
+          "type": "number"
+        },
+        {
+          "key": "consumo_urbano_eletrico",
+          "label": "Consumo Urbano — Elétrico",
+          "type": "text"
+        },
+        {
+          "key": "consumo_rodoviario_eletrico",
+          "label": "Consumo Rodoviário — Elétrico",
+          "type": "text"
+        },
+        {
+          "key": "consumo_energetico_kwh_100km",
+          "label": "Consumo Energético (kWh/100km)",
+          "type": "number"
+        },
+        {
+          "key": "autonomia_eletrica",
+          "label": "Autonomia Elétrica",
+          "type": "text"
+        },
+        {
+          "key": "nota_verde",
+          "label": "Nota Verde",
+          "type": "text"
+        },
+        {
+          "key": "classificacao_inmetro_segmento",
+          "label": "Classificação INMETRO — Segmento",
+          "type": "text"
+        },
+        {
+          "key": "classificacao_inmetro_geral",
+          "label": "Classificação INMETRO — Geral",
+          "type": "text"
+        },
+        {
+          "key": "conpet",
+          "label": "CONPET",
+          "type": "boolean"
+        }
+      ]
+    }
+  ]
+}
