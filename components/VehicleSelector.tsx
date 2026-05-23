@@ -8,19 +8,15 @@ import { SearchSelect } from './SearchSelect';
 type VehicleSelectorProps = {
   slot: ComparisonSlot;
   category: string | null;
-  canRemove: boolean;
   compact?: boolean;
   onChange: (slot: ComparisonSlot) => void;
-  onRemove: () => void;
 };
 
 export function VehicleSelector({
   slot,
   category,
-  canRemove,
   compact = false,
   onChange,
-  onRemove,
 }: VehicleSelectorProps) {
   const [brands, setBrands] = useState<string[]>([]);
   const [models, setModels] = useState<string[]>([]);
@@ -70,12 +66,6 @@ export function VehicleSelector({
         <Text className={`${compact ? 'text-base' : 'text-lg'} font-bold text-[#00142E]`}>
           {slot.label}
         </Text>
-
-        {canRemove && (
-          <TouchableOpacity onPress={onRemove}>
-            <Text className="text-sm font-bold text-[#7C93AF]">Remover</Text>
-          </TouchableOpacity>
-        )}
       </View>
 
       <SearchSelect
