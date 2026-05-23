@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'SUA_API_KEY',
-  authDomain: 'SEU_AUTH_DOMAIN',
-  projectId: 'SEU_PROJECT_ID',
-  storageBucket: 'SEU_STORAGE_BUCKET',
-  messagingSenderId: 'SEU_MESSAGING_SENDER_ID',
-  appId: 'SEU_APP_ID',
+  apiKey: "AIzaSyD90N9HA2NFE6rhlGnLMRXy1FKnADYtAIc",
+  authDomain: "specvoraauth.firebaseapp.com",
+  projectId: "specvoraauth",
+  storageBucket: "specvoraauth.firebasestorage.app",
+  messagingSenderId: "245567251936",
+  appId: "1:245567251936:web:ea1b511787b6bd6136b785"
 };
 
 const app = initializeApp(firebaseConfig);
