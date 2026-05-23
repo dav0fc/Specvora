@@ -22,7 +22,7 @@ import {
   Vehicle,
 } from '../data/vehicles';
 import { findVehicle, listVehicleCategories } from '../services/vehicleService';
-import { isAuthenticated, logoutUser } from '../services/authService';
+import { logoutUser, waitForAuthState } from '../services/authService';
 
 const MAX_VEHICLES = 3;
 
@@ -67,18 +67,32 @@ export default function HomeScreen() {
     : Math.min(300, width - 48);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.replace('/');
-      return;
-    }
+    let mounted = true;
 
-    async function loadCategories() {
+    async function checkAuthAndLoadCategories() {
       setLoading(true);
+
+      const user = await waitForAuthState();
+
+      if (!mounted) return;
+
+      if (!user) {
+        router.replace('/');
+        return;
+      }
+
       setCategories(await listVehicleCategories());
-      setLoading(false);
+
+      if (mounted) {
+        setLoading(false);
+      }
     }
 
-    loadCategories();
+    checkAuthAndLoadCategories();
+
+    return () => {
+      mounted = false;
+    };
   }, [router]);
 
   useEffect(() => {

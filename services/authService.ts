@@ -1,83 +1,62 @@
-// export type AuthUser = {
-//   email: string;
-// };
-
-// const MOCK_EMAIL = 'admin@admin.com.br';
-// const MOCK_PASSWORD = '1234';
-
-// let currentUser: AuthUser | null = null;
-
-// function validateEmailAndPassword(email: string, password: string) {
-//   if (!email.trim() || !password.trim()) {
-//     throw new Error('Preencha email e senha.');
-//   }
-// }
-
-// export async function registerUser(email: string, password: string) {
-//   validateEmailAndPassword(email, password);
-
-//   return {
-//     user: {
-//       email,
-//     },
-//   };
-// }
-
-// export async function loginUser(email: string, password: string) {
-//   validateEmailAndPassword(email, password);
-
-//   if (email !== MOCK_EMAIL || password !== MOCK_PASSWORD) {
-//     throw new Error('Email ou senha inválidos.');
-//   }
-
-//   currentUser = {
-//     email,
-//   };
-
-//   return {
-//     user: currentUser,
-//   };
-// }
-
-// export async function resetUserPassword(email: string) {
-//   if (!email.trim()) {
-//     throw new Error('Informe seu email.');
-//   }
-// }
-
-// export async function logoutUser() {
-//   currentUser = null;
-// }
-
-// export function isAuthenticated() {
-//   return currentUser !== null;
-// }
-
-// export function getCurrentUser() {
-//   return currentUser;
-// }
-
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
+  onAuthStateChanged,
   sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   signOut,
+  User,
 } from 'firebase/auth';
+
 import { auth } from '../firebase/config';
 
 export async function registerUser(email: string, password: string) {
-  return createUserWithEmailAndPassword(auth, email, password);
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  return userCredential;
 }
 
 export async function loginUser(email: string, password: string) {
-  return signInWithEmailAndPassword(auth, email, password);
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+  return userCredential;
 }
 
 export async function resetUserPassword(email: string) {
-  return sendPasswordResetEmail(auth, email);
+  await sendPasswordResetEmail(auth, email);
 }
 
 export async function logoutUser() {
-  return signOut(auth);
+  await signOut(auth);
 }
 
+export function getCurrentUser() {
+  return auth.currentUser;
+}
+
+export function isAuthenticated() {
+  return auth.currentUser !== null;
+}
+
+export function waitForAuthState() {
+  return new Promise<User | null>((resolve) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (user) => {
+        unsubscribe();
+        resolve(user);
+      },
+      () => {
+        unsubscribe();
+        resolve(null);
+      }
+    );
+  });
+}
