@@ -1,51 +1,48 @@
-import vehiclesRaw from './merged_output.json';
+import schemaDb from './specSchema.json';
+import vehiclesDb from './vehicles.json';
 
 export type SpecValue = string | number | boolean | null;
 
-export type RawSpecItem = {
-  name: string;
-  value: SpecValue;
-};
-
-export type RawCategory = {
-  name: string;
-  items?: RawSpecItem[];
-};
-
-export type RawVehicle = {
-  brand: string;
-  model: string;
-  version: string;
-  engine?: string;
-  year?: string;
-  vehicleCategory?: string;
-  categories: RawCategory[];
-};
-
-export type SpecItem = {
-  name: string;
-  value: SpecValue;
+export type SpecDefinition = {
+  key: string;
+  label: string;
+  type: 'text' | 'number' | 'boolean';
 };
 
 export type SpecCategory = {
-  category: string;
-  specs: SpecItem[];
+  id: string;
+  name: string;
+  specs: SpecDefinition[];
 };
 
-export type Vehicle = {
+export type VehicleRecord = {
+  id: string;
+  baseVehicleId?: string;
   brand: string;
   model: string;
   version: string;
-  engine?: string;
-  year?: string;
-  vehicleCategory?: string;
-  categories: SpecCategory[];
+  year?: string | null;
+  vehicleCategory?: string | null;
+  engine?: string | null;
+  specs: Record<string, SpecValue>;
 };
+
+export type Vehicle = VehicleRecord;
 
 export type VehicleSearchParams = {
   brand: string;
   model: string;
   version: string;
+};
+
+export type VehicleFilters = {
+  category?: string | null;
+  brand?: string | null;
+  model?: string | null;
+};
+
+export type VehicleInput = Omit<VehicleRecord, 'id'> & {
+  id?: string;
 };
 
 export type ComparisonSlot = {
@@ -68,83 +65,170 @@ export type ComparisonRow = {
   values: string[];
 };
 
-function normalize(value: string) {
+export type AttributeOption = {
+  key: string;
+  category: string;
+  label: string;
+};
+
+type SchemaDb = {
+  schemaVersion: number;
+  categories: SpecCategory[];
+};
+
+type VehiclesDb = {
+  schemaVersion: number;
+  vehicles: VehicleRecord[];
+};
+
+const schema = schemaDb as SchemaDb;
+const database = vehiclesDb as VehiclesDb;
+
+export const specCategories = schema.categories;
+export const vehicleSeed = database.vehicles;
+
+export function normalize(value: string) {
   return value.trim().toLowerCase();
 }
 
-function specKey(category: string, name: string) {
-  return `${normalize(category)}::${normalize(name)}`;
+export function makeVehicleId(vehicle: Pick<VehicleRecord, 'brand' | 'model' | 'version'>) {
+  return `${vehicle.brand}-${vehicle.model}-${vehicle.version}`
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
-function rawToVehicle(raw: RawVehicle): Vehicle {
+export function getSpecKey(category: string, label: string) {
+  return `${normalize(category)}::${normalize(label)}`;
+}
+
+export function findSpecDefinitionByLabel(label: string) {
+  for (const category of specCategories) {
+    const spec = category.specs.find((item) => normalize(item.label) === normalize(label));
+
+    if (spec) return spec;
+  }
+
+  return null;
+}
+
+function resolveVehicle(
+  record: VehicleRecord,
+  source: VehicleRecord[],
+  resolvingIds: Set<string>
+): Vehicle {
+  if (!record.baseVehicleId) {
+    return {
+      ...record,
+      specs: {
+        ...record.specs,
+      },
+    };
+  }
+
+  if (resolvingIds.has(record.id)) {
+    throw new Error(`Referência circular encontrada no veículo ${record.id}.`);
+  }
+
+  const baseVehicle = source.find((item) => item.id === record.baseVehicleId);
+
+  if (!baseVehicle) {
+    return {
+      ...record,
+      specs: {
+        ...record.specs,
+      },
+    };
+  }
+
+  resolvingIds.add(record.id);
+
+  const resolvedBase = resolveVehicle(baseVehicle, source, resolvingIds);
+
+  resolvingIds.delete(record.id);
+
   return {
-    brand: raw.brand,
-    model: raw.model,
-    version: raw.version,
-    engine: raw.engine,
-    year: raw.year,
-    vehicleCategory: raw.vehicleCategory,
-    categories: raw.categories.map((category) => ({
-      category: category.name,
-      specs: (category.items ?? []).map((item) => ({
-        name: item.name,
-        value: item.value,
-      })),
-    })),
+    ...record,
+    specs: {
+      ...resolvedBase.specs,
+      ...record.specs,
+    },
   };
 }
 
-export const vehicles: Vehicle[] = (vehiclesRaw as RawVehicle[]).map(rawToVehicle);
-
-function filterByCategory(category?: string | null) {
-  if (!category) return vehicles;
-
-  return vehicles.filter(
-    (vehicle) => normalize(vehicle.vehicleCategory ?? '') === normalize(category)
-  );
+export function resolveVehicles(source: VehicleRecord[] = vehicleSeed): Vehicle[] {
+  return source.map((vehicle) => resolveVehicle(vehicle, source, new Set<string>()));
 }
 
-export function getVehicleCategories() {
+export const vehicles = resolveVehicles();
+
+function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
+  return source.filter((vehicle) => {
+    if (filters?.category && normalize(vehicle.vehicleCategory ?? '') !== normalize(filters.category)) {
+      return false;
+    }
+
+    if (filters?.brand && normalize(vehicle.brand) !== normalize(filters.brand)) {
+      return false;
+    }
+
+    if (filters?.model && normalize(vehicle.model) !== normalize(filters.model)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+export function getVehicleCategories(source: Vehicle[] = vehicles) {
   return Array.from(
     new Set(
-      vehicles
+      source
         .map((vehicle) => vehicle.vehicleCategory)
         .filter((category): category is string => Boolean(category))
     )
   ).sort();
 }
 
-export function getBrands(category?: string | null) {
-  return Array.from(new Set(filterByCategory(category).map((vehicle) => vehicle.brand))).sort();
+export function getBrands(category?: string | null, source: Vehicle[] = vehicles) {
+  return Array.from(
+    new Set(filterVehicles(source, { category }).map((vehicle) => vehicle.brand))
+  ).sort();
 }
 
-export function getModels(brand: string, category?: string | null) {
+export function getModels(
+  brand: string,
+  category?: string | null,
+  source: Vehicle[] = vehicles
+) {
   return Array.from(
     new Set(
-      filterByCategory(category)
-        .filter((vehicle) => normalize(vehicle.brand) === normalize(brand))
-        .map((vehicle) => vehicle.model)
+      filterVehicles(source, { category, brand }).map((vehicle) => vehicle.model)
     )
   ).sort();
 }
 
-export function getVersions(brand: string, model: string, category?: string | null) {
+export function getVersions(
+  brand: string,
+  model: string,
+  category?: string | null,
+  source: Vehicle[] = vehicles
+) {
   return Array.from(
     new Set(
-      filterByCategory(category)
-        .filter(
-          (vehicle) =>
-            normalize(vehicle.brand) === normalize(brand) &&
-            normalize(vehicle.model) === normalize(model)
-        )
-        .map((vehicle) => vehicle.version)
+      filterVehicles(source, { category, brand, model }).map((vehicle) => vehicle.version)
     )
   ).sort();
 }
 
-export function findVariant({ brand, model, version }: VehicleSearchParams) {
+export function findVariant(
+  { brand, model, version }: VehicleSearchParams,
+  source: Vehicle[] = vehicles
+) {
   return (
-    vehicles.find(
+    source.find(
       (vehicle) =>
         normalize(vehicle.brand) === normalize(brand) &&
         normalize(vehicle.model) === normalize(model) &&
@@ -160,44 +244,46 @@ export function displaySpecValue(value: SpecValue | undefined) {
   return String(value);
 }
 
-function isAvailable(value: SpecValue) {
+export function getAttributeOptions(): AttributeOption[] {
+  return specCategories.flatMap((category) =>
+    category.specs.map((spec) => ({
+      key: spec.key,
+      category: category.name,
+      label: spec.label,
+    }))
+  );
+}
+
+function hasAvailableValue(value: SpecValue | undefined) {
   if (typeof value === 'boolean') return value;
 
   return value !== null && value !== undefined && value !== '';
 }
 
-function findSpec(vehicle: Vehicle, specName: string) {
-  for (const category of vehicle.categories) {
-    const spec = category.specs.find((item) => normalize(item.name) === normalize(specName));
+function getSpecValue(vehicle: Vehicle, specLabel: string) {
+  const spec = findSpecDefinitionByLabel(specLabel);
 
-    if (spec) return spec;
-  }
+  if (!spec) return null;
 
-  return null;
+  return vehicle.specs[spec.key];
 }
 
-function findSpecByCategory(vehicle: Vehicle, categoryName: string, specName: string) {
-  const category = vehicle.categories.find(
-    (item) => normalize(item.category) === normalize(categoryName)
-  );
-
-  return category?.specs.find((item) => normalize(item.name) === normalize(specName));
-}
-
-function specNumber(vehicle: Vehicle, specName: string) {
-  const value = findSpec(vehicle, specName)?.value;
+function specNumber(vehicle: Vehicle, specLabel: string) {
+  const value = getSpecValue(vehicle, specLabel);
 
   if (typeof value === 'number') return value;
+
   if (typeof value === 'string') {
     const parsed = Number(value.replace(',', '.'));
+
     return Number.isFinite(parsed) ? parsed : 0;
   }
 
   return 0;
 }
 
-function maxSpec(specName: string) {
-  return Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specName)), 1);
+function maxSpec(specLabel: string) {
+  return Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specLabel)), 1);
 }
 
 function normalizeNumber(value: number, max: number) {
@@ -205,15 +291,15 @@ function normalizeNumber(value: number, max: number) {
 }
 
 function categoryScore(vehicle: Vehicle, categoryNames: string[]) {
-  const specs = vehicle.categories
-    .filter((category) => categoryNames.includes(category.category))
-    .flatMap((category) => category.specs);
+  const categoryKeys = specCategories
+    .filter((category) => categoryNames.includes(category.name))
+    .flatMap((category) => category.specs.map((spec) => spec.key));
 
-  if (specs.length === 0) return 0;
+  if (categoryKeys.length === 0) return 0;
 
-  const availableSpecs = specs.filter((spec) => isAvailable(spec.value)).length;
+  const availableSpecs = categoryKeys.filter((key) => hasAvailableValue(vehicle.specs[key])).length;
 
-  return Math.round((availableSpecs / specs.length) * 100);
+  return Math.round((availableSpecs / categoryKeys.length) * 100);
 }
 
 export function getRadarMetrics(vehicle: Vehicle): RadarMetric[] {
@@ -224,8 +310,14 @@ export function getRadarMetrics(vehicle: Vehicle): RadarMetric[] {
   );
 
   const efficiency = Math.round(
-    (normalizeNumber(specNumber(vehicle, 'Economia de Combustível'), maxSpec('Economia de Combustível')) +
-      normalizeNumber(specNumber(vehicle, 'Consumo Rodoviário — Diesel'), maxSpec('Consumo Rodoviário — Diesel'))) /
+    (normalizeNumber(
+      specNumber(vehicle, 'Economia de Combustível'),
+      maxSpec('Economia de Combustível')
+    ) +
+      normalizeNumber(
+        specNumber(vehicle, 'Consumo Rodoviário — Diesel'),
+        maxSpec('Consumo Rodoviário — Diesel')
+      )) /
       2
   );
 
@@ -251,31 +343,13 @@ export function getRadarMetrics(vehicle: Vehicle): RadarMetric[] {
   ];
 }
 
-function getAllSpecRows(selectedVehicles: Vehicle[]) {
-  const rows: Array<{ category: string; label: string }> = [];
-  const usedKeys = new Set<string>();
-
-  selectedVehicles.forEach((vehicle) => {
-    vehicle.categories.forEach((category) => {
-      category.specs.forEach((spec) => {
-        const key = specKey(category.category, spec.name);
-
-        if (!usedKeys.has(key)) {
-          usedKeys.add(key);
-          rows.push({
-            category: category.category,
-            label: spec.name,
-          });
-        }
-      });
-    });
-  });
-
-  return rows;
-}
-
-export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] {
+export function getComparisonRows(
+  selectedVehicles: Vehicle[],
+  selectedAttributeKeys: string[] = []
+): ComparisonRow[] {
   if (selectedVehicles.length < 2) return [];
+
+  const selectedKeySet = new Set(selectedAttributeKeys);
 
   const fixedRows: ComparisonRow[] = [
     {
@@ -292,13 +366,15 @@ export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] 
     },
   ];
 
-  const specRows = getAllSpecRows(selectedVehicles).map((row) => ({
-    category: row.category,
-    label: row.label,
-    values: selectedVehicles.map((vehicle) =>
-      displaySpecValue(findSpecByCategory(vehicle, row.category, row.label)?.value)
-    ),
-  }));
+  const specRows = specCategories.flatMap((category) =>
+    category.specs
+      .filter((spec) => selectedKeySet.size === 0 || selectedKeySet.has(spec.key))
+      .map((spec) => ({
+        category: category.name,
+        label: spec.label,
+        values: selectedVehicles.map((vehicle) => displaySpecValue(vehicle.specs[spec.key])),
+      }))
+  );
 
   return [...fixedRows, ...specRows];
 }
