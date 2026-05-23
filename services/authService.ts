@@ -4,17 +4,24 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
   User,
 } from 'firebase/auth';
 
 import { auth } from '../firebase/config';
 
-export async function registerUser(email: string, password: string) {
+export async function registerUser(email: string, password: string, name?: string) {
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
     password
   );
+
+  if (name?.trim()) {
+    await updateProfile(userCredential.user, {
+      displayName: name.trim(),
+    });
+  }
 
   return userCredential;
 }
