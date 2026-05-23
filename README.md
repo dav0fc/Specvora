@@ -1,12 +1,57 @@
-### Template React Native com Expo + NativeWind
+# SPECVORA — Sprint Mobile Development and IoT
+## Integrantes do grupo
 
-Este repositório é um template para iniciar rapidamente um app React Native utilizando Expo, TypeScript e NativeWind (Tailwind CSS para React Native). Ele já vem configurado com as dependências e arquivos necessários para começar a estilizar com classes utilitárias.
+- **Denise Senise** — RM 556006
+- **Larissa Rodrigues Lapa** — RM 554517
+- **Mateus Leme** — RM 557803
+- **David Gabriel Gomes Fernandes** — RM 556020
+- **Vinicius Augusto Neves Prestes** — RM 559097
 
-### Tecnologias
-- **Expo**: fluxo de desenvolvimento simplificado para React Native
-- **React Native**: desenvolvimento mobile nativo com React
-- **TypeScript**: tipagem estática para maior segurança
-- **NativeWind**: estilização usando utilitários à la Tailwind
+## Desafio escolhido
+**Desafio 1 — Inteligência competitiva automotiva**
+
+## Descrição da solução
+O **Specvora** é uma aplicação mobile desenvolvida em **React Native com Expo** para apoiar a análise competitiva de veículos.
+A solução permite que o usuário selecione veículos por **marca**, **modelo** e **versão**, defina livremente quais **atributos técnicos** deseja consultar e receba uma lista padronizada de especificações técnicas comparáveis.
+
+## Objetivo
+Transformar uma base de dados técnica em uma ferramenta clara para consulta, comparação e validação de especificações automotivas, facilitando o trabalho de analistas internos da Ford.
+
+## Entradas do usuário
+- Marca
+- Modelo
+- Versão
+- Tipo de veículo
+- Lista livre de atributos técnicos/equipamentos desejados
+- 
+## Saída da aplicação
+- Lista padronizada de especificações técnicas
+- Campos claros, organizados e comparáveis
+- Exibição explícita de informações indisponíveis como `N/A`
+- Comparação entre dois veículos
+- Gráfico radar como visualização complementar
+
+## Tecnologias utilizadas
+- React Native
+- Expo
+- Expo Router
+- TypeScript
+- NativeWind
+- Firebase Authentication
+- React Native SVG
+- Dataset simulado em JSON
+
+## Funcionalidades principais
+- Login com Firebase Authentication
+- Cadastro de usuário
+- Recuperação de senha
+- Proteção da tela principal por autenticação
+- Seleção de veículos por marca, modelo e versão
+- Filtro por tipo de veículo
+- Seleção livre de atributos técnicos
+- Comparação de especificações técnicas em tabela padronizada
+- Radar chart comparativo
+- Interface responsiva para celular e tablet
 
 ### Pré-requisitos
 - Node.js LTS instalado
@@ -36,78 +81,3 @@ w  # Web (quando aplicável)
 - `npm run ios`: abre no simulador iOS
 - `npm run web`: abre no navegador (quando aplicável)
 
-### Estrutura principal
-```
-assets/               # imagens e fontes
-styles/               # estilos globais e presets do NativeWind
-types/                # tipos e declarações auxiliares
-App.tsx               # entrada principal do app
-babel.config.js       # plugin do nativewind e presets do Expo
-metro.config.js       # config do Metro (resolução e assets)
-tailwind.config.js    # configuração do NativeWind/Tailwind
-nativewind-env.d.ts   # tipos do NativeWind
-tsconfig.json         # configuração TypeScript
-```
-
-### Configuração do NativeWind
-O template já inclui as configurações essenciais para o NativeWind funcionar corretamente.
-
-- `tailwind.config.js`: define o preset e paths a serem analisados
-```js
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    './App.{js,jsx,ts,tsx}',
-    './app/**/*.{js,jsx,ts,tsx}',
-    './components/**/*.{js,jsx,ts,tsx}',
-    './styles/**/*.{js,jsx,ts,tsx}',
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
-```
-
-- `babel.config.js`: adiciona o plugin do NativeWind
-```js
-module.exports = function(api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-    plugins: ['nativewind/babel'],
-  };
-};
-```
-
-- `nativewind-env.d.ts`: fornece dicas de tipo
-```ts
-/// <reference types="nativewind/types" />
-```
-
-Exemplo de uso no `App.tsx`:
-```tsx
-import { Text, View } from 'react-native';
-
-export default function App() {
-  return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-xl font-semibold text-blue-600">
-        Template Expo + NativeWind
-      </Text>
-    </View>
-  );
-}
-```
-
-### Dicas e resolução de problemas
-- Se classes não aplicarem estilo, confirme os caminhos em `content` do `tailwind.config.js`.
-- Garanta que o plugin `nativewind/babel` esteja no `babel.config.js`.
-- Após alterar `tailwind.config.js`, reinicie o bundler do Expo.
-- Em iOS/Android, limpe cache quando necessário:
-```bash
-expo start -c
-```
-
-### Licença
-Este projeto é disponibilizado como template educacional. Adapte conforme a sua necessidade.
