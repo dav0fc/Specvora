@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import { AttributeSelector } from '../components/AttributeSelector';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { RadarChart } from '../components/RadarChart';
 import { VehicleLegend } from '../components/VehicleLegend';
@@ -17,6 +18,7 @@ import { VehicleTypeDrawer } from '../components/VehicleTypeDrawer';
 import { VehicleTypePanel } from '../components/VehicleTypePanel';
 import {
   ComparisonSlot,
+  getAttributeOptions,
   getComparisonRows,
   getRadarMetrics,
   Vehicle,
@@ -58,6 +60,7 @@ export default function HomeScreen() {
   const [typePanelOpen, setTypePanelOpen] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
   const [slots, setSlots] = useState<ComparisonSlot[]>([createSlot(0), createSlot(1)]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [userName, setUserName] = useState('Usuário');
@@ -120,6 +123,8 @@ export default function HomeScreen() {
     loadVehicles();
   }, [slots]);
 
+  const attributeOptions = useMemo(() => getAttributeOptions(), []);
+
   const radarSeries = useMemo(
     () =>
       vehicles.map((vehicle, index) => ({
@@ -131,7 +136,10 @@ export default function HomeScreen() {
     [vehicles]
   );
 
-  const comparisonRows = useMemo(() => getComparisonRows(vehicles), [vehicles]);
+  const comparisonRows = useMemo(
+    () => getComparisonRows(vehicles, selectedAttributes),
+    [vehicles, selectedAttributes]
+  );
 
   function updateSlot(slotId: string, nextSlot: ComparisonSlot) {
     setSlots((currentSlots) =>
@@ -204,6 +212,12 @@ export default function HomeScreen() {
                 onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
               />
             ))}
+
+            <AttributeSelector
+              options={attributeOptions}
+              selectedKeys={selectedAttributes}
+              onChange={setSelectedAttributes}
+            />
           </ScrollView>
         </View>
 
@@ -277,6 +291,12 @@ export default function HomeScreen() {
             onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
           />
         ))}
+
+        <AttributeSelector
+          options={attributeOptions}
+          selectedKeys={selectedAttributes}
+          onChange={setSelectedAttributes}
+        />
 
         <View className="rounded-3xl border border-[#D8E3F2] bg-white p-5">
           <View className="mb-4 flex-row items-center justify-between">

@@ -68,6 +68,12 @@ export type ComparisonRow = {
   values: string[];
 };
 
+export type AttributeOption = {
+  key: string;
+  category: string;
+  label: string;
+};
+
 function normalize(value: string) {
   return value.trim().toLowerCase();
 }
@@ -158,6 +164,36 @@ export function displaySpecValue(value: SpecValue | undefined) {
   if (typeof value === 'boolean') return value ? 'Sim' : 'Não';
 
   return String(value);
+}
+
+export function getAttributeOptions(): AttributeOption[] {
+  const options: AttributeOption[] = [];
+  const usedKeys = new Set<string>();
+
+  vehicles.forEach((vehicle) => {
+    vehicle.categories.forEach((category) => {
+      category.specs.forEach((spec) => {
+        const key = specKey(category.category, spec.name);
+
+        if (!usedKeys.has(key)) {
+          usedKeys.add(key);
+          options.push({
+            key,
+            category: category.category,
+            label: spec.name,
+          });
+        }
+      });
+    });
+  });
+
+  return options.sort((first, second) => {
+    const categoryCompare = first.category.localeCompare(second.category);
+
+    if (categoryCompare !== 0) return categoryCompare;
+
+    return first.label.localeCompare(second.label);
+  });
 }
 
 function isAvailable(value: SpecValue) {
@@ -252,7 +288,7 @@ export function getRadarMetrics(vehicle: Vehicle): RadarMetric[] {
 }
 
 function getAllSpecRows(selectedVehicles: Vehicle[]) {
-  const rows: Array<{ category: string; label: string }> = [];
+  const rows: Array<{ category: string; label: string; key: string }> = [];
   const usedKeys = new Set<string>();
 
   selectedVehicles.forEach((vehicle) => {
@@ -265,6 +301,7 @@ function getAllSpecRows(selectedVehicles: Vehicle[]) {
           rows.push({
             category: category.category,
             label: spec.name,
+            key,
           });
         }
       });
@@ -274,8 +311,13 @@ function getAllSpecRows(selectedVehicles: Vehicle[]) {
   return rows;
 }
 
-export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] {
+export function getComparisonRows(
+  selectedVehicles: Vehicle[],
+  selectedAttributeKeys: string[] = []
+): ComparisonRow[] {
   if (selectedVehicles.length < 2) return [];
+
+  const selectedKeySet = new Set(selectedAttributeKeys);
 
   const fixedRows: ComparisonRow[] = [
     {
@@ -292,13 +334,15 @@ export function getComparisonRows(selectedVehicles: Vehicle[]): ComparisonRow[] 
     },
   ];
 
-  const specRows = getAllSpecRows(selectedVehicles).map((row) => ({
-    category: row.category,
-    label: row.label,
-    values: selectedVehicles.map((vehicle) =>
-      displaySpecValue(findSpecByCategory(vehicle, row.category, row.label)?.value)
-    ),
-  }));
+  const specRows = getAllSpecRows(selectedVehicles)
+    .filter((row) => selectedKeySet.size === 0 || selectedKeySet.has(row.key))
+    .map((row) => ({
+      category: row.category,
+      label: row.label,
+      values: selectedVehicles.map((vehicle) =>
+        displaySpecValue(findSpecByCategory(vehicle, row.category, row.label)?.value)
+      ),
+    }));
 
   return [...fixedRows, ...specRows];
 }
