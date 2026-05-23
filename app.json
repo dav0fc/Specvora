@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "nativeWind-app-initial",
-    "slug": "nativeWind-app-initial",
+    "name": "Specvora",
+    "slug": "specvora",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
