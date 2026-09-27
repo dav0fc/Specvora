@@ -94,14 +94,14 @@ export function VehicleSearchCard({
             autoCapitalize="none"
             className="rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3 text-base text-[#00142E]"
             onChangeText={onTermChange}
-            placeholder="Ex.: ranger, raptor, 1.6, diesel 4x4"
+            placeholder="Ex.: ranger, raptor, 1.5, diesel 4x4"
             placeholderTextColor="#7C93AF"
             value={slot.term}
           />
 
           {!slot.term.trim() ? (
             <Text className="mt-2 text-xs font-semibold text-[#7C93AF]">
-              Digite o nome do carro (ex.: ranger) ou uma especificação (ex.: 1.6, diesel).
+              Digite o nome do carro (ex.: ranger) ou uma especificação (ex.: 1.5, diesel).
             </Text>
           ) : results.length === 0 ? (
             <Text className="mt-2 text-xs font-semibold text-[#7C93AF]">
