@@ -75,6 +75,9 @@ i  # iOS
 a  # Android
 w  # Web (quando aplicável)
 ```
+3. Login Mockado:
+Email: test2@test.com
+Senha: 12345678
 
 ### Scripts úteis
 - `npm run start`: inicia o Metro/Expo
