@@ -73,7 +73,7 @@ O fluxo completo da aplicação, na ordem em que ele é usado:
 
 | **Tabela padronizada de especificações** | **Gráfico radar (0–100)** | **Detalhe da seção de dados** |
 |:---:|:---:|:---:|
-| <img src="assets/Imagens_Readme/Imagem12.jpeg" width="210" alt="Tabela de comparação entre dois veículos" /> | <img src="assets/Imagens_Readme/Imagem13.jpeg" width="210" alt="Gráfico radar da comparação" /> | <img src="assets/Imagens_Readme/Imagem14.jpeg" width="120" alt="Detalhe da seção de dados" /> |
+| <img src="assets/Imagens_Readme/Imagem12.jpeg" width="210" alt="Tabela de comparação entre dois veículos" /> | <img src="assets/Imagens_Readme/Imagem13.jpeg" width="210" alt="Gráfico radar da comparação" /> | <img src="assets/Imagens_Readme/Imagem14.jpeg" width="210" alt="Detalhe da seção de dados" /> |
 
 ## Tecnologias utilizadas
 - React Native
