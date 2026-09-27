@@ -15,17 +15,16 @@ import { AttributeSelector } from '../components/AttributeSelector';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { RadarChart } from '../components/RadarChart';
 import { VehicleLegend } from '../components/VehicleLegend';
-import { VehicleSelector } from '../components/VehicleSelector';
+import { VehicleSearchCard } from '../components/VehicleSearchCard';
 import {
   ComparisonSlot,
   getAttributeOptions,
   getComparisonRows,
   getRadarMetrics,
-  normalize,
+  vehicles,
   Vehicle,
 } from '../data/vehicles';
 import { logoutUser, waitForAuthState } from '../services/authService';
-import { findVehicle } from '../services/vehicleService';
 
 const RADAR_COLORS = ['#00095B', '#1700F4'];
 const RADAR_DOT_CLASSES = ['bg-[#00095B]', 'bg-[#1700F4]'];
@@ -34,9 +33,8 @@ function createSlot(index: number): ComparisonSlot {
   return {
     id: `vehicle-${index + 1}`,
     label: `Veículo ${String.fromCharCode(65 + index)}`,
-    brand: null,
-    model: null,
-    version: null,
+    term: '',
+    vehicleId: null,
   };
 }
 
@@ -60,9 +58,16 @@ export default function HomeScreen() {
 
   const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
   const [slots, setSlots] = useState<ComparisonSlot[]>([createSlot(0), createSlot(1)]);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [userName, setUserName] = useState('Usuário');
   const [loading, setLoading] = useState(true);
+
+  const selectedVehicles = useMemo(
+    () =>
+      slots
+        .map((slot) => vehicles.find((vehicle) => vehicle.id === slot.vehicleId) ?? null)
+        .filter((vehicle): vehicle is Vehicle => vehicle !== null),
+    [slots]
+  );
 
   const selectorWidth = width >= 1200 ? 380 : 340;
 
@@ -96,65 +101,45 @@ export default function HomeScreen() {
     };
   }, [router]);
 
-  useEffect(() => {
-    async function loadVehicles() {
-      const selectedVehicles = await Promise.all(
-        slots.map((slot) => {
-          if (!slot.brand || !slot.model || !slot.version) return null;
-
-          return findVehicle({
-            brand: slot.brand,
-            model: slot.model,
-            version: slot.version,
-          });
-        })
-      );
-
-      setVehicles(selectedVehicles.filter(Boolean) as Vehicle[]);
-    }
-
-    loadVehicles();
-  }, [slots]);
-
   const attributeOptions = useMemo(() => getAttributeOptions(), []);
 
   const radarSeries = useMemo(
     () =>
-      vehicles.map((vehicle, index) => ({
+      selectedVehicles.map((vehicle, index) => ({
         name: vehicleTitle(vehicle),
         color: RADAR_COLORS[index],
         dotClassName: RADAR_DOT_CLASSES[index],
         values: getRadarMetrics(vehicle),
       })),
-    [vehicles]
+    [selectedVehicles]
   );
 
   const comparisonRows = useMemo(
-    () => getComparisonRows(vehicles, selectedAttributes),
-    [vehicles, selectedAttributes]
+    () => getComparisonRows(selectedVehicles, selectedAttributes),
+    [selectedVehicles, selectedAttributes]
   );
 
-  function updateSlot(slotId: string, nextSlot: ComparisonSlot) {
-    const isComplete = Boolean(nextSlot.brand && nextSlot.model && nextSlot.version);
-    const other = slots.find(
-      (slot) => slot.id !== slotId && slot.brand && slot.model && slot.version
+  function updateSlot(slotId: string, patch: Partial<ComparisonSlot>) {
+    setSlots((currentSlots) =>
+      currentSlots.map((slot) => (slot.id === slotId ? { ...slot, ...patch } : slot))
     );
+  }
 
-    if (isComplete && nextSlot.brand && nextSlot.model && nextSlot.version && other) {
-      const isSameVehicle =
-        normalize(nextSlot.brand) === normalize(other.brand!) &&
-        normalize(nextSlot.model) === normalize(other.model!) &&
-        normalize(nextSlot.version) === normalize(other.version!);
+  function handleSelectVehicle(slotId: string, vehicleId: string) {
+    const duplicate = slots.find((slot) => slot.id !== slotId && slot.vehicleId === vehicleId);
 
-      if (isSameVehicle) {
-        Alert.alert('Veículo duplicado', `Este veículo já está selecionado no ${other.label}.`);
-        return;
-      }
+    if (duplicate) {
+      Alert.alert('Veículo duplicado', `Este veículo já está selecionado no ${duplicate.label}.`);
+      return;
     }
 
-    setSlots((currentSlots) =>
-      currentSlots.map((slot) => (slot.id === slotId ? nextSlot : slot))
-    );
+    updateSlot(slotId, { term: '', vehicleId });
+  }
+
+  function getExcludedVehicleIds(slotId: string) {
+    return slots
+      .filter((slot) => slot.id !== slotId && slot.vehicleId)
+      .map((slot) => slot.vehicleId as string);
   }
 
   async function handleLogout() {
@@ -204,11 +189,15 @@ export default function HomeScreen() {
             contentContainerStyle={{ padding: 16, paddingBottom: 28, gap: 12 }}
           >
             {slots.map((slot) => (
-              <VehicleSelector
+              <VehicleSearchCard
                 key={slot.id}
                 slot={slot}
+                vehicles={vehicles}
+                excludedVehicleIds={getExcludedVehicleIds(slot.id)}
                 compact
-                onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
+                onTermChange={(term) => updateSlot(slot.id, { term })}
+                onSelect={(vehicleId) => handleSelectVehicle(slot.id, vehicleId)}
+                onClear={() => updateSlot(slot.id, { term: '', vehicleId: null })}
               />
             ))}
 
@@ -239,7 +228,7 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          <ComparisonTable vehicles={vehicles} rows={comparisonRows} />
+          <ComparisonTable vehicles={selectedVehicles} rows={comparisonRows} />
         </ScrollView>
       </View>
     );
@@ -270,10 +259,14 @@ export default function HomeScreen() {
 
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 14, gap: 14 }}>
         {slots.map((slot) => (
-          <VehicleSelector
+          <VehicleSearchCard
             key={slot.id}
             slot={slot}
-            onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
+            vehicles={vehicles}
+            excludedVehicleIds={getExcludedVehicleIds(slot.id)}
+            onTermChange={(term) => updateSlot(slot.id, { term })}
+            onSelect={(vehicleId) => handleSelectVehicle(slot.id, vehicleId)}
+            onClear={() => updateSlot(slot.id, { term: '', vehicleId: null })}
           />
         ))}
 
@@ -295,7 +288,7 @@ export default function HomeScreen() {
           <VehicleLegend series={radarSeries} className="mt-3" />
         </View>
 
-        <ComparisonTable vehicles={vehicles} rows={comparisonRows} />
+        <ComparisonTable vehicles={selectedVehicles} rows={comparisonRows} />
       </ScrollView>
     </View>
   );

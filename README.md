@@ -12,17 +12,19 @@
 
 ## Descrição da solução
 O **Specvora** é uma aplicação mobile desenvolvida em **React Native com Expo** para apoiar a análise competitiva de veículos.
-A solução permite que o usuário selecione veículos por **marca**, **modelo** e **versão**, defina livremente quais **atributos técnicos** deseja consultar e receba uma lista padronizada de especificações técnicas comparáveis.
+A solução permite que o usuário pesquise veículos em **um único campo por carro** — pelo nome (ex.: `ranger` traz todas as versões da Ranger) ou por **especificação técnica** (ex.: `1.5`, `diesel 4x4`) —, defina livremente quais **atributos técnicos** deseja consultar e receba uma lista padronizada de especificações técnicas comparáveis. Essa lista é somente um exemplo e utiliza dois JSONs de dados mockados como banco de dados.
+Nossa solução tem como base sistemas com o modo paisagem (horizontal) de orientação, preferivel utilizar nessa orientação
 
 ## Objetivo
 Transformar uma base de dados técnica em uma ferramenta clara para consulta, comparação e validação de especificações automotivas, facilitando o trabalho de analistas internos da Ford.
 
 ## Entradas do usuário
-- Marca
-- Modelo
-- Versão
-- Tipo de veículo
-- Lista livre de atributos técnicos/equipamentos desejados
+- Um campo de pesquisa por veículo a comparar:
+  - pelo nome do carro: `ranger` traz todas as versões da Ranger;
+  - por especificação técnica/equipamento: `1.5`, `diesel`, `4x4`, `câmera 360`;
+  - combinando termos: `diesel 3.0`.
+- O veículo já selecionado em um campo não aparece nos resultados do outro.
+- Lista livre para selecionar atributos técnicos/equipamentos desejados
   
 ## Saída da aplicação
 - Lista padronizada de especificações técnicas (com 1 ou 2 veículos)
@@ -46,7 +48,8 @@ Transformar uma base de dados técnica em uma ferramenta clara para consulta, co
 - Cadastro de usuário
 - Recuperação de senha
 - Proteção da tela principal por autenticação
-- Filtro por tipo de veículo
+- Pesquisa de veículo por nome ou especificação técnica (um campo por veículo)
+- Veículo já selecionado não aparece nos resultados do outro campo
 - Seleção livre de atributos técnicos
 - Comparação de especificações técnicas em tabela padronizada
 - Interface responsiva para celular e tablet

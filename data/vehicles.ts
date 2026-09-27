@@ -47,9 +47,8 @@ export type VehicleInput = Omit<VehicleRecord, 'id'> & {
 export type ComparisonSlot = {
   id: string;
   label: string;
-  brand: string | null;
-  model: string | null;
-  version: string | null;
+  term: string;
+  vehicleId: string | null;
 };
 
 export type RadarMetric = {
@@ -258,6 +257,75 @@ export function getAttributeOptions(): AttributeOption[] {
       label: spec.label,
     }))
   );
+}
+
+export function stripAccents(value: string) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+export function normalizeSearch(value: string) {
+  return stripAccents(value.trim().toLowerCase());
+}
+
+export function vehicleSearchText(vehicle: Vehicle): string {
+  const parts: string[] = [
+    vehicle.brand,
+    vehicle.model,
+    vehicle.version,
+    vehicle.year ?? '',
+    vehicle.engine ?? '',
+  ];
+
+  for (const category of specCategories) {
+    for (const spec of category.specs) {
+      const value = vehicle.specs[spec.key];
+
+      if (value === true) {
+        // Equipamento presente: busca pelo nome do equipamento (ex.: "diesel", "camera 360")
+        parts.push(spec.label);
+      } else if (typeof value === 'number' || (typeof value === 'string' && value !== '')) {
+        // Valor numerico/texto: busca pelo valor (ex.: "1.6", "3.0", "397")
+        parts.push(displaySpecValue(value, spec.unit));
+      }
+    }
+  }
+
+  return normalizeSearch(parts.join(' '));
+}
+
+function textContains(text: string, token: string): boolean {
+  let index = text.indexOf(token);
+
+  while (index !== -1) {
+    const previous = index > 0 ? text[index - 1] : '';
+
+    // Antecedido por dígito = parte de outro numero (ex.: "1.5" dentro de "11.5")
+    if (!/\d/.test(previous)) return true;
+
+    index = text.indexOf(token, index + 1);
+  }
+
+  return false;
+}
+
+export function searchVehicles(
+  term: string,
+  source: Vehicle[] = vehicles,
+  excludeIds: string[] = []
+): Vehicle[] {
+  const search = normalizeSearch(term);
+
+  if (!search) return [];
+
+  const excluded = new Set(excludeIds);
+  const tokens = search.split(/\s+/).filter(Boolean);
+
+  return source.filter((vehicle) => {
+    if (excluded.has(vehicle.id)) return false;
+
+    const text = vehicleSearchText(vehicle);
+    return tokens.every((token) => textContains(text, token));
+  });
 }
 
 function hasAvailableValue(value: SpecValue | undefined) {

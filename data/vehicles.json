@@ -908,7 +908,14 @@
         "camera_360_graus": true,
         "piloto_automatico_adaptativo": true,
         "sistema_de_monitoramento_de_ponto_cego_blis": true,
-        "classificacao_inmetro_geral": "E"
+        "classificacao_inmetro_geral": "E",
+        "tipo_de_combustivel": "G",
+        "co2_g_km_gasolina_diesel": null,
+        "consumo_urbano_diesel": null,
+        "consumo_rodoviario_diesel": null,
+        "consumo_energetico_kwh_100km": null,
+        "nota_verde": null,
+        "classificacao_inmetro_segmento": null
       }
     },
     {
