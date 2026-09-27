@@ -1,7 +1,12 @@
+<p align="center">
+  <img src="assets/icon.png" width="120" alt="Ícone do Specvora" />
+</p>
+
+<h1 align="center">SPECVORA — Sprint Mobile Development and IoT</h1>
+
 # LINK DO APK
 https://mega.nz/file/j41BWQAR#uhXVsxZ_UcRuyzoEleKUTTD_qhOr5dLfLSAnOKIFmno
 
-# SPECVORA — Sprint Mobile Development and IoT
 ## Integrantes do grupo
 
 - **Denise Senise** — RM 556006
@@ -35,6 +40,40 @@ Transformar uma base de dados técnica em uma ferramenta clara para consulta, co
 - Exibição explícita de informações indisponíveis como `N/A`
 - Comparação entre dois veículos
 - Gráfico radar como visualização complementar (somente na comparação de 2 veículos)
+
+## 📱 Capturas de tela
+
+O fluxo completo da aplicação, na ordem em que ele é usado:
+
+### 1. Autenticação
+
+| **Login** | **Login com credenciais** |
+|:---:|:---:|
+| <img src="assets/Imagens_Readme/Imagem1.jpeg" width="250" alt="Tela de login" /> | <img src="assets/Imagens_Readme/Imagem2.jpeg" width="250" alt="Login com e-mail preenchido" /> |
+
+### 2. Recuperação de senha
+
+| **Solicitação de recuperação** | **Link enviado** | **E-mail recebido na caixa de entrada** |
+|:---:|:---:|:---:|
+| <img src="assets/Imagens_Readme/Imagem3.jpeg" width="210" alt="Tela de recuperar senha" /> | <img src="assets/Imagens_Readme/Imagem4.jpeg" width="210" alt="Confirmação de e-mail enviado" /> | <img src="assets/Imagens_Readme/Imagem5.jpeg" width="210" alt="E-mail com o link de redefinição" /> |
+
+### 3. Pesquisa de veículos
+
+| **Tela inicial: um campo por veículo** | **Tela inicial antes da seleção** | **Veículo A selecionado e resultados do veículo B** |
+|:---:|:---:|:---:|
+| <img src="assets/Imagens_Readme/Imagem6.jpeg" width="210" alt="Tela inicial com os campos de pesquisa" /> | <img src="assets/Imagens_Readme/Imagem7.jpeg" width="210" alt="Tela inicial aguardando a seleção dos veículos" /> | <img src="assets/Imagens_Readme/Imagem8.jpeg" width="210" alt="Resultados da pesquisa do veículo B" /> |
+
+### 4. Seleção de atributos técnicos
+
+| **Atributos por categoria** | **Todos os atributos selecionados (283)** | **Filtro de busca dentro dos atributos** |
+|:---:|:---:|:---:|
+| <img src="assets/Imagens_Readme/Imagem9.jpeg" width="210" alt="Seleção de atributos por categoria" /> | <img src="assets/Imagens_Readme/Imagem10.jpeg" width="210" alt="Lista completa de atributos selecionados" /> | <img src="assets/Imagens_Readme/Imagem11.jpeg" width="210" alt="Busca de atributos por termo" /> |
+
+### 5. Comparação
+
+| **Tabela padronizada de especificações** | **Gráfico radar (0–100)** | **Detalhe da seção de dados** |
+|:---:|:---:|:---:|
+| <img src="assets/Imagens_Readme/Imagem12.jpeg" width="210" alt="Tabela de comparação entre dois veículos" /> | <img src="assets/Imagens_Readme/Imagem13.jpeg" width="210" alt="Gráfico radar da comparação" /> | <img src="assets/Imagens_Readme/Imagem14.jpeg" width="120" alt="Detalhe da seção de dados" /> |
 
 ## Tecnologias utilizadas
 - React Native
