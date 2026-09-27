@@ -86,3 +86,13 @@ w  # Web (quando aplicável)
 ### Observações sobre o Firebase
 - As credenciais em `firebase/config.ts` são do app **web** do projeto `specvoraauth` no Firebase Console (chave de cliente, pública por natureza). Funciona no React Native, mas o ideal para um app dedicado é criar um app **React Native** no console (appId com sufixo `rn:`) e trocar as credenciais.
 - A **recuperação de senha** depende de um endereço de email de contato configurado no Firebase Console (Authentication → Settings). Sem ele, o link de recuperação não é entregue.
+
+### Fluxo de recuperação de senha
+A recuperação segue a documentação do Firebase Authentication para React Native:
+
+1. `app/forgot-password.tsx` chama `sendPasswordResetEmail` com `ActionCodeSettings` (`handleCodeInApp: true`), enviando o link de recuperação para o e-mail.
+2. Ao tocar no link, o app é aberto com o parâmetro `oobCode` na URL (deep link). O `app/_layout.tsx` detecta o código (cold start e app em segundo plano) e encaminha para `app/reset-password.tsx`.
+3. A tela de redefinição valida o código com `checkActionCode` (confirmando que é de recuperação de senha) e permite definir a nova senha com `confirmPasswordReset`, tudo dentro do app.
+4. Fallback: se o link for aberto fora do app (navegador), a recuperação é concluída na página web do Firebase (`specvoraauth.firebaseapp.com`).
+
+> **Nota:** para o link abrir o app diretamente em builds de produção, é necessário configurar App Links (Android) e/ou Universal Links (iOS) apontando para o domínio usado no e-mail. No Expo Go, o link abre no navegador (fallback web).
