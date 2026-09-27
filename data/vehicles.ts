@@ -7,6 +7,7 @@ export type SpecDefinition = {
   key: string;
   label: string;
   type: 'text' | 'number' | 'boolean';
+  unit?: string;
 };
 
 export type SpecCategory = {
@@ -22,7 +23,6 @@ export type VehicleRecord = {
   model: string;
   version: string;
   year?: string | null;
-  vehicleCategory?: string | null;
   engine?: string | null;
   specs: Record<string, SpecValue>;
 };
@@ -36,7 +36,6 @@ export type VehicleSearchParams = {
 };
 
 export type VehicleFilters = {
-  category?: string | null;
   brand?: string | null;
   model?: string | null;
 };
@@ -48,9 +47,8 @@ export type VehicleInput = Omit<VehicleRecord, 'id'> & {
 export type ComparisonSlot = {
   id: string;
   label: string;
-  brand: string | null;
-  model: string | null;
-  version: string | null;
+  term: string;
+  vehicleId: string | null;
 };
 
 export type RadarMetric = {
@@ -87,21 +85,49 @@ const database = vehiclesDb as VehiclesDb;
 export const specCategories = schema.categories;
 export const vehicleSeed = database.vehicles;
 
+function validateVehicleIds(source: VehicleRecord[] = vehicleSeed) {
+  const seen = new Set<string>();
+
+  for (const vehicle of source) {
+    if (seen.has(vehicle.id)) {
+      console.warn(
+        `[Specvora] ID de veículo duplicado: "${vehicle.id}". Corrija o id em data/vehicles.json.`
+      );
+    }
+
+    seen.add(vehicle.id);
+  }
+}
+
+validateVehicleIds();
+
 export function normalize(value: string) {
   return value.trim().toLowerCase();
 }
 
-export function makeVehicleId(vehicle: Pick<VehicleRecord, 'brand' | 'model' | 'version'>) {
-  return `${vehicle.brand}-${vehicle.model}-${vehicle.version}`
+export function makeVehicleId(
+  vehicle: Pick<VehicleRecord, 'brand' | 'model' | 'version'> & {
+    year?: string | null;
+  },
+  existingIds: string[] = vehicleSeed.map((record) => record.id)
+) {
+  const yearSuffix = vehicle.year?.trim() ? `-${vehicle.year.trim()}` : '';
+  const base = `${vehicle.brand}-${vehicle.model}-${vehicle.version}${yearSuffix}`
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
-}
 
-export function getSpecKey(category: string, label: string) {
-  return `${normalize(category)}::${normalize(label)}`;
+  let id = base;
+  let suffix = 2;
+
+  while (existingIds.includes(id)) {
+    id = `${base}-${suffix}`;
+    suffix += 1;
+  }
+
+  return id;
 }
 
 export function findSpecDefinitionByLabel(label: string) {
@@ -164,12 +190,8 @@ export function resolveVehicles(source: VehicleRecord[] = vehicleSeed): Vehicle[
 
 export const vehicles = resolveVehicles();
 
-function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
+export function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
   return source.filter((vehicle) => {
-    if (filters?.category && normalize(vehicle.vehicleCategory ?? '') !== normalize(filters.category)) {
-      return false;
-    }
-
     if (filters?.brand && normalize(vehicle.brand) !== normalize(filters.brand)) {
       return false;
     }
@@ -182,43 +204,20 @@ function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
   });
 }
 
-export function getVehicleCategories(source: Vehicle[] = vehicles) {
+export function getBrands(source: Vehicle[] = vehicles) {
+  return Array.from(new Set(source.map((vehicle) => vehicle.brand))).sort();
+}
+
+export function getModels(brand: string, source: Vehicle[] = vehicles) {
   return Array.from(
-    new Set(
-      source
-        .map((vehicle) => vehicle.vehicleCategory)
-        .filter((category): category is string => Boolean(category))
-    )
+    new Set(filterVehicles(source, { brand }).map((vehicle) => vehicle.model))
   ).sort();
 }
 
-export function getBrands(category?: string | null, source: Vehicle[] = vehicles) {
-  return Array.from(
-    new Set(filterVehicles(source, { category }).map((vehicle) => vehicle.brand))
-  ).sort();
-}
-
-export function getModels(
-  brand: string,
-  category?: string | null,
-  source: Vehicle[] = vehicles
-) {
+export function getVersions(brand: string, model: string, source: Vehicle[] = vehicles) {
   return Array.from(
     new Set(
-      filterVehicles(source, { category, brand }).map((vehicle) => vehicle.model)
-    )
-  ).sort();
-}
-
-export function getVersions(
-  brand: string,
-  model: string,
-  category?: string | null,
-  source: Vehicle[] = vehicles
-) {
-  return Array.from(
-    new Set(
-      filterVehicles(source, { category, brand, model }).map((vehicle) => vehicle.version)
+      filterVehicles(source, { brand, model }).map((vehicle) => vehicle.version)
     )
   ).sort();
 }
@@ -237,9 +236,15 @@ export function findVariant(
   );
 }
 
-export function displaySpecValue(value: SpecValue | undefined) {
+export function displaySpecValue(value: SpecValue | undefined, unit?: string) {
   if (value === null || value === undefined || value === '') return 'N/A';
   if (typeof value === 'boolean') return value ? 'Sim' : 'Não';
+
+  if (typeof value === 'number' && unit) {
+    const text = Number.isInteger(value) ? value.toFixed(1) : String(value);
+
+    return `${text} ${unit}`;
+  }
 
   return String(value);
 }
@@ -252,6 +257,75 @@ export function getAttributeOptions(): AttributeOption[] {
       label: spec.label,
     }))
   );
+}
+
+export function stripAccents(value: string) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+export function normalizeSearch(value: string) {
+  return stripAccents(value.trim().toLowerCase());
+}
+
+export function vehicleSearchText(vehicle: Vehicle): string {
+  const parts: string[] = [
+    vehicle.brand,
+    vehicle.model,
+    vehicle.version,
+    vehicle.year ?? '',
+    vehicle.engine ?? '',
+  ];
+
+  for (const category of specCategories) {
+    for (const spec of category.specs) {
+      const value = vehicle.specs[spec.key];
+
+      if (value === true) {
+        // Equipamento presente: busca pelo nome do equipamento (ex.: "diesel", "camera 360")
+        parts.push(spec.label);
+      } else if (typeof value === 'number' || (typeof value === 'string' && value !== '')) {
+        // Valor numerico/texto: busca pelo valor (ex.: "1.6", "3.0", "397")
+        parts.push(displaySpecValue(value, spec.unit));
+      }
+    }
+  }
+
+  return normalizeSearch(parts.join(' '));
+}
+
+function textContains(text: string, token: string): boolean {
+  let index = text.indexOf(token);
+
+  while (index !== -1) {
+    const previous = index > 0 ? text[index - 1] : '';
+
+    // Antecedido por dígito = parte de outro numero (ex.: "1.5" dentro de "11.5")
+    if (!/\d/.test(previous)) return true;
+
+    index = text.indexOf(token, index + 1);
+  }
+
+  return false;
+}
+
+export function searchVehicles(
+  term: string,
+  source: Vehicle[] = vehicles,
+  excludeIds: string[] = []
+): Vehicle[] {
+  const search = normalizeSearch(term);
+
+  if (!search) return [];
+
+  const excluded = new Set(excludeIds);
+  const tokens = search.split(/\s+/).filter(Boolean);
+
+  return source.filter((vehicle) => {
+    if (excluded.has(vehicle.id)) return false;
+
+    const text = vehicleSearchText(vehicle);
+    return tokens.every((token) => textContains(text, token));
+  });
 }
 
 function hasAvailableValue(value: SpecValue | undefined) {
@@ -282,8 +356,17 @@ function specNumber(vehicle: Vehicle, specLabel: string) {
   return 0;
 }
 
+const maxSpecCache = new Map<string, number>();
+
 function maxSpec(specLabel: string) {
-  return Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specLabel)), 1);
+  if (!maxSpecCache.has(specLabel)) {
+    maxSpecCache.set(
+      specLabel,
+      Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specLabel)), 1)
+    );
+  }
+
+  return maxSpecCache.get(specLabel)!;
 }
 
 function normalizeNumber(value: number, max: number) {
@@ -347,7 +430,7 @@ export function getComparisonRows(
   selectedVehicles: Vehicle[],
   selectedAttributeKeys: string[] = []
 ): ComparisonRow[] {
-  if (selectedVehicles.length < 2) return [];
+  if (selectedVehicles.length === 0) return [];
 
   const selectedKeySet = new Set(selectedAttributeKeys);
 
@@ -355,10 +438,6 @@ export function getComparisonRows(
     {
       label: 'Ano',
       values: selectedVehicles.map((vehicle) => vehicle.year ?? 'N/A'),
-    },
-    {
-      label: 'Categoria',
-      values: selectedVehicles.map((vehicle) => vehicle.vehicleCategory ?? 'N/A'),
     },
     {
       label: 'Motor',
@@ -372,7 +451,9 @@ export function getComparisonRows(
       .map((spec) => ({
         category: category.name,
         label: spec.label,
-        values: selectedVehicles.map((vehicle) => displaySpecValue(vehicle.specs[spec.key])),
+        values: selectedVehicles.map((vehicle) =>
+          displaySpecValue(vehicle.specs[spec.key], spec.unit)
+        ),
       }))
   );
 

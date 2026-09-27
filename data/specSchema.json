@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "description": "Catálogo único de atributos técnicos. Para adicionar um novo atributo, cadastre aqui uma vez e depois preencha o valor em vehicles.json.",
+  "description": "Catálogo único de atributos técnicos. Para adicionar um novo atributo, cadastre aqui uma vez e depois preencha o valor em vehicles.json. Convenção: 'cilindrada' é em litros com 1 decimal (ex.: 3.0 = 3.0 L). O campo opcional 'unit' acrescenta a unidade à exibição de specs number (ex.: 3 vira 3.0 L).",
   "categories": [
     {
       "id": "engine_transmission",
@@ -14,7 +14,8 @@
         {
           "key": "cilindrada",
           "label": "Cilindrada",
-          "type": "number"
+          "type": "number",
+          "unit": "L"
         },
         {
           "key": "potencia",

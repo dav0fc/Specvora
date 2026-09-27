@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -8,23 +9,22 @@ import {
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AttributeSelector } from '../components/AttributeSelector';
 import { ComparisonTable } from '../components/ComparisonTable';
 import { RadarChart } from '../components/RadarChart';
 import { VehicleLegend } from '../components/VehicleLegend';
-import { VehicleSelector } from '../components/VehicleSelector';
-import { VehicleTypeDrawer } from '../components/VehicleTypeDrawer';
-import { VehicleTypePanel } from '../components/VehicleTypePanel';
+import { VehicleSearchCard } from '../components/VehicleSearchCard';
 import {
   ComparisonSlot,
   getAttributeOptions,
   getComparisonRows,
   getRadarMetrics,
+  vehicles,
   Vehicle,
 } from '../data/vehicles';
 import { logoutUser, waitForAuthState } from '../services/authService';
-import { findVehicle, listVehicleCategories } from '../services/vehicleService';
 
 const RADAR_COLORS = ['#00095B', '#1700F4'];
 const RADAR_DOT_CLASSES = ['bg-[#00095B]', 'bg-[#1700F4]'];
@@ -33,9 +33,8 @@ function createSlot(index: number): ComparisonSlot {
   return {
     id: `vehicle-${index + 1}`,
     label: `Veículo ${String.fromCharCode(65 + index)}`,
-    brand: null,
-    model: null,
-    version: null,
+    term: '',
+    vehicleId: null,
   };
 }
 
@@ -53,22 +52,22 @@ function getUserName(displayName?: string | null, email?: string | null) {
 export default function HomeScreen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   const isTablet = width >= 768;
 
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [typePanelOpen, setTypePanelOpen] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
   const [slots, setSlots] = useState<ComparisonSlot[]>([createSlot(0), createSlot(1)]);
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [userName, setUserName] = useState('Usuário');
   const [loading, setLoading] = useState(true);
 
-  const sideWidth = typePanelOpen
-    ? Math.min(340, Math.max(260, Math.round(width * 0.22)))
-    : 76;
+  const selectedVehicles = useMemo(
+    () =>
+      slots
+        .map((slot) => vehicles.find((vehicle) => vehicle.id === slot.vehicleId) ?? null)
+        .filter((vehicle): vehicle is Vehicle => vehicle !== null),
+    [slots]
+  );
 
   const selectorWidth = width >= 1200 ? 380 : 340;
 
@@ -92,7 +91,6 @@ export default function HomeScreen() {
       }
 
       setUserName(getUserName(user.displayName, user.email));
-      setCategories(await listVehicleCategories());
       setLoading(false);
     }
 
@@ -103,54 +101,45 @@ export default function HomeScreen() {
     };
   }, [router]);
 
-  useEffect(() => {
-    async function loadVehicles() {
-      const selectedVehicles = await Promise.all(
-        slots.map((slot) => {
-          if (!slot.brand || !slot.model || !slot.version) return null;
-
-          return findVehicle({
-            brand: slot.brand,
-            model: slot.model,
-            version: slot.version,
-          });
-        })
-      );
-
-      setVehicles(selectedVehicles.filter(Boolean) as Vehicle[]);
-    }
-
-    loadVehicles();
-  }, [slots]);
-
   const attributeOptions = useMemo(() => getAttributeOptions(), []);
 
   const radarSeries = useMemo(
     () =>
-      vehicles.map((vehicle, index) => ({
+      selectedVehicles.map((vehicle, index) => ({
         name: vehicleTitle(vehicle),
         color: RADAR_COLORS[index],
         dotClassName: RADAR_DOT_CLASSES[index],
         values: getRadarMetrics(vehicle),
       })),
-    [vehicles]
+    [selectedVehicles]
   );
 
   const comparisonRows = useMemo(
-    () => getComparisonRows(vehicles, selectedAttributes),
-    [vehicles, selectedAttributes]
+    () => getComparisonRows(selectedVehicles, selectedAttributes),
+    [selectedVehicles, selectedAttributes]
   );
 
-  function updateSlot(slotId: string, nextSlot: ComparisonSlot) {
+  function updateSlot(slotId: string, patch: Partial<ComparisonSlot>) {
     setSlots((currentSlots) =>
-      currentSlots.map((slot) => (slot.id === slotId ? nextSlot : slot))
+      currentSlots.map((slot) => (slot.id === slotId ? { ...slot, ...patch } : slot))
     );
   }
 
-  function handleCategorySelect(category: string | null) {
-    setSelectedCategory(category);
-    setSlots([createSlot(0), createSlot(1)]);
-    setDrawerVisible(false);
+  function handleSelectVehicle(slotId: string, vehicleId: string) {
+    const duplicate = slots.find((slot) => slot.id !== slotId && slot.vehicleId === vehicleId);
+
+    if (duplicate) {
+      Alert.alert('Veículo duplicado', `Este veículo já está selecionado no ${duplicate.label}.`);
+      return;
+    }
+
+    updateSlot(slotId, { term: '', vehicleId });
+  }
+
+  function getExcludedVehicleIds(slotId: string) {
+    return slots
+      .filter((slot) => slot.id !== slotId && slot.vehicleId)
+      .map((slot) => slot.vehicleId as string);
   }
 
   async function handleLogout() {
@@ -169,20 +158,14 @@ export default function HomeScreen() {
   if (isTablet) {
     return (
       <View className="flex-1 flex-row bg-[#F5F8FC]">
-        <VehicleTypePanel
-          width={sideWidth}
-          expanded={typePanelOpen}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onToggle={() => setTypePanelOpen((current) => !current)}
-          onSelect={handleCategorySelect}
-        />
-
         <View
           className="h-full border-r border-[#D8E3F2] bg-white"
           style={{ width: selectorWidth }}
         >
-          <View className="border-b border-[#D8E3F2] px-5 pb-5 pt-7">
+          <View
+            className="border-b border-[#D8E3F2] px-5 pb-5"
+            style={{ paddingTop: insets.top + 28 }}
+          >
             <View className="flex-row items-center justify-between gap-4">
               <Text className="flex-1 text-2xl font-bold text-[#00142E]" numberOfLines={1}>
                 {userName}
@@ -190,6 +173,8 @@ export default function HomeScreen() {
 
               <TouchableOpacity
                 activeOpacity={0.82}
+                accessibilityRole="button"
+                accessibilityLabel="Sair da conta"
                 onPress={handleLogout}
                 className="rounded-full border border-[#D8E3F2] px-4 py-3"
               >
@@ -204,12 +189,15 @@ export default function HomeScreen() {
             contentContainerStyle={{ padding: 16, paddingBottom: 28, gap: 12 }}
           >
             {slots.map((slot) => (
-              <VehicleSelector
+              <VehicleSearchCard
                 key={slot.id}
                 slot={slot}
-                category={selectedCategory}
+                vehicles={vehicles}
+                excludedVehicleIds={getExcludedVehicleIds(slot.id)}
                 compact
-                onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
+                onTermChange={(term) => updateSlot(slot.id, { term })}
+                onSelect={(vehicleId) => handleSelectVehicle(slot.id, vehicleId)}
+                onClear={() => updateSlot(slot.id, { term: '', vehicleId: null })}
               />
             ))}
 
@@ -240,7 +228,7 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          <ComparisonTable vehicles={vehicles} rows={comparisonRows} />
+          <ComparisonTable vehicles={selectedVehicles} rows={comparisonRows} />
         </ScrollView>
       </View>
     );
@@ -248,47 +236,37 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-[#F5F8FC]">
-      <View className="border-b border-[#D8E3F2] bg-white px-4 pb-4 pt-5">
+      <View
+        className="border-b border-[#D8E3F2] bg-white px-4 pb-4"
+        style={{ paddingTop: insets.top + 20 }}
+      >
         <View className="flex-row items-center justify-between gap-3">
           <Text className="flex-1 text-2xl font-bold text-[#00142E]" numberOfLines={1}>
             {userName}
           </Text>
 
-          <View className="flex-row items-center gap-2">
-            <TouchableOpacity
-              activeOpacity={0.82}
-              onPress={handleLogout}
-              className="rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3"
-            >
-              <Text className="text-sm font-bold text-[#00095B]">Sair</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.82}
-              onPress={() => setDrawerVisible(true)}
-              className="rounded-2xl border border-[#D8E3F2] bg-[#F5F8FC] px-4 py-3"
-            >
-              <Text className="text-xs font-bold uppercase tracking-[2px] text-[#00095B]">
-                Tipo
-              </Text>
-              <Text
-                className="mt-1 max-w-28 text-sm font-semibold text-[#00142E]"
-                numberOfLines={1}
-              >
-                {selectedCategory ?? 'Todos'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            activeOpacity={0.82}
+            accessibilityRole="button"
+            accessibilityLabel="Sair da conta"
+            onPress={handleLogout}
+            className="rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3"
+          >
+            <Text className="text-sm font-bold text-[#00095B]">Sair</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 14, gap: 14 }}>
         {slots.map((slot) => (
-          <VehicleSelector
+          <VehicleSearchCard
             key={slot.id}
             slot={slot}
-            category={selectedCategory}
-            onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
+            vehicles={vehicles}
+            excludedVehicleIds={getExcludedVehicleIds(slot.id)}
+            onTermChange={(term) => updateSlot(slot.id, { term })}
+            onSelect={(vehicleId) => handleSelectVehicle(slot.id, vehicleId)}
+            onClear={() => updateSlot(slot.id, { term: '', vehicleId: null })}
           />
         ))}
 
@@ -310,16 +288,8 @@ export default function HomeScreen() {
           <VehicleLegend series={radarSeries} className="mt-3" />
         </View>
 
-        <ComparisonTable vehicles={vehicles} rows={comparisonRows} />
+        <ComparisonTable vehicles={selectedVehicles} rows={comparisonRows} />
       </ScrollView>
-
-      <VehicleTypeDrawer
-        visible={drawerVisible}
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onClose={() => setDrawerVisible(false)}
-        onSelect={handleCategorySelect}
-      />
     </View>
   );
 }
