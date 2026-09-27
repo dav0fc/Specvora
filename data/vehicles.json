@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "description": "Banco mockado normalizado. Use baseVehicleId para reaproveitar especificações de outro veículo e sobrescreva apenas o que mudar. Convenções: specs com type number no specSchema são gravadas como number; 'cilindrada' é em litros com 1 decimal (ex.: 3.0). As linhas fixas Ano, Categoria e Motor vêm dos campos do veículo (year, vehicleCategory, engine) e ficam fora do specSchema.",
+  "description": "Banco mockado normalizado. Use baseVehicleId para reaproveitar especificações de outro veículo e sobrescreva apenas o que mudar. Convenções: specs com type number no specSchema são gravadas como number; 'cilindrada' é em litros com 1 decimal (ex.: 3.0). As linhas fixas Ano e Motor vêm dos campos do veículo (year, engine) e ficam fora do specSchema.",
   "vehicles": [
     {
       "id": "ford_nova_ranger_4x4_xlt_2026",
@@ -8,7 +8,6 @@
       "model": "Nova Ranger 4x4",
       "version": "XLT",
       "year": "2026",
-      "vehicleCategory": "Picape",
       "engine": "3.0 V6 - 24V",
       "specs": {
         "peso_em_ordem_de_marchas": 2283,
@@ -302,7 +301,6 @@
       "model": "Nova Ranger 4x4",
       "version": "LTD",
       "year": "2026",
-      "vehicleCategory": "Picape",
       "engine": "3.0 V6 - 24V",
       "specs": {
         "peso_em_ordem_de_marchas": 2357,
@@ -596,7 +594,6 @@
       "model": "Nova Ranger 4x4",
       "version": "LTD+",
       "year": "2026",
-      "vehicleCategory": "Picape",
       "engine": "3.0 V6 - 24V",
       "specs": {
         "peso_em_ordem_de_marchas": 2357,
@@ -891,7 +888,6 @@
       "model": "Ranger Raptor",
       "version": "3.0 V6 EcoBoost",
       "year": "2026",
-      "vehicleCategory": "Picape",
       "engine": "3.0 V6 EcoBoost",
       "specs": {
         "peso_em_ordem_de_marchas": 2475,
@@ -922,7 +918,6 @@
       "model": "Territory",
       "version": "SEL",
       "year": "2026",
-      "vehicleCategory": "SUV",
       "engine": "1.5 EcoBoost",
       "specs": {
         "peso_em_ordem_de_marchas": 1592,
@@ -957,7 +952,6 @@
       "model": "Territory",
       "version": "Titanium",
       "year": "2026",
-      "vehicleCategory": "SUV",
       "engine": "1.5 EcoBoost",
       "specs": {
         "peso_em_ordem_de_marchas": 1620,
@@ -992,7 +986,6 @@
       "model": "Focus",
       "version": "SE",
       "year": "2026",
-      "vehicleCategory": "Hatch",
       "engine": "2.0 Flex",
       "specs": {
         "peso_em_ordem_de_marchas": 1385,
@@ -1029,7 +1022,6 @@
       "model": "Focus",
       "version": "Titanium",
       "year": "2026",
-      "vehicleCategory": "Hatch",
       "engine": "2.0 Flex",
       "specs": {
         "peso_em_ordem_de_marchas": 1420,
@@ -1067,7 +1059,6 @@
       "model": "Fusion",
       "version": "SEL",
       "year": "2026",
-      "vehicleCategory": "Sedan",
       "engine": "2.0 EcoBoost",
       "specs": {
         "peso_em_ordem_de_marchas": 1645,
@@ -1100,7 +1091,6 @@
       "model": "Fusion",
       "version": "Titanium AWD",
       "year": "2026",
-      "vehicleCategory": "Sedan",
       "engine": "2.0 EcoBoost",
       "specs": {
         "peso_em_ordem_de_marchas": 1710,

@@ -16,8 +16,6 @@ import { ComparisonTable } from '../components/ComparisonTable';
 import { RadarChart } from '../components/RadarChart';
 import { VehicleLegend } from '../components/VehicleLegend';
 import { VehicleSelector } from '../components/VehicleSelector';
-import { VehicleTypeDrawer } from '../components/VehicleTypeDrawer';
-import { VehicleTypePanel } from '../components/VehicleTypePanel';
 import {
   ComparisonSlot,
   getAttributeOptions,
@@ -27,7 +25,7 @@ import {
   Vehicle,
 } from '../data/vehicles';
 import { logoutUser, waitForAuthState } from '../services/authService';
-import { findVehicle, listVehicleCategories } from '../services/vehicleService';
+import { findVehicle } from '../services/vehicleService';
 
 const RADAR_COLORS = ['#00095B', '#1700F4'];
 const RADAR_DOT_CLASSES = ['bg-[#00095B]', 'bg-[#1700F4]'];
@@ -60,19 +58,11 @@ export default function HomeScreen() {
 
   const isTablet = width >= 768;
 
-  const [drawerVisible, setDrawerVisible] = useState(false);
-  const [typePanelOpen, setTypePanelOpen] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedAttributes, setSelectedAttributes] = useState<string[]>([]);
   const [slots, setSlots] = useState<ComparisonSlot[]>([createSlot(0), createSlot(1)]);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [userName, setUserName] = useState('Usuário');
   const [loading, setLoading] = useState(true);
-
-  const sideWidth = typePanelOpen
-    ? Math.min(340, Math.max(260, Math.round(width * 0.22)))
-    : 76;
 
   const selectorWidth = width >= 1200 ? 380 : 340;
 
@@ -96,7 +86,6 @@ export default function HomeScreen() {
       }
 
       setUserName(getUserName(user.displayName, user.email));
-      setCategories(await listVehicleCategories());
       setLoading(false);
     }
 
@@ -168,17 +157,6 @@ export default function HomeScreen() {
     );
   }
 
-  function handleCategorySelect(category: string | null) {
-    const changed = category !== selectedCategory;
-    setSelectedCategory(category);
-
-    if (changed) {
-      setSlots([createSlot(0), createSlot(1)]);
-    }
-
-    setDrawerVisible(false);
-  }
-
   async function handleLogout() {
     await logoutUser();
     router.replace('/');
@@ -195,15 +173,6 @@ export default function HomeScreen() {
   if (isTablet) {
     return (
       <View className="flex-1 flex-row bg-[#F5F8FC]">
-        <VehicleTypePanel
-          width={sideWidth}
-          expanded={typePanelOpen}
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onToggle={() => setTypePanelOpen((current) => !current)}
-          onSelect={handleCategorySelect}
-        />
-
         <View
           className="h-full border-r border-[#D8E3F2] bg-white"
           style={{ width: selectorWidth }}
@@ -238,7 +207,6 @@ export default function HomeScreen() {
               <VehicleSelector
                 key={slot.id}
                 slot={slot}
-                category={selectedCategory}
                 compact
                 onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
               />
@@ -288,35 +256,15 @@ export default function HomeScreen() {
             {userName}
           </Text>
 
-          <View className="flex-row items-center gap-2">
-            <TouchableOpacity
-              activeOpacity={0.82}
-              accessibilityRole="button"
-              accessibilityLabel="Sair da conta"
-              onPress={handleLogout}
-              className="rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3"
-            >
-              <Text className="text-sm font-bold text-[#00095B]">Sair</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.82}
-              accessibilityRole="button"
-              accessibilityLabel={`Tipo de veículo atual: ${selectedCategory ?? 'Todos'}. Toque para trocar.`}
-              onPress={() => setDrawerVisible(true)}
-              className="rounded-2xl border border-[#D8E3F2] bg-[#F5F8FC] px-4 py-3"
-            >
-              <Text className="text-xs font-bold uppercase tracking-[2px] text-[#00095B]">
-                Tipo
-              </Text>
-              <Text
-                className="mt-1 max-w-28 text-sm font-semibold text-[#00142E]"
-                numberOfLines={1}
-              >
-                {selectedCategory ?? 'Todos'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            activeOpacity={0.82}
+            accessibilityRole="button"
+            accessibilityLabel="Sair da conta"
+            onPress={handleLogout}
+            className="rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3"
+          >
+            <Text className="text-sm font-bold text-[#00095B]">Sair</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -325,7 +273,6 @@ export default function HomeScreen() {
           <VehicleSelector
             key={slot.id}
             slot={slot}
-            category={selectedCategory}
             onChange={(nextSlot) => updateSlot(slot.id, nextSlot)}
           />
         ))}
@@ -350,14 +297,6 @@ export default function HomeScreen() {
 
         <ComparisonTable vehicles={vehicles} rows={comparisonRows} />
       </ScrollView>
-
-      <VehicleTypeDrawer
-        visible={drawerVisible}
-        categories={categories}
-        selectedCategory={selectedCategory}
-        onClose={() => setDrawerVisible(false)}
-        onSelect={handleCategorySelect}
-      />
     </View>
   );
 }

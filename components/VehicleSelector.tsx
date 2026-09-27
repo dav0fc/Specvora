@@ -7,14 +7,12 @@ import { SearchSelect } from './SearchSelect';
 
 type VehicleSelectorProps = {
   slot: ComparisonSlot;
-  category: string | null;
   compact?: boolean;
   onChange: (slot: ComparisonSlot) => void;
 };
 
 export function VehicleSelector({
   slot,
-  category,
   compact = false,
   onChange,
 }: VehicleSelectorProps) {
@@ -24,11 +22,11 @@ export function VehicleSelector({
 
   useEffect(() => {
     async function loadBrands() {
-      setBrands(await listBrands(category));
+      setBrands(await listBrands());
     }
 
     loadBrands();
-  }, [category]);
+  }, []);
 
   useEffect(() => {
     async function loadModels() {
@@ -37,11 +35,11 @@ export function VehicleSelector({
         return;
       }
 
-      setModels(await listModels(slot.brand, category));
+      setModels(await listModels(slot.brand));
     }
 
     loadModels();
-  }, [slot.brand, category]);
+  }, [slot.brand]);
 
   useEffect(() => {
     async function loadVersions() {
@@ -50,11 +48,11 @@ export function VehicleSelector({
         return;
       }
 
-      setVersions(await listVersions(slot.brand, slot.model, category));
+      setVersions(await listVersions(slot.brand, slot.model));
     }
 
     loadVersions();
-  }, [slot.brand, slot.model, category]);
+  }, [slot.brand, slot.model]);
 
   return (
     <View

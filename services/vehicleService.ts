@@ -3,7 +3,6 @@ import {
   findVariant,
   getBrands,
   getModels,
-  getVehicleCategories,
   getVersions,
   resolveVehicles,
   Vehicle,
@@ -47,28 +46,22 @@ export async function listVehicles(filters?: VehicleFilters) {
   return filterVehicles(source, filters);
 }
 
-export async function listVehicleCategories() {
+export async function listBrands() {
   const source = await listVehicles();
 
-  return getVehicleCategories(source);
+  return getBrands(source);
 }
 
-export async function listBrands(category?: string | null) {
+export async function listModels(brand: string) {
   const source = await listVehicles();
 
-  return getBrands(category, source);
+  return getModels(brand, source);
 }
 
-export async function listModels(brand: string, category?: string | null) {
+export async function listVersions(brand: string, model: string) {
   const source = await listVehicles();
 
-  return getModels(brand, category, source);
-}
-
-export async function listVersions(brand: string, model: string, category?: string | null) {
-  const source = await listVehicles();
-
-  return getVersions(brand, model, category, source);
+  return getVersions(brand, model, source);
 }
 
 export async function findVehicle(params: VehicleSearchParams) {

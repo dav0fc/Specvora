@@ -23,7 +23,6 @@ export type VehicleRecord = {
   model: string;
   version: string;
   year?: string | null;
-  vehicleCategory?: string | null;
   engine?: string | null;
   specs: Record<string, SpecValue>;
 };
@@ -37,7 +36,6 @@ export type VehicleSearchParams = {
 };
 
 export type VehicleFilters = {
-  category?: string | null;
   brand?: string | null;
   model?: string | null;
 };
@@ -195,10 +193,6 @@ export const vehicles = resolveVehicles();
 
 export function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
   return source.filter((vehicle) => {
-    if (filters?.category && normalize(vehicle.vehicleCategory ?? '') !== normalize(filters.category)) {
-      return false;
-    }
-
     if (filters?.brand && normalize(vehicle.brand) !== normalize(filters.brand)) {
       return false;
     }
@@ -211,43 +205,20 @@ export function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
   });
 }
 
-export function getVehicleCategories(source: Vehicle[] = vehicles) {
+export function getBrands(source: Vehicle[] = vehicles) {
+  return Array.from(new Set(source.map((vehicle) => vehicle.brand))).sort();
+}
+
+export function getModels(brand: string, source: Vehicle[] = vehicles) {
   return Array.from(
-    new Set(
-      source
-        .map((vehicle) => vehicle.vehicleCategory)
-        .filter((category): category is string => Boolean(category))
-    )
+    new Set(filterVehicles(source, { brand }).map((vehicle) => vehicle.model))
   ).sort();
 }
 
-export function getBrands(category?: string | null, source: Vehicle[] = vehicles) {
-  return Array.from(
-    new Set(filterVehicles(source, { category }).map((vehicle) => vehicle.brand))
-  ).sort();
-}
-
-export function getModels(
-  brand: string,
-  category?: string | null,
-  source: Vehicle[] = vehicles
-) {
+export function getVersions(brand: string, model: string, source: Vehicle[] = vehicles) {
   return Array.from(
     new Set(
-      filterVehicles(source, { category, brand }).map((vehicle) => vehicle.model)
-    )
-  ).sort();
-}
-
-export function getVersions(
-  brand: string,
-  model: string,
-  category?: string | null,
-  source: Vehicle[] = vehicles
-) {
-  return Array.from(
-    new Set(
-      filterVehicles(source, { category, brand, model }).map((vehicle) => vehicle.version)
+      filterVehicles(source, { brand, model }).map((vehicle) => vehicle.version)
     )
   ).sort();
 }
@@ -399,10 +370,6 @@ export function getComparisonRows(
     {
       label: 'Ano',
       values: selectedVehicles.map((vehicle) => vehicle.year ?? 'N/A'),
-    },
-    {
-      label: 'Categoria',
-      values: selectedVehicles.map((vehicle) => vehicle.vehicleCategory ?? 'N/A'),
     },
     {
       label: 'Motor',
