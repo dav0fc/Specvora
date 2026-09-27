@@ -7,6 +7,7 @@ export type SpecDefinition = {
   key: string;
   label: string;
   type: 'text' | 'number' | 'boolean';
+  unit?: string;
 };
 
 export type SpecCategory = {
@@ -87,21 +88,49 @@ const database = vehiclesDb as VehiclesDb;
 export const specCategories = schema.categories;
 export const vehicleSeed = database.vehicles;
 
+function validateVehicleIds(source: VehicleRecord[] = vehicleSeed) {
+  const seen = new Set<string>();
+
+  for (const vehicle of source) {
+    if (seen.has(vehicle.id)) {
+      console.warn(
+        `[Specvora] ID de veículo duplicado: "${vehicle.id}". Corrija o id em data/vehicles.json.`
+      );
+    }
+
+    seen.add(vehicle.id);
+  }
+}
+
+validateVehicleIds();
+
 export function normalize(value: string) {
   return value.trim().toLowerCase();
 }
 
-export function makeVehicleId(vehicle: Pick<VehicleRecord, 'brand' | 'model' | 'version'>) {
-  return `${vehicle.brand}-${vehicle.model}-${vehicle.version}`
+export function makeVehicleId(
+  vehicle: Pick<VehicleRecord, 'brand' | 'model' | 'version'> & {
+    year?: string | null;
+  },
+  existingIds: string[] = vehicleSeed.map((record) => record.id)
+) {
+  const yearSuffix = vehicle.year?.trim() ? `-${vehicle.year.trim()}` : '';
+  const base = `${vehicle.brand}-${vehicle.model}-${vehicle.version}${yearSuffix}`
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
-}
 
-export function getSpecKey(category: string, label: string) {
-  return `${normalize(category)}::${normalize(label)}`;
+  let id = base;
+  let suffix = 2;
+
+  while (existingIds.includes(id)) {
+    id = `${base}-${suffix}`;
+    suffix += 1;
+  }
+
+  return id;
 }
 
 export function findSpecDefinitionByLabel(label: string) {
@@ -164,7 +193,7 @@ export function resolveVehicles(source: VehicleRecord[] = vehicleSeed): Vehicle[
 
 export const vehicles = resolveVehicles();
 
-function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
+export function filterVehicles(source: Vehicle[], filters?: VehicleFilters) {
   return source.filter((vehicle) => {
     if (filters?.category && normalize(vehicle.vehicleCategory ?? '') !== normalize(filters.category)) {
       return false;
@@ -237,9 +266,15 @@ export function findVariant(
   );
 }
 
-export function displaySpecValue(value: SpecValue | undefined) {
+export function displaySpecValue(value: SpecValue | undefined, unit?: string) {
   if (value === null || value === undefined || value === '') return 'N/A';
   if (typeof value === 'boolean') return value ? 'Sim' : 'Não';
+
+  if (typeof value === 'number' && unit) {
+    const text = Number.isInteger(value) ? value.toFixed(1) : String(value);
+
+    return `${text} ${unit}`;
+  }
 
   return String(value);
 }
@@ -282,8 +317,17 @@ function specNumber(vehicle: Vehicle, specLabel: string) {
   return 0;
 }
 
+const maxSpecCache = new Map<string, number>();
+
 function maxSpec(specLabel: string) {
-  return Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specLabel)), 1);
+  if (!maxSpecCache.has(specLabel)) {
+    maxSpecCache.set(
+      specLabel,
+      Math.max(...vehicles.map((vehicle) => specNumber(vehicle, specLabel)), 1)
+    );
+  }
+
+  return maxSpecCache.get(specLabel)!;
 }
 
 function normalizeNumber(value: number, max: number) {
@@ -347,7 +391,7 @@ export function getComparisonRows(
   selectedVehicles: Vehicle[],
   selectedAttributeKeys: string[] = []
 ): ComparisonRow[] {
-  if (selectedVehicles.length < 2) return [];
+  if (selectedVehicles.length === 0) return [];
 
   const selectedKeySet = new Set(selectedAttributeKeys);
 
@@ -372,7 +416,9 @@ export function getComparisonRows(
       .map((spec) => ({
         category: category.name,
         label: spec.label,
-        values: selectedVehicles.map((vehicle) => displaySpecValue(vehicle.specs[spec.key])),
+        values: selectedVehicles.map((vehicle) =>
+          displaySpecValue(vehicle.specs[spec.key], spec.unit)
+        ),
       }))
   );
 

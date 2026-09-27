@@ -22,7 +22,7 @@ export function VehicleLegend({ series, className = '' }: VehicleLegendProps) {
       <View className="gap-2">
         {series.map((item, index) => (
           <View
-            key={item.name}
+            key={`legenda-${index}`}
             className="flex-row items-center rounded-2xl bg-[#F5F8FC] px-3 py-2"
           >
             <View className={`mr-3 h-3 w-3 rounded-full ${item.dotClassName}`} />

@@ -2,8 +2,46 @@
 
 > Documento de referência para quem precisa entender o app inteiro **sem explorar o repositório**.
 > Cada arquivo do projeto é explicado linha a linha (ou bloco a bloco, para arquivos JSON grandes).
-> Os números de linha referem-se ao estado do repositório em `main` (commit `b90e41c`).
+> Os números de linha referem-se ao estado do repositório em `main` (commit `b90e41c`), **antes** da atualização.
+> **Checkpoint: em 2026-09-27 o plano do Update.md foi integralmente aplicado** (ver §0). As descrições de §5 já refletem o estado novo do código.
 > Problemas encontrados e o que deve ser mudado estão em **Update.md** — este arquivo apenas DESCREVE.
+
+---
+
+## 0. Log de alterações — aplicação do Update.md (2026-09-27)
+
+**Tudo que era executável no Update.md foi aplicado.** Estado verificado com `npm run validate` (ok), `npx tsc --noEmit` (ok) e um teste de integração simulando o caso de validação (Raptor sozinho → 286 linhas na tabela, Cilindrada exibida como `3.0 L`, comparação de 2 veículos inalterada).
+
+### P0 — bloqueios da validação
+- **P0-1 (feito):** `getComparisonRows` agora aceita 1 veículo (guarda `=== 0`); `ComparisonTable` só mostra placeholder com 0 veículos ("Selecione um veículo"); radar/legenda continuam exigindo 2 (decisão do Update: a saída obrigatória é a lista). Com o Raptor sozinho a tabela exibe as 3 linhas fixas + 283 specs.
+- **P0-2 (parcial — pendente do slide):** os 19 valores do Raptor no JSON são os do mock (potência 397, torque 583, peso 2475, economia 8.3, INMETRO "E", 7 airbags, multimídia 12", câmera 360, ACC, BLIS, Fox Live Valve, Terrain Management, Trail Control, AWD, biturbo, ATR 60/40, rodas 17). **O slide oficial não está no repositório** — a conferência final (passo 1 do P0-2) ainda falta. Para travar a resposta na demo, o `scripts/validate.mjs` compara o Raptor resolvido contra essa tabela de valores esperados (se o slide mudar, atualizar o `expected` no script). Formato: `cilindrada` agora é number + unidade `L` no schema → exibe **"3.0 L"**.
+
+### P1 — integridade de dados
+- **P1-1 (feito):** id do LTD+ renomeado para `ford_nova_ranger_4x4_ltd_plus_2026` (colisão resolvida; os 4 `baseVehicleId` continuam apontando para o LTD, idêntico ao comportamento de antes — ver pendência abaixo). `makeVehicleId` agora inclui o ano e adiciona sufixo `-2`, `-3`… em caso de colisão. `validateVehicleIds()` roda no load e faz `console.warn` se houver id duplicado.
+- **P1-2 (feito):** os 61 valores numéricos que eram string em `vehicles.json` viraram `number` (script one-shot; verificado pelo `validate.mjs`, que falha se uma spec `type: "number"` vier como string). Convenção de `cilindrada` = litros com 1 decimal, registrada no `description` do schema; o schema ganhou o campo opcional `unit` (apenas `cilindrada` usa, `"L"`) e `displaySpecValue(value, unit?)` formata inteiros com 1 decimal + unidade (3 → `3.0 L`, 1.5 → `1.5 L`).
+- **P1-3 (decisão tomada):** o Raptor **mantém** o `baseVehicleId` para o LTD — os 264 campos que o slide não mostra continuam herdados (P0-2 passo 3: "deixar como estão, viram Não/N/A"). Com o id do LTD+ renomeado, a herança agora é determinística (sempre o LTD, linha 300).
+
+### P2 — robustez/UX
+- **P2-1 (feito, opção 1 + 2):** `updateSlot` em `home.tsx` bloqueia completar um slot com o mesmo veículo do outro (Alert "Veículo duplicado"); chaves de React trocadas para posição (`col-${index}` no cabeçalho da tabela, `serie-${index}` nos polígonos do radar, `legenda-${index}` na legenda).
+- **P2-2 (feito):** `handleCategorySelect` só zera os slots quando o tipo efetivamente muda.
+- **P2-3 (feito):** `maxSpec` usa cache em módulo (`maxSpecCache`).
+- **P2-4 (feito):** `filterVehicles` exportado de `data/vehicles.ts`; `listVehicles` delega a filtragem para ele (o filtro inline case-sensitive foi apagado).
+- **P2-5 (feito, incluindo o opcional):** as 3 telas de auth ganham estado `submitting` (botão desabilitado + texto "Entrando…"/"Cadastrando…"/"Enviando…"), validação de e-mail por regex antes da chamada, e o `Button` nativo virou `TouchableOpacity` azul Ford. `authService.ts` exporta `translateAuthError()` (traduz `auth/invalid-credential`, `auth/wrong-password`, `auth/user-not-found`, `auth/invalid-email`, `auth/weak-password`, `auth/email-already-in-use`, `auth/too-many-requests` para PT).
+- **P2-6 (feito):** telas de auth usam `SafeAreaView` (top) do `react-native-safe-area-context` dentro do `KeyboardAvoidingView`; a Home usa `useSafeAreaInsets()` no padding-top dos headers (celular e tablet). O `SafeAreaProvider` já vem do `expo-router` (`ExpoRoot.js`), não foi necessário adicionar.
+
+### P3 — limpeza
+- **P3-1 (feito):** apagados `app/details.tsx`, `components/Dropdown.tsx`, `App.tsx.bkp`, `nativewind-env.d.ts` (raiz — ficou só o de `types/`), `styles/colors.ts`, `styles/fontFamily.ts`; removidas do `vehicleService.ts` as 4 funções de CRUD (`getVehicleById`, `createVehicle`, `updateVehicle`, `deleteVehicle`) e de `data/vehicles.ts`/`authService.ts` as exports mortas (`getSpecKey`, `getCurrentUser`, `isAuthenticated`). `tailwind.config.js`: `content` corrigido para `["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./index.ts"]` e o `extend` de tokens removido (opção (i) do Update — os componentes seguem com hex arbitrário; a opção (ii) "reformular componentes com tokens" fica para o futuro). A dependência `expo-status-bar` foi **mantida** porque o P3-2 a passou a usar.
+- **P3-2 (feito):** `<StatusBar style="dark" />` dentro do `<Stack>` em `app/_layout.tsx`.
+- **P3-3 (feito o que era para o projeto):** código do Firebase intencionalmente mantido (chave de cliente); README.md documenta (a) que as credenciais são do app web `specvoraauth` e que o ideal é criar app RN dedicado, e (b) que a recuperação de senha depende de email de contato configurado no console Firebase.
+- **P3-4 (feito):** contador da tabela agora "N atributos" (desconta as 3 linhas fixas, com plural correto); agrupamento visual: cada categoria da tabela ganha **uma** linha de cabeçalho de grupo (fundo claro) e as linhas não repetem a categoria; placeholder do radar com 1 veículo: "Selecione um segundo veículo para comparar" (com 0: "Selecione um veículo"); `description` do `vehicles.json` documenta que Ano/Categoria/Motor vêm dos campos do veículo e ficam fora do schema; **acessibilidade**: `accessibilityRole`/`accessibilityLabel`/`accessibilityState` nos touchables de todas as telas (login, cadastro, recuperação, home, SearchSelect, AttributeSelector, drawer e painel de tipos — checkboxes com role `checkbox`); **testes**: `scripts/validate.mjs` (ids únicos; chaves de specs ↔ schema nos dois sentidos + coerência de tipos; `baseVehicleId` existente; valores do Raptor) e o script `npm run validate` no package.json.
+
+### Pendências (exigem entrada externa — não bloqueiam a validação)
+1. **P0-2 passo 1:** conferir os 19 valores do Raptor contra o slide oficial (slide não está no repositório). Até lá, o `npm run validate` trava os valores do mock como a "fonte da verdade" da demo.
+2. **P1-1 passo 2:** decidir a que veículo cada um dos 4 `baseVehicleId` (`...ltd_2026`) deve apontar — hoje (e depois da atualização) todos resolvem para o **LTD** (comportamento idêntico ao de antes). O Update sugere que Territory/Focus/Fusion Titanium talvez devessem herdar do **LTD+** — **confirmar com o time**; se sim, basta trocar o `baseVehicleId` nos 3 registros (o id do LTD+ agora é único e seguro para apontar).
+
+### Arquivos novos / removidos nesta atualização
+- **Novos:** `scripts/validate.mjs`; `validate` em `package.json` scripts.
+- **Removidos:** `app/details.tsx`, `components/Dropdown.tsx`, `App.tsx.bkp`, `nativewind-env.d.ts` (raiz), `styles/colors.ts`, `styles/fontFamily.ts`.
 
 ---
 
@@ -35,13 +73,13 @@ O usuário:
 | Entrada: Marca | ✅ | `components/VehicleSelector.tsx` (SearchSelect "Marca") |
 | Entrada: Modelo | ✅ | `components/VehicleSelector.tsx` (SearchSelect "Modelo") |
 | Entrada: Versão | ✅ | `components/VehicleSelector.tsx` (SearchSelect "Versão") |
-| Saída: lista de especificações técnicas | ⚠️ **PARCIAL** | `data/vehicles.ts:getComparisonRows` existe, MAS a tela só a exibe com **2 veículos** selecionados (`components/ComparisonTable.tsx:28`, `data/vehicles.ts:346-348`) |
+| Saída: lista de especificações técnicas | ✅ | `data/vehicles.ts:getComparisonRows` + `components/ComparisonTable.tsx` — **funciona com 1 ou 2 veículos** (guarda `=== 0`); placeholder só com 0 veículos (atualizado no Update.md, P0-1) |
 | Formato sempre o mesmo, independentemente do veículo | ✅ | `data/specSchema.json` (283 chaves fixas) — toda linha da tabela vem do schema |
 | Campos claros, organizados, comparáveis | ✅ | Tabela com coluna "Item" + coluna por veículo, agrupada por categoria |
 | Informação inexistente explícita (vazio/N/A) | ✅ | `data/vehicles.ts:displaySpecValue` (linhas 240-245) → `N/A` para `null`/`undefined`/`''`; `false` → `Não` |
-| Validação com a Ford Ranger Raptor | ⚠️ **PARCIAL** | O dado existe (`data/vehicles.json:889-921`, `Ranger Raptor` / `3.0 V6 EcoBoost`) e resolve para 283 campos — MAS (a) a UI não mostra a lista com 1 veículo só, e (b) os valores são mockados e precisam ser conferidos contra o slide oficial (o slide não está no repositório). Detalhes em Update.md |
+| Validação com a Ford Ranger Raptor | ⚠️ **PARCIAL (só a conferência do slide falta)** | O dado existe (`Ranger Raptor` / `3.0 V6 EcoBoost`) e resolve para 283 campos; a UI **mostra a lista com 1 veículo** (P0-1 feito). Os 19 valores declarados são o mock do slide e **ainda precisam ser conferidos contra o slide oficial** (não está no repositório) — o `scripts/validate.mjs` trava esses valores (P0-2, pendência 1 do §0). |
 
-**Conclusão:** o esqueleto do desafio está implementado; o bloqueio principal para a validação é que a saída obrigatória (a lista) só aparece comparando 2 veículos, e o caso de validação pedido é um veículo único (Ranger Raptor).
+**Conclusão (atualizada 2026-09-27):** o bloqueio da UI foi resolvido (P0-1) — logar → escolher só o Ranger Raptor já exibe a lista padronizada completa. O que falta para a validação ser 100% é conferir os valores contra o slide oficial (pendência externa, §0).
 
 ---
 
@@ -78,7 +116,7 @@ Fluxo da tela Home:
 3. Cada `VehicleSelector` (slots A e B) carrega marcas → modelos → versões em cascata.
 4. Quando um slot fica completo (marca+modelo+versão), o `useEffect [slots]` chama `findVehicle(...)` e popula `vehicles[]`.
 5. `getRadarMetrics(vehicle)` → série do radar; `getComparisonRows(vehicles, selectedAttributes)` → linhas da tabela.
-6. `ComparisonTable` e `RadarChart` renderizam (só com **2** veículos — ver §2).
+6. `ComparisonTable` renderiza a lista com **1 ou 2** veículos (placeholder só com 0); `RadarChart`/`VehicleLegend` só com 2 (ver §2).
 
 ---
 
@@ -88,48 +126,46 @@ Fluxo da tela Home:
 Specvora/
 ├── index.ts                      # Entry point (1 linha)
 ├── app.json                      # Config Expo (nome, ícones, splash, plugins)
-├── package.json                  # Dependências e scripts
+├── package.json                  # Dependências e scripts (+ "validate": node scripts/validate.mjs)
 ├── tsconfig.json                 # Extende expo/tsconfig.base + mapping do Firebase RN
 ├── babel.config.js               # Presets Babel (Expo + NativeWind)
 ├── metro.config.js               # Metro + NativeWind (input styles/global.css)
-├── tailwind.config.js            # Tailwind/NativeWind (content, preset, theme)
-├── nativewind-env.d.ts           # Reference de tipos do NativeWind (raiz)
-├── types/nativewind-env.d.ts     # IDÊNTICO ao anterior (duplicado)
-├── App.tsx.bkp                   # Backup do boilerplate NativeWind (NÃO é compilado)
+├── tailwind.config.js            # Tailwind/NativeWind (content corrigido, sem tokens — §5.7)
+├── types/nativewind-env.d.ts     # Reference de tipos do NativeWind (único — o da raiz foi apagado)
 ├── Pedido_Desafio.txt            # Enunciado do desafio (ford)
-├── README.md                     # Leia-me do grupo
+├── README.md                     # Leia-me do grupo (+ observações Firebase, §P3-3)
 ├── app/                          # ROTAS (Expo Router)
-│   ├── _layout.tsx               # Stack global, sem header
-│   ├── index.tsx                 # Login
-│   ├── register.tsx              # Cadastro
-│   ├── forgot-password.tsx       # Recuperação de senha
-│   ├── home.tsx                  # Tela principal (325 linhas, celular+tablet)
-│   └── details.tsx               # ÓRFÃ — só redireciona (login ou home)
+│   ├── _layout.tsx               # Stack global, sem header, + StatusBar dark
+│   ├── index.tsx                 # Login (SafeAreaView, submitting, validação de email)
+│   ├── register.tsx              # Cadastro (idem)
+│   ├── forgot-password.tsx       # Recuperação de senha (idem)
+│   └── home.tsx                  # Tela principal (celular+tablet, safe area, bloq. duplicado)
 ├── components/
 │   ├── VehicleSelector.tsx       # Slot Marca/Modelo/Versão (cascata)
-│   ├── SearchSelect.tsx          # Dropdown com busca (modal)
-│   ├── Dropdown.tsx              # OUTRO dropdown, tema escuro — NÃO USADO
-│   ├── AttributeSelector.tsx     # Multi-seleção de atributos (modal + busca)
-│   ├── ComparisonTable.tsx       # Tabela padronizada de specs
-│   ├── RadarChart.tsx            # Gráfico radar SVG
-│   ├── VehicleLegend.tsx         # Legenda do radar
+│   ├── SearchSelect.tsx          # Dropdown com busca (modal, acessível)
+│   ├── AttributeSelector.tsx     # Multi-seleção de atributos (modal + busca, acessível)
+│   ├── ComparisonTable.tsx       # Tabela padronizada (1-2 veículos, grupos por categoria)
+│   ├── RadarChart.tsx            # Gráfico radar SVG (2+ veículos)
+│   ├── VehicleLegend.tsx         # Legenda do radar (2+ veículos)
 │   ├── VehicleTypeDrawer.tsx     # Drawer modal de tipo (celular)
 │   └── VehicleTypePanel.tsx      # Painel lateral de tipo (tablet)
 ├── services/
-│   ├── authService.ts            # Firebase Auth (login/cadastro/senha/logout)
-│   └── vehicleService.ts         # "API" mockada + CRUD local não usado
+│   ├── authService.ts            # Firebase Auth (login/cadastro/senha/logout, erros PT)
+│   └── vehicleService.ts         # "API" mockada (CRUD local removido — sobra morta)
+├── scripts/
+│   └── validate.mjs              # Validação do banco + Raptor (npm run validate)
 ├── data/
-│   ├── specSchema.json           # Catálogo: 15 categorias, 283 atributos
-│   ├── vehicles.json             # 10 veículos (Ford) com specs + herança
-│   └── vehicles.ts               # Tipos + lógica pura (resolve, filtros, rows)
+│   ├── specSchema.json           # Catálogo: 15 categorias, 283 atributos (+ unit em cilindrada)
+│   ├── vehicles.json             # 10 veículos (Ford) com specs + herança (números tipados)
+│   └── vehicles.ts               # Tipos + lógica pura (resolve, filtros, rows, 1-2 veículos)
 ├── firebase/
 │   └── config.ts                 # Config Firebase + auth com persistence RN
 ├── styles/
-│   ├── global.css                # 3 diretivas @tailwind (input do NativeWind)
-│   ├── colors.ts                 # Paleta (não usada pelos componentes)
-│   └── fontFamily.ts             # Roboto (fontes não carregadas — não usado)
+│   └── global.css                # 3 diretivas @tailwind (input do NativeWind)
 ├── assets/                       # Ícones (icon, adaptive, splash, favicon)
 └── .expo/                        # Metadados locais do Expo (devices.json)
+
+Removidos na atualização de 2026-09-27 (P3-1): `app/details.tsx`, `components/Dropdown.tsx`, `App.tsx.bkp`, `nativewind-env.d.ts` (raiz), `styles/colors.ts`, `styles/fontFamily.ts`.
 ```
 
 ---
@@ -219,26 +255,24 @@ module.exports = withNativeWind(config, { input: './styles/global.css' })
 ```
 - **L4-5:** envolve o bundle do Metro no plugin do NativeWind, dizendo onde está o CSS de entrada (`styles/global.css`). Sem isso, `className` não funciona.
 
-### 5.7 `tailwind.config.js`
+### 5.7 `tailwind.config.js` (atualizado na 2026-09-27)
 
 ```js
-import { colors } from "./styles/colors"        // paleta nomeada (twilight, fordBlue, ...)
-import { fontFamily } from "./styles/fontFamily" // Roboto regular/bold/medium
-
 module.exports = {
-  content: ["./App.tsx", "./**/*.{ts,tsx}"],    // ./App.tsx NÃO existe (só o .bkp) — inofensivo
-  presets: [require("nativewind/preset")],      // preset do NativeWind
-  theme: { extend: { colors, fontFamily } },    // registra tokens, mas NENHUM componente usa
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./index.ts"],
+  presets: [require("nativewind/preset")],
+  theme: { extend: {} },   // tokens removidos (P3-1h, opção i)
   plugins: [],
 }
 ```
-⚠️ Os componentes usam valores arbitrários em hex (`bg-[#F5F8FC]`, `text-[#00142E]`) em vez dos tokens (`bg-aero`, `text-twilight`). Os tokens existem mas estão ociosos.
+- `content` corrigido (antes apontava para `./App.tsx` inexistente + glob genérico).
+- Os tokens `colors`/`fontFamily` foram **apagados** (arquivos `styles/colors.ts` e `styles/fontFamily.ts` removidos) — a opção (ii) do Update (reformular os componentes para usar `bg-aero`, `text-twilight` etc.) fica pendente como melhoria futura; os componentes continuam com hex arbitrário.
 
-### 5.8 `nativewind-env.d.ts` (raiz) e `types/nativewind-env.d.ts`
+### 5.8 `types/nativewind-env.d.ts`
 
-Ambos contêm exatamente: `/// <reference types="nativewind/types" />`
+Contém: `/// <reference types="nativewind/types" />`
 - Serve para o TypeScript aceitar `className` em componentes RN (`View`, `Text`, ...).
-- Estão **duplicados** (raiz e `types/`) — sobra de configuração.
+- O duplicado da raiz foi **removido** (P3-1f); ficou só o de `types/`.
 
 ### 5.9 `styles/global.css`
 
@@ -249,36 +283,17 @@ Ambos contêm exatamente: `/// <reference types="nativewind/types" />`
 ```
 - Três diretivas do Tailwind; este arquivo é **input do pipeline NativeWind/Metro** (§5.6), não um CSS renderizado.
 
-### 5.10 `styles/colors.ts`
+### 5.10 `styles/colors.ts` — **REMOVIDO** (2026-09-27, P3-1h)
 
-```ts
-export const colors = {
-  twilight: '#00142E',   // azul-marinho profundo (títulos, fundo do painel de tipos)
-  fordBlue: '#00095B',   // azul Ford (botões, destaques)
-  fordGrabber: '#1700F4',// azul-violeta vibrante (2ª série do radar)
-  sky: '#2A6BAC',        // azul médio (declarado, não usado)
-  aero: '#F5F8FC',       // fundo claro geral do app
-  line: '#D8E3F2',       // cor das bordas
-  muted: '#517198',      // texto secundário/marcadores
-  white: '#FFFFFF',
-};
-```
-Usado apenas pelo `tailwind.config.js`; nenhum componente importa.
+Paleta nomeada que só era consumida pelo `tailwind.config.js` (tokens ociosos). Valores de referência para quem quiser reformular os componentes com tokens (opção (ii) do Update.md): `twilight #00142E`, `fordBlue #00095B`, `fordGrabber #1700F4`, `sky #2A6BAC`, `aero #F5F8FC`, `line #D8E3F2`, `muted #517198`, `white #FFFFFF`.
 
-### 5.11 `styles/fontFamily.ts`
+### 5.11 `styles/fontFamily.ts` — **REMOVIDO** (2026-09-27, P3-1h/j)
 
-```ts
-export const fontFamily = {
-  regular: "Roboto_400Regular",   // nomes de fontes que NÃO são carregadas
-  bold:    "Roboto_700Bold",      // (não há expo-font nem loadAsync no app)
-  medium:  "Roboto_500Medium",
-}
-```
-Configuração morta: sem `expo-font` nenhuma dessas famílias existe no runtime.
+Era configuração morta (fontes Roboto nunca carregadas, sem `expo-font`). Se um dia a tipografia custom for implementada, recarregar via `expo-font` + `useFonts`.
 
-### 5.12 `App.tsx.bkp`
+### 5.12 `App.tsx.bkp` — **REMOVIDO** (2026-09-27, P3-1c)
 
-Backup do boilerplate do NativeWind (tela "Bem-vindo ao seu projeto"). Referencia `./assets/react-icon.png`, que também não existe. **Não é compilado** (entry é `index.ts`). Resíduo do início do projeto.
+Era backup morto do boilerplate do NativeWind (referenciava `assets/react-icon.png`, inexistente; nunca compilado — entry é `index.ts`).
 
 ### 5.13 `firebase/config.ts` (31 linhas)
 
@@ -321,10 +336,11 @@ Catálogo único de atributos técnicos. Estrutura:
 ```jsonc
 {
   "schemaVersion": 1,
-  "description": "Catálogo único de atributos técnicos. Para adicionar um novo atributo, cadastre aqui uma vez e depois preencha o valor em vehicles.json.",
+  "description": "Catálogo único de atributos técnicos. ... Convenção: 'cilindrada' é em litros com 1 decimal (ex.: 3.0 = 3.0 L). O campo opcional 'unit' acrescenta a unidade à exibição de specs number (ex.: 3 vira 3.0 L).",
   "categories": [
     { "id": "engine_transmission", "name": "Engine & Transmission",
       "specs": [
+        { "key": "cilindrada", "label": "Cilindrada", "type": "number", "unit": "L" },  // único spec com unit (atualização 2026-09-27)
         { "key": "potencia", "label": "Potência", "type": "number" },   // key = slug estável (id na tabela/specs)
         { "key": "transmissao_automatica", "label": "Transmissão Automática", "type": "boolean" },
         ...
@@ -333,8 +349,8 @@ Catálogo único de atributos técnicos. Estrutura:
   ]
 }
 ```
-- Cada **spec** tem `key` (identificador snake_case usado nos `specs{}` dos veículos e como `key` de React nas listas), `label` (texto exibido, em PT) e `type` (`text` | `number` | `boolean`).
-- `type` é **informativo apenas**: o código lê os valores como string/number/boolean sem validar contra o tipo (e há valores numéricos guardados como string — ver Update.md).
+- Cada **spec** tem `key` (identificador snake_case usado nos `specs{}` dos veículos e como `key` de React nas listas), `label` (texto exibido, em PT), `type` (`text` | `number` | `boolean`) e o opcional `unit` (acrescenta a unidade à exibição de numbers — só `cilindrada` usa, `"L"`; P1-2 de 2026-09-27).
+- `type` é **informativo**, mas agora **enforçado em dois pontos**: os JSONs têm os numbers tipados de verdade (conversão de 2026-09-27, P1-2) e o `scripts/validate.mjs` falha se uma spec `type: "number"` vier como string.
 - Os **15 grupos** (na ordem do arquivo):
 
 | # | id | name (exibido na UI) | nº de specs |
@@ -366,26 +382,26 @@ Catálogo único de atributos técnicos. Estrutura:
 ```jsonc
 {
   "schemaVersion": 1,
-  "description": "Banco mockado normalizado. Use baseVehicleId para reaproveitar especificações de outro veículo e sobrescreva apenas o que muda.",
+  "description": "Banco mockado normalizado. ... Convenções: specs com type number no specSchema são gravadas como number; 'cilindrada' é em litros com 1 decimal (ex.: 3.0). As linhas fixas Ano, Categoria e Motor vêm dos campos do veículo (year, vehicleCategory, engine) e ficam fora do specSchema.",
   "vehicles": [
     {
       "id": "ford_nova_ranger_4x4_xlt_2026",
       "brand": "FORD", "model": "Nova Ranger 4x4", "version": "XLT",
       "year": "2026", "vehicleCategory": "Picape", "engine": "3.0 V6 - 24V",
-      "specs": { "peso_em_ordem_de_marchas": "2283", "potencia": "250", "torque": "600",
-                 "transmissao_automatica": true, ... }   // 283 chaves
+      "specs": { "peso_em_ordem_de_marchas": 2283, "potencia": 250, "torque": 600,
+                 "transmissao_automatica": true, ... }   // 283 chaves, numbers tipados desde 2026-09-27
     },
     { "id": "ford-ranger-raptor-3-0-v6-ecoboost-2026",
       "baseVehicleId": "ford_nova_ranger_4x4_ltd_2026",   // herda 283 specs do base...
       "brand": "FORD", "model": "Ranger Raptor", "version": "3.0 V6 EcoBoost",
       "year": "2026", "vehicleCategory": "Picape", "engine": "3.0 V6 EcoBoost",
-      "specs": { "peso_em_ordem_de_marchas": 2475, "potencia": 397, "torque": 583, ... }  // ...e sobrescreve 19
+      "specs": { "peso_em_ordem_de_marchas": 2475, "cilindrada": 3, "potencia": 397, "torque": 583, ... }  // ...e declara 20 chaves
     }, ...
   ]
 }
 ```
 
-**Mecânica de herança:** um veículo com `baseVehicleId` herda todo o `specs{}` do veículo-base e sobrescreve apenas as chaves que ele declara. Ex.: o Ranger Raptor declara só 19 chaves (potência 397, torque 583, peso 2475, biturbo, AWD, Trail Control, suspensão Fox, Terrain Management, 7 airbags, multimídia 12", câmera 360, ACC, BLIS, classificação INMETRO "E", pneus ATR 60/40, rodas 17) e herda as outras 264 do base.
+**Mecânica de herança:** um veículo com `baseVehicleId` herda todo o `specs{}` do veículo-base e sobrescreve apenas as chaves que ele declara. Ex.: o Ranger Raptor declara só 20 chaves (peso 2475, cilindrada 3, potência 397, torque 583, economia 8.3, diesel Não, biturbo, rodas 17, ATR 60/40, AWD, Trail Control, suspensão Fox, Terrain Management, 7 airbags, multimídia 12", câmera 360, ACC, BLIS, classificação INMETRO "E") e herda as outras 263 do base — incluindo as 8 `null` (consumos etanol/gasolina/elétrico, CO₂ etanol, autonomia elétrica). **Os 20 valores declarados são a fonte da validação do desafio e ficam travados no `scripts/validate.mjs` (P0-2); a conferência final contra o slide oficial ainda está pendente (slide fora do repositório, §0).**
 
 Os 10 veículos:
 
@@ -393,8 +409,8 @@ Os 10 veículos:
 |---|---|---|---|
 | ford_nova_ranger_4x4_xlt_2026 | FORD / Nova Ranger 4x4 / XLT | Picape | — (283 specs próprias) |
 | **ford_nova_ranger_4x4_ltd_2026** (linha 300) | FORD / Nova Ranger 4x4 / LTD | Picape | — |
-| **ford_nova_ranger_4x4_ltd_2026** (linha 594) ⚠️ | FORD / Nova Ranger 4x4 / LTD+ | Picape | — |
-| ford-ranger-raptor-3-0-v6-ecoboost-2026 (id na linha 888) | FORD / Ranger Raptor / 3.0 V6 EcoBoost | Picape | `...ltd_2026` (19 specs) |
+| **ford_nova_ranger_4x4_ltd_plus_2026** (linha 594; id único desde 2026-09-27 — era duplicado do LTD) | FORD / Nova Ranger 4x4 / LTD+ | Picape | — |
+| ford-ranger-raptor-3-0-v6-ecoboost-2026 (id na linha 888) | FORD / Ranger Raptor / 3.0 V6 EcoBoost | Picape | `...ltd_2026` (20 specs declaradas) |
 | ford-territory-sel-2026 | FORD / Territory / SEL | SUV | `...xlt_2026` (23 specs) |
 | ford-territory-titanium-2026 | FORD / Territory / Titanium | SUV | `...ltd_2026` (23 specs) |
 | ford-focus-se-2026 | FORD / Focus / SE | Hatch | `...xlt_2026` (25 specs) |
@@ -402,12 +418,12 @@ Os 10 veículos:
 | ford-fusion-sel-2026 | FORD / Fusion / SEL | Sedan | `...xlt_2026` (21 specs) |
 | ford-fusion-titanium-awd-2026 | FORD / Fusion / Titanium AWD | Sedan | `...ltd_2026` (23 specs) |
 
-⚠️ **IDs duplicados:** o LTD (linha 300) e o LTD+ (linha 594) compartilham o id `ford_nova_ranger_4x4_ltd_2026`. Consequências: `getVehicleById` é ambíguo, e os 4 veículos que apontam esse id como base (Raptor, Territory Titanium, Focus Titanium, Fusion Titanium AWD) resolvem sempre para o **primeiro** achado no array (o LTD, linha 300). Ver Update.md, item 2.
+✔️ **IDs únicos (atualização 2026-09-27, P1-1):** o id do LTD+ foi renomeado para `ford_nova_ranger_4x4_ltd_plus_2026`. Os 4 veículos que apontam `...ltd_2026` como base (Raptor, Territory Titanium, Focus Titanium, Fusion Titanium AWD) resolvem de forma **determinística** para o LTD (linha 300) — comportamento idêntico ao de antes. **Pendência (P1-1 passo 2, §0):** confirmar com o time se os 3 Titanium deveriam apontar para o LTD+; se sim, trocar o `baseVehicleId` nos 3 registros. `validateVehicleIds()` em `data/vehicles.ts` faz `console.warn` no load se houver colisão, e o `validate.mjs` falha com ids duplicados.
 
-Observações de dados:
-- Nos veículos-base (XLT/LTD/LTD+), **numéricos vêm como string** (`"potencia": "250"`); nas sobrescritas do Raptor, vêm como number (`"potencia": 397`). O código lida com os dois (ver `specNumber`).
-- `null` em `specs` significa "não disponível" → exibido como `N/A`. No Raptor, 8 specs ficam `null` (consumos etanol/gasolina/elétrico, CO₂ etanol, autonomia elétrica).
-- O campo `cilindrada` do Raptor é `"3"` (provavelmente "3.0 L") — ambíguo contra um slide real.
+Observações de dados (atualizadas 2026-09-27):
+- **Todos os numéricos agora são `number`** (P1-2): os 61 strings numéricas foram convertidas (`"250"` → `250`); o `validate.mjs` impede regressão.
+- `null` em `specs` significa "não disponível" → exibido como `N/A`. No Raptor, 8 specs ficam `null` (herdadas do LTD: consumos etanol/gasolina/elétrico, CO₂ etanol, autonomia elétrica). Raptor resolvido: 283 chaves — 124 com valor, 151 `false` ("Não"), 8 `null` ("N/A").
+- `cilindrada` segue a convenção **litros com 1 decimal** (3 = 3.0 L) e exibe com unidade graças ao `"unit": "L"` do schema → `displaySpecValue` mostra **"3.0 L"**.
 
 ### 5.16 `data/vehicles.ts` (380 linhas) — o "cérebro" de dados
 
@@ -418,13 +434,13 @@ Arquivo de **lógica pura** (sem React): tipos, normalização, resolução de h
 
 **Tipos (L4-82)**
 - `SpecValue` (L4): `string | number | boolean | null` — o universo de valores de uma spec.
-- `SpecDefinition` (L6-10): `{ key, label, type }` — uma linha do schema.
+- `SpecDefinition` (L6-10): `{ key, label, type, unit? }` — uma linha do schema (o `unit?` é novo na atualização 2026-09-27, P1-2).
 - `SpecCategory` (L12-16): `{ id, name, specs[] }` — um grupo do schema.
 - `VehicleRecord` (L18-28): forma bruta do JSON — `id`, `baseVehicleId?`, `brand`, `model`, `version`, `year?`, `vehicleCategory?`, `engine?`, `specs: Record<string, SpecValue>`.
 - `Vehicle` (L30): alias de `VehicleRecord` (após a resolução, `specs` já é o mapa completo).
 - `VehicleSearchParams` (L32-36): `{ brand, model, version }` — a tripla de busca.
 - `VehicleFilters` (L38-42): filtros opcionais por `category`/`brand`/`model`.
-- `VehicleInput` (L44-46): `VehicleRecord` sem `id` obrigatório (usado só pelo CRUD morto do service).
+- `VehicleInput` (L44-46): `VehicleRecord` sem `id` obrigatório (antes usado pelo CRUD do service, removido em 2026-09-27 — agora só existe para quem recriar o CRUD).
 - `ComparisonSlot` (L48-54): estado de um slot da UI — `id`, `label` ("Veículo A/B"), e marca/modelo/versão (cada um `string | null`).
 - `RadarMetric` (L56-60): `{ key, label, value }` — um eixo do radar (value 0-100).
 - `ComparisonRow` (L62-66): uma linha da tabela — `category?`, `label`, `values[]` (um valor por veículo, já formatados).
@@ -435,14 +451,13 @@ Arquivo de **lógica pura** (sem React): tipos, normalização, resolução de h
 - L84-85: `schema`/`database` = cast dos JSONs importados para os tipos.
 - L87: `specCategories` exportado (usado por `getAttributeOptions`, `getComparisonRows`, `findSpecDefinitionByLabel`, radar).
 - L88: `vehicleSeed` exportado = o array bruto de veículos (usado como seed do service).
-- L90-92: `normalize(value)` — `trim().toLowerCase()`; comparador "ignorante de caixa e espaços" usado em toda a busca/filtro.
+- **Novo (2026-09-27, P1-1):** `validateVehicleIds()` roda no load do módulo e faz `console.warn` se dois veículos compartilharem `id` (proteção contra regressão da colisão LTD/LTD+).
+- `normalize(value)` — `trim().toLowerCase()`; comparador "ignorante de caixa e espaços" usado em toda a busca/filtro.
 
-**L94-101 — `makeVehicleId({brand, model, version})`**
-Gera slug: junta os três campos, remove diacríticos (NFD + regex `\u0300-\u036f`), lowercase, troca qualquer sequência não-alfanumérica por `-`, corta `-` nas pontas. Ex.: `FORD / Nova Ranger 4x4 / XLT` → `ford-nova-ranger-4x4-xlt`.
-⚠️ Não inclui ano nem sufixo — **LTD e LTD+ colidem** (o JSON de fato tem o duplo). Só é usado no CRUD morto (`createVehicle`).
+**`makeVehicleId({brand, model, version, year?}, existingIds?)` (reescrito na 2026-09-27, P1-1)**
+Gera slug: junta os três campos **+ ano** (se vier), remove diacríticos (NFD + regex `\u0300-\u036f`), lowercase, troca qualquer sequência não-alfanumérica por `-`, corta `-` nas pontas. Se o id já existir em `existingIds` (padrão: ids do `vehicleSeed`), adiciona sufixo `-2`, `-3`… Ex.: `FORD / Nova Ranger 4x4 / XLT / 2026` → `ford-nova-ranger-4x4-xlt-2026` (e `-2` se colidir).
 
-**L103-105 — `getSpecKey(category, label)`**
-Gera `${normalize(category)}::${normalize(label)}`. **Nunca chamado** por nenhum outro arquivo (morte de código).
+**Removido na 2026-09-27 (P3-1e):** `getSpecKey(category, label)` (morte de código, nunca chamado).
 
 **L107-115 — `findSpecDefinitionByLabel(label)`**
 Varre `specCategories` e retorna a primeira `SpecDefinition` cujo `label` casa (case-insensitive). Retorna `null` se não achar. Usado pelo radar (busca `'Potência'`, `'Torque'` etc.).
@@ -462,8 +477,8 @@ Aplica `resolveVehicle` em cada veículo, cada um com um `Set` de ciclo próprio
 **L165 — `export const vehicles = resolveVehicles()`**
 Banco resolvido em nível de módulo (calculado uma vez, no import). Usado como fonte padrão das funções de filtro.
 
-**L167-183 — `filterVehicles(source, filters)` (privado)**
-Filtro por `vehicleCategory`/`brand`/`model`, todos via `normalize` (case-insensitive).
+**`filterVehicles(source, filters)` (privado → EXPORTADO na 2026-09-27, P2-4)**
+Filtro por `vehicleCategory`/`brand`/`model`, todos via `normalize` (case-insensitive). Agora é a fonte única de filtragem: `vehicleService.listVehicles` delega para ele.
 
 **L185-193 — `getVehicleCategories(source = vehicles)`**
 Coleta `vehicleCategory` distintos e não-nulos, ordenados (A-Z): no dataset atual → `["Hatch", "Picape", "Sedan", "SUV"]`.
@@ -474,10 +489,11 @@ Mesmo padrão: filtra o banco (`getBrands` por categoria opcional; `getModels` p
 **L226-238 — `findVariant({brand, model, version}, source = vehicles)`**
 Busca exata (normalizada) dos três campos → retorna o `Vehicle` ou `null`. É a "consulta" que o slot faz quando marca+modelo+versão estão completos.
 
-**L240-245 — `displaySpecValue(value)`**
+**`displaySpecValue(value, unit?)` (ganhou o 2º parâmetro na 2026-09-27, P1-2)**
 Formatador obrigatório para a tabela (requisito "informação inexistente explícita"):
 - `null` / `undefined` / `''` → `'N/A'`;
 - `boolean` → `'Sim'` / `'Não'`;
+- `number` + `unit` → inteiro vira 1 decimal + unidade (3 + `L` → `"3.0 L"`; 1.5 + `L` → `"1.5 L"`);
 - demais → `String(value)`.
 
 **L247-255 — `getAttributeOptions()`**
@@ -487,7 +503,7 @@ Achatamento do schema: para cada categoria, para cada spec → `{ key, category:
 - `hasAvailableValue` (L257-261): spec "presente" se `true`, ou não-`null`/`undefined`/`''`. (`false` conta como ausente.)
 - `getSpecValue(vehicle, specLabel)` (L263-269): acha a definição por label e lê `vehicle.specs[spec.key]`.
 - `specNumber(vehicle, specLabel)` (L271-283): converte o valor em número — number passa direto; string tenta `Number(value.replace(',', '.'))` (aceita vírgula decimal) e cai em `0` se não for finito; demais tipos → `0`.
-- `maxSpec(specLabel)` (L285-287): `Math.max(...todos os veículos, 1)` — o teto de normalização (evita divisão por zero). ⚠️ Percorre **todos** os veículos do seed a cada chamada (ver Update.md, item 6).
+- `maxSpec(specLabel)` (atualizado 2026-09-27, P2-3): `Math.max(...todos os veículos, 1)` — o teto de normalização (evita divisão por zero), **agora com cache em módulo** (`maxSpecCache`): calcula uma vez por label, reusa nas chamadas seguintes.
 - `normalizeNumber(value, max)` (L289-291): `(value/max)*100` limitado a [0,100], arredondado.
 - `categoryScore(vehicle, categoryNames)` (L293-302): **índice de disponibilidade** — % de specs da(s) categoria(s) que o veículo possui (`true`/valor). Ex.: "Segurança" = 86% se 12 de 14 specs de Safety existem.
 - `getRadarMetrics(vehicle)` (L305-344): produz os 6 eixos:
@@ -498,91 +514,84 @@ Achatamento do schema: para cada categoria, para cada spec → `{ key, category:
   - `comfort` "Conforto" = `categoryScore(['Air Conditioning','Seats','Trim','Sunroof'])`;
   - `utility` "Uso" = `categoryScore(['4X4','Wheels','Others'])`.
 
-**L346-380 — `getComparisonRows(selectedVehicles, selectedAttributeKeys = [])`**
+**`getComparisonRows(selectedVehicles, selectedAttributeKeys = [])` (atualizado 2026-09-27, P0-1)**
 Monta as linhas da tabela:
-- L348-349: **se `selectedVehicles.length < 2` retorna `[]`** ← a regra que esconde a lista com 1 veículo (bloqueio da validação; ver Update.md, item 1).
-- L353: `selectedKeySet` = Set das chaves de atributos marcadas pelo usuário.
-- L355-369: 3 linhas fixas no topo — `Ano`, `Categoria`, `Motor` (com `?? 'N/A'`).
-- L371-379: as linhas de specs: para cada categoria do schema, specs filtradas (`selectedKeySet.size === 0` → **todas**; senão só as marcadas), cada uma virando `{ category, label, values: veículos.map(displaySpecValue) }`.
-- L381: retorna `[...fixedRows, ...specRows]`.
+- **se `selectedVehicles.length === 0` retorna `[]`** ← antes era `< 2` (o bloqueio da validação); agora **1 ou 2 veículos** geram a lista (P0-1).
+- `selectedKeySet` = Set das chaves de atributos marcadas pelo usuário.
+- 3 linhas fixas no topo — `Ano`, `Categoria`, `Motor` (com `?? 'N/A'`; fora do schema — documentado no `description` do vehicles.json).
+- As linhas de specs: para cada categoria do schema, specs filtradas (`selectedKeySet.size === 0` → **todas**; senão só as marcadas), cada uma virando `{ category, label, values: veículos.map((v) => displaySpecValue(v.specs[spec.key], spec.unit)) }` (a unidade é nova — P1-2).
+- Retorna `[...fixedRows, ...specRows]` → com 1 veículo: 286 linhas (3 fixas + 283 specs).
 
-### 5.17 `services/authService.ts` (69 linhas)
+### 5.17 `services/authService.ts` (atualizado 2026-09-27)
 
-Camada fina sobre o Firebase Auth. Todos os erros chegam à UI como `Error.message` (em PT, já traduzidos pelo Firebase, ex.: "Invalid login credentials.").
+Camada fina sobre o Firebase Auth. Erros: as telas de auth **não** mostram mais a mensagem crua do Firebase — passam por `translateAuthError()` (P2-5).
 
-- **L1-11:** imports (funções do `firebase/auth` + `User`) e do singleton `auth`.
-- **L13-27 — `registerUser(email, password, name?)`:** `createUserWithEmailAndPassword` → cria a conta; se `name` veio, `updateProfile({ displayName })`. Retorna o credential.
-- **L29-35 — `loginUser(email, password)`:** `signInWithEmailAndPassword`.
-- **L39-41 — `resetUserPassword(email)`:** `sendPasswordResetEmail`.
-- **L43-45 — `logoutUser()`:** `signOut(auth)`.
-- **L47-49 — `getCurrentUser()`:** lê `auth.currentUser` (não é usado pela UI).
-- **L51-53 — `isAuthenticated()`:** `currentUser !== null` (usada só pela tela órfã `details.tsx`).
-- **L55-69 — `waitForAuthState()`:** retorna `Promise<User | null>` que resolve no **primeiro** evento de `onAuthStateChanged` (desinscreve antes de resolver). É a barra de proteção da Home: resolve `null` se não houver sessão → redirect para login.
+- **Imports:** funções do `firebase/auth` + `User` e o singleton `auth`.
+- **`registerUser(email, password, name?)`:** `createUserWithEmailAndPassword` → cria a conta; se `name` veio, `updateProfile({ displayName })`. Retorna o credential.
+- **`loginUser(email, password)`:** `signInWithEmailAndPassword`.
+- **`resetUserPassword(email)`:** `sendPasswordResetEmail`.
+- **`logoutUser()`:** `signOut(auth)`.
+- **`translateAuthError(error)` (NOVO, 2026-09-27, P2-5):** traduz o `code` do erro do Firebase para PT — `auth/invalid-credential` / `auth/wrong-password` / `auth/user-not-found` → "Email ou senha incorretos."; `auth/invalid-email` → "Informe um email válido."; `auth/weak-password` → "A senha precisa ter pelo menos 6 caracteres."; `auth/email-already-in-use` → "Este email já está cadastrado."; `auth/too-many-requests` → "Muitas tentativas..."; demais → `error.message` (ou fallback genérico).
+- **`waitForAuthState()`:** retorna `Promise<User | null>` que resolve no **primeiro** evento de `onAuthStateChanged` (desinscreve antes de resolver). É a barra de proteção da Home: resolve `null` se não houver sessão → redirect para login.
+- **Removidos na 2026-09-27 (P3-1e):** `getCurrentUser()` (não era usado) e `isAuthenticated()` (usava só a tela órfã `details.tsx`, também removida).
 
-### 5.18 `services/vehicleService.ts` (154 linhas)
+### 5.18 `services/vehicleService.ts` (atualizado 2026-09-27 — 77 linhas, antes 154)
 
-"Fake API" + CRUD local. Padrão de todas as funções: tenta a API; se não houver API, usa o banco local resolvido.
+"Fake API" de leitura. Padrão de todas as funções: tenta a API; se não houver API, usa o banco local resolvido. **O CRUD local inteiro foi removido (P3-1d).**
 
-- **L1-16:** imports de `data/vehicles` (funções puras + seed + tipos).
-- **L17 — `const API_BASE_URL = '';`** ← chave: vazia.
-- **L19 — `let localVehicles = JSON.parse(JSON.stringify(vehicleSeed))`** — deep-clone do seed em memória (o CRUD morto mutaria este clone, nunca o JSON original).
-- **L21-37 — `request<T>(path, options?)`:** se `API_BASE_URL` vazio → `return null` (L22); senão `fetch` com `Content-Type: application/json`, lança `Erro na API: {status}` se `!response.ok`, senão `response.json()`. Como a URL é vazia, **sempre retorna null hoje** — todo o caminho de API é inerte.
-- **L39-41 — `getLocalVehicles()`:** `resolveVehicles(localVehicles)` (aplica herança).
-- **L43-55 — `listVehicles(filters?)`:** tenta `GET /vehicles` (sempre null) → usa local; filtra por `category`/`brand`/`model` com **comparação estrita `!==`** (inconsistente com o `normalize` de `data/vehicles.ts` — caminho nunca chamado com filtros pela UI).
-- **L57-61 — `listVehicleCategories()`:** `getVehicleCategories` sobre `listVehicles()`.
-- **L63-67 — `listBrands(category?)`**, **L69-73 — `listModels(brand, category?)`**, **L75-79 — `listVersions(brand, model, category?)`:** idem, delegando para as funções puras.
-- **L81-90 — `findVehicle(params)`:** tenta `POST /vehicles/search`; senão `findVariant(params, local)`. **Esta é a função real usada pela Home** quando um slot completa marca+modelo+versão.
-- **L92-98 — `getVehicleById(id)`:** API → local (`.find` por id). ⚠️ ambígua com os ids duplicados. **Não usada pela UI.**
-- **L100-117 — `createVehicle(input)`**, **L119-142 — `updateVehicle(id, input)`** (com merge de `specs`), **L144-154 — `deleteVehicle(id)`**: CRUD completo sobre `localVehicles` (push / map+merge / filter). **Nenhum desses três é chamado pela UI** — sobra do recurso "adicionar carros" removido (commit `ff63a26 "removi o adicionar carros"`).
+- **Imports:** de `data/vehicles` (`filterVehicles` agora incluído — P2-4).
+- **`const API_BASE_URL = '';`** ← chave: vazia.
+- **`let localVehicles = JSON.parse(JSON.stringify(vehicleSeed))`** — deep-clone do seed em memória (hoje é somente leitura; nenhum código o muta mais).
+- **`request<T>(path, options?)`:** se `API_BASE_URL` vazio → `return null`; senão `fetch` com `Content-Type: application/json`, lança `Erro na API: {status}` se `!response.ok`, senão `response.json()`. Como a URL é vazia, **sempre retorna null hoje** — todo o caminho de API é inerte.
+- **`getLocalVehicles()`:** `resolveVehicles(localVehicles)` (aplica herança).
+- **`listVehicles(filters?)`:** tenta `GET /vehicles` (sempre null) → usa local; a filtragem agora **delega para `filterVehicles`** de `data/vehicles.ts` (P2-4 — o filtro inline case-sensitive `!==` foi apagado; comportamento único de filtro no app).
+- **`listVehicleCategories()`:** `getVehicleCategories` sobre `listVehicles()`.
+- **`listBrands(category?)`**, **`listModels(brand, category?)`**, **`listVersions(brand, model, category?)`:** idem, delegando para as funções puras.
+- **`findVehicle(params)`:** tenta `POST /vehicles/search`; senão `findVariant(params, local)`. **Esta é a função real usada pela Home** quando um slot completa marca+modelo+versão.
+- **Removidos na 2026-09-27 (P3-1d):** `getVehicleById(id)`, `createVehicle(input)`, `updateVehicle(id, input)`, `deleteVehicle(id)` — CRUD sobre `localVehicles` nunca chamado pela UI (sobra do recurso "adicionar carros" removido em `ff63a26`).
 
 ### 5.19 `app/_layout.tsx` (15 linhas)
 
 ```tsx
-1  import '../styles/global.css';              // entra o CSS no bundle (obrigatório p/ NativeWind)
-3  import { Stack } from 'expo-router';
-5  export default function RootLayout() {
-6    return (
-7      <Stack
-8        initialRouteName="index"              // abre em / (Login)
-9        screenOptions={{
-10         headerShown: false,                 // todas as telas desenham cabeçalho próprio
-11         contentStyle: { backgroundColor: '#F5F8FC' },
-12       }}
-13     />
-14   );
-15 }
+import '../styles/global.css';              // entra o CSS no bundle (obrigatório p/ NativeWind)
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar'; // NOVO na 2026-09-27 (P3-2)
+
+export default function RootLayout() {
+  return (
+    <Stack
+      initialRouteName="index"                // abre em / (Login)
+      screenOptions={{
+        headerShown: false,                   // todas as telas desenham cabeçalho próprio
+        contentStyle: { backgroundColor: '#F5F8FC' },
+      }}
+    >
+      <StatusBar style="dark" />              // app é claro → ícones do status escuros
+    </Stack>
+  );
+}
 ```
-Layout raiz da navegação. `Stack` sem `<Stack.Screen>` declarados → rotas inferidas dos arquivos de `app/`. Não há proteção de rota por `.Protected` aqui — a proteção é feita manualmente dentro de `home.tsx` (§5.23) e `details.tsx`.
+Layout raiz da navegação. `Stack` sem `<Stack.Screen>` declarados → rotas inferidas dos arquivos de `app/`. Não há proteção de rota por `.Protected` aqui — a proteção é feita manualmente dentro de `home.tsx` (§5.23). (A tela `details.tsx` foi removida em 2026-09-27, P3-1a.)
 
-### 5.20 `app/index.tsx` — Login (87 linhas)
+### 5.20 `app/index.tsx` — Login (atualizado 2026-09-27: P2-5, P2-6, P3-4#5)
 
-- **L1:** `useState` do React.
-- **L2-14:** imports RN (`Alert, Button, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, useWindowDimensions, View`) + `useRouter` do expo-router.
-- **L16:** importa `loginUser` do service.
-- **L18-23:** `router` (navegação), `width` da tela e `isTablet = width >= 768` (quebra de layout).
-- **L25-26:** estado `email`, `password` (strings vazias).
-- **L28-42 — `handleLogin()`:** valida campos não vazios (Alert "Preencha email e senha."); `await loginUser(...)`; sucesso → `router.replace('/home')` (substitui a pilha, então voltar do Home não volta ao Login); erro → `Alert` com a mensagem do Firebase (ou fallback genérico).
-- **L44-87 (JSX):**
-  - `KeyboardAvoidingView` (L45-48): sobe o conteúdo quando o teclado abre (comportamento `padding` só no iOS).
-  - Card centralizado (L50): largura `w-full` no celular, `w-3/5` no tablet.
-  - Título "Login" (L51).
-  - `TextInput` e-mail (L53-60): `autoCapitalize="none"`, `keyboardType="email-address"`.
-  - `TextInput` senha (L62-69): `secureTextEntry` (mascara).
-  - `Button "Entrar"` (L71): botão nativo, cor `#00095B` (azul Ford).
-  - Links `TouchableOpacity` (L73-81): "Criar conta?" → `/register`; "Esqueci minha senha" → `/forgot-password`.
+- **Imports:** RN (`Alert, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, useWindowDimensions, View`) + `useRouter` + `SafeAreaView` do `react-native-safe-area-context` (o `Button` nativo saiu).
+- **`EMAIL_PATTERN = /^\S+@\S+\.\S+$/`** — validação mínima de e-mail.
+- **Estado:** `email`, `password` + **`submitting`** (novo).
+- **`handleLogin()`:** guarda `if (submitting) return`; valida campos não vazios (Alert "Preencha email e senha."); **valida o formato do e-mail** (Alert "Informe um email válido."); `setSubmitting(true)` → `await loginUser(...)`; sucesso → `router.replace('/home')`; erro → `Alert` com `translateAuthError(error)`; `finally setSubmitting(false)`.
+- **JSX:** `KeyboardAvoidingView` → **`SafeAreaView edges={['top']}`** (novo, P2-6 — o `SafeAreaProvider` já vem do expo-router) → card centralizado (`w-full` celular / `w-3/5` tablet) → título "Login" → 2 `TextInput` (com `accessibilityLabel`) → **botão "Entrar" como `TouchableOpacity` azul Ford `#00095B`** (`disabled={submitting}`, texto "Entrando…" enquanto envia, `accessibilityRole="button"`) → links "Criar conta?" e "Esqueci minha senha" (com `accessibilityRole`/`accessibilityLabel`).
 
-### 5.21 `app/register.tsx` — Cadastro (89 linhas)
+### 5.21 `app/register.tsx` — Cadastro (atualizado 2026-09-27, mesmos padrões do Login)
 
-Espelho do Login:
-- **L18-24:** estado `name`, `email`, `password`.
-- **L26-41 — `handleRegister()`:** valida os 3 campos; `registerUser(email, password, name)` (que também grava o `displayName`); sucesso → Alert "Usuário cadastrado com sucesso." + `router.back()` (volta ao Login); erro → Alert.
-- **L43-88 (JSX):** card com título "Cadastro", 3 TextInputs (Nome, E-mail, Senha) e botão "Cadastrar". Mesmas classes/cores do Login.
+- Estado `name`, `email`, `password` + `submitting`.
+- **`handleRegister()`:** guarda contra duplo clique; valida os 3 campos; valida o formato do e-mail; `registerUser(email, password, name)` (que também grava o `displayName`); sucesso → Alert "Usuário cadastrado com sucesso." + `router.back()`; erro → `Alert` com `translateAuthError(error)`. `finally setSubmitting(false)`.
+- JSX: `SafeAreaView` (top) no lugar do `View` externo, 3 TextInputs com `accessibilityLabel`, botão "Cadastrar" como `TouchableOpacity` azul (desabilitado + "Cadastrando…" enquanto envia).
 
-### 5.22 `app/forgot-password.tsx` — Recuperação de senha (70 linhas)
+### 5.22 `app/forgot-password.tsx` — Recuperação de senha (atualizado 2026-09-27, mesmos padrões)
 
-- **L18:** estado `email`.
-- **L20-36 — `handleResetPassword()`:** valida e-mail; `resetUserPassword(email)` → `sendPasswordResetEmail`; sucesso → Alert "Email enviado..." + `router.back()`; erro → Alert (ex.: e-mail não cadastrado).
-- **L38-69 (JSX):** card "Recuperar Senha" com 1 TextInput e botão "Enviar".
+- Estado `email` + `submitting`.
+- **`handleResetPassword()`:** guarda contra duplo clique; valida e-mail não vazio **e** formato; `resetUserPassword(email)` → `sendPasswordResetEmail`; sucesso → Alert "Email enviado..." + `router.back()`; erro → `Alert` com `translateAuthError(error)`.
+- JSX: `SafeAreaView` (top), TextInput com `accessibilityLabel`, botão "Enviar" como `TouchableOpacity` azul (desabilitado + "Enviando…" enquanto envia).
 
 ### 5.23 `app/home.tsx` — Tela principal (325 linhas)
 
@@ -625,10 +634,10 @@ A tela de trabalho. Contém **dois layouts completos** (tablet e celular) desenh
 - **L128-137 — `radarSeries`:** para cada veículo → `{ name, color, dotClassName, values: getRadarMetrics(vehicle) }` (cor alternada A/B).
 - **L139-142 — `comparisonRows`:** `getComparisonRows(vehicles, selectedAttributes)` — reage a mudança de veículos OU de atributos marcados.
 
-**Handlers (L144-159)**
-- **`updateSlot(slotId, nextSlot)` (L144-148):** substitui o slot no estado (imutável).
-- **`handleCategorySelect(category)` (L150-154):** troca o tipo, **reinicia os 2 slots** (limpa marca/modelo/versão) e fecha o drawer.
-- **`handleLogout()` (L156-159):** `logoutUser()` → `router.replace('/')`.
+**Handlers (atualizados 2026-09-27: P2-1, P2-2)**
+- **`updateSlot(slotId, nextSlot)`:** **bloqueia veículo duplicado (P2-1):** se o `nextSlot` estiver completo (marca+modelo+versão) e igual (normalizado) ao slot já completo do outro lado → `Alert.alert('Veículo duplicado', ...)` e **ignora o onChange** (o slot fica com marca+modelo, sem versão). Senão, substitui o slot no estado (imutável).
+- **`handleCategorySelect(category)`:** troca o tipo; **reinicia os 2 slots SÓ quando o tipo efetivamente muda** (`changed = category !== selectedCategory`, P2-2 — re-clicar no mesmo tipo ou em "Todos" não perde mais a seleção) e fecha o drawer.
+- **`handleLogout()`:** `logoutUser()` → `router.replace('/')`.
 
 **Render (L160-324)**
 - **L160-166:** se `loading` → spinner centralizado.
@@ -641,13 +650,13 @@ A tela de trabalho. Contém **dois layouts completos** (tablet e celular) desenh
   - `ScrollView` com: 2 `VehicleSelector` (versão cheia), `AttributeSelector`, card "Radar" (`RadarChart` + legenda embaixo), `ComparisonTable`;
   - `VehicleTypeDrawer` (modal) no fim da árvore.
 
-**O que a tela NÃO faz** (importante para o Update.md): não impede escolher o mesmo veículo nos dois slots; não mostra nada de specs com 1 veículo (a tabela e o radar exibem placeholder "Selecione dois veículos").
+**Atualizações de 2026-09-27 (home):** agora **impede** escolher o mesmo veículo nos dois slots (P2-1, via `updateSlot`); a tabela **mostra a lista com 1 veículo** (P0-1) — o placeholder só aparece com 0 veículos; headers com `useSafeAreaInsets()` no padding-top (P2-6); botões "Sair"/"Tipo" com `accessibilityRole`/`accessibilityLabel` (P3-4#5).
 
-### 5.24 `app/details.tsx` — tela ÓRFÃ (24 linhas)
+**O que a tela NÃO faz:** não mostra radar/legenda com 1 veículo (decisão de produto do P0-1: a saída obrigatória é a lista; o radar pede o 2º veículo com a mensagem "Selecione um segundo veículo para comparar").
 
-- **L10-19:** no mount, se `isAuthenticated()` → `router.replace('/home')`; senão → `router.replace('/')`. Ou seja, **redireciona sempre para outro lugar**.
-- **L21-23:** mostra só um spinner.
-- **Nenhum outro arquivo faz `router.push('/details')`** — rota morta (provavelmente rastro de um design antigo com tela de detalhes de veículo).
+### 5.24 `app/details.tsx` — tela ÓRFÃ — **REMOVIDA** (2026-09-27, P3-1a)
+
+Era só um redirecionamento (`isAuthenticated()` → `/home`; senão → `/`) + spinner, sem nenhum link apontando para ela. Apagada; junto saiu a `isAuthenticated()` do authService (P3-1e).
 
 ### 5.25 `components/VehicleSelector.tsx` (98 linhas)
 
@@ -665,21 +674,21 @@ Um slot de seleção (Veículo A ou B).
   - **Modelo:** `disabled={!slot.brand}`; ao escolher → limpa só a versão;
   - **Versão:** `disabled={!slot.model}`; ao escolher → fecha a cascata.
 
-### 5.26 `components/SearchSelect.tsx` (141 linhas)
+### 5.26 `components/SearchSelect.tsx` (atualizado 2026-09-27: P3-4#5)
 
 Dropdown com busca, em modal (usado 6× pela Home: 3 por slot).
 
-- **L1-11:** imports + props `{ label, value, options, disabled?, compact?, onSelect }`.
-- **L13-30:** `isTablet` (modal mais largo no tablet), estado `visible`/`term`; `filteredOptions` via `useMemo` — substring case-insensitive no texto.
-- **L32-42:** `open()` (só se habilitado e com opções) e `close()` (fecha e limpa a busca).
-- **L44-140 (JSX):**
-  - Rótulo em caixa alta (L46-48);
-  - "Botão" (TouchableOpacity, L50-68): mostra o valor selecionado (negrito escuro) ou "Selecionar" (cinza), com um "＋" à direita; estilos desabilitados em cinza;
-  - Modal (L70-139): overlay `bg-black/25`; painel branco (520px no tablet, 100% no celular) com título, "Fechar", `TextInput` de busca (`placeholder="Buscar"`), `FlatList` das opções filtradas (item selecionado em azul Ford), "Nenhum item" vazio. Tocar num item → `onSelect(item)` + `close()`.
+- **Props:** `{ label, value, options, disabled?, compact?, onSelect }`.
+- **Estado:** `visible`/`term`; `filteredOptions` via `useMemo` — substring case-insensitive no texto.
+- **`open()`** (só se habilitado e com opções) e **`close()`** (fecha e limpa a busca).
+- **JSX:**
+  - Rótulo em caixa alta;
+  - "Botão" (TouchableOpacity): mostra o valor selecionado (negrito escuro) ou "Selecionar" (cinza), com um "＋" à direita; estilos desabilitados em cinza; **`accessibilityRole="button"` + `accessibilityLabel="${label}: ${value ?? 'Selecionar'}"` + `accessibilityState={{ disabled }}` (novo)**;
+  - Modal: overlay `bg-black/25`; painel branco (520px no tablet, 100% no celular) com título, "Fechar" (com `accessibilityRole`/`Label`), `TextInput` de busca (`placeholder="Buscar"`, com `accessibilityLabel`), `FlatList` das opções filtradas (item selecionado em azul Ford; cada item é `Pressable` com `accessibilityRole="button"` + `accessibilityState={{ selected }}`), "Nenhum item" vazio. Tocar num item → `onSelect(item)` + `close()`.
 
-### 5.27 `components/Dropdown.tsx` (102 linhas) — **NÃO USADO**
+### 5.27 `components/Dropdown.tsx` — **REMOVIDO** (2026-09-27, P3-1b)
 
-Outro dropdown, com **tema escuro** (`#0f172a`, `#93c5fd`), modal estilo "sheet inferior" (`justify-end`, `rounded-t-3xl`), sem busca. **Nenhum arquivo importa** — resíduo de iteração anterior (os textos "Selecione a etapa anterior" indicam um fluxo em etapas antigo). Mantém o mesmo contrato de props que SearchSelect menos busca/compact.
+Era outro dropdown de tema escuro, nunca importado (resíduo de iteração anterior com fluxo em etapas). Apagado.
 
 ### 5.28 `components/AttributeSelector.tsx` (182 linhas)
 
@@ -689,21 +698,21 @@ O coração do requisito "lista livre de atributos".
 - **L19-40:** `isTablet`; estado `visible` (modal) e `term` (busca); `selectedSet` (Set para O(1) em render); `filteredOptions` — filtra por `label` ou `category` (case-insensitive).
 - **L42-57:** `toggleAttribute(key)` (remove ou adiciona a chave), `clearSelection()`, `close()`.
 - **L59-181 (JSX):**
-  - Card "Atributos" (L60-79): contador ("N selecionados" ou "Todos") + botão azul "Selecionar" (abre o modal); se há seleção, link "Mostrar todos" limpa (volta a exibir as 283 specs);
-  - Modal (L81-180): painel (620px no tablet, 100% no celular, máx. 82% da altura): cabeçalho com contador e "Fechar"; `TextInput` "Buscar equipamento ou atributo"; botões **"Selecionar todos"** (marca as 283) e **"Limpar"**; `FlatList` com checkboxes desenhados (quadrado: preenchido azul = marcado), label em negrito + categoria em caixa alta. `keyboardShouldPersistTaps="handled"` deixa a lista rolar com o teclado aberto.
+  - Card "Atributos": contador ("N selecionados" ou "Todos") + botão azul "Selecionar" (abre o modal; com `accessibilityRole`/`Label`); se há seleção, link "Mostrar todos" limpa (volta a exibir as 283 specs);
+  - Modal: painel (620px no tablet, 100% no celular, máx. 82% da altura): cabeçalho com contador e "Fechar"; `TextInput` "Buscar equipamento ou atributo" (com `accessibilityLabel`); botões **"Selecionar todos"** (marca as 283) e **"Limpar"** (ambos com `accessibilityRole`/`Label`); `FlatList` com checkboxes desenhados (quadrado: preenchido azul = marcado; cada item é `Pressable` com **`accessibilityRole="checkbox"`** + `accessibilityLabel` (label + categoria) + `accessibilityState={{ selected }}` — novo na 2026-09-27), label em negrito + categoria em caixa alta. `keyboardShouldPersistTaps="handled"` deixa a lista rolar com o teclado aberto.
 
-### 5.29 `components/ComparisonTable.tsx` (97 linhas)
+### 5.29 `components/ComparisonTable.tsx` (reescrito em 2026-09-27: P0-1, P2-1, P3-4#1/#2)
 
-A saída obrigatória do desafio, em forma de tabela.
+A saída obrigatória do desafio, em forma de tabela. **Funciona com 1 OU 2 veículos.**
 
-- **L1-12:** imports + props `{ vehicles, rows }` + helper `vehicleName` (`"Modelo - Versão"`).
-- **L14-21:** `isTablet`; larguras: coluna "Item" 260 (tablet) / 210 (celular); coluna por veículo 250 / 190; `tableMinWidth` = soma (garante rolagem horizontal correta).
-- **L23-33:** **se `vehicles.length < 2`** → card "Dados" com o placeholder **"Selecione dois veículos"** (L28) — aqui mora o bloqueio da validação com 1 veículo.
-- **L35-96 (JSX, caso ≥ 2 veículos):**
-  - Cabeçalho do card: "Dados" + contador "{rows.length} itens";
-  - `ScrollView horizontal` envolvendo a grade (L53):
-    - Linha de cabeçalho (L55-72): "ITEM" + um cabeçalho por veículo (chave de React = `brand-model-version`, `numberOfLines={2}`);
-    - Linhas de dados (L74-93): cada `ComparisonRow` → coluna esquerda com a **categoria em caixa alta** (quando presente) + label; uma célula por veículo com o valor já formatado (`N/A`, `Sim`/`Não`, número/texto). Separações `border-b` sutis.
+- **Props:** `{ vehicles, rows }` + helper `vehicleName` (`"Modelo - Versão"`).
+- **`isTablet`;** larguras: coluna "Item" 260 (tablet) / 210 (celular); coluna por veículo 250 / 190; `tableMinWidth` = soma (rolagem horizontal correta mesmo com 1 coluna).
+- **Placeholder:** **só com `vehicles.length === 0`** (antes era `< 2`) — mensagem **"Selecione um veículo"** (P0-1). Com 1 veículo, a tabela renderiza normalmente com 1 coluna de valores.
+- **Cabeçalho do card:** "Dados" + contador **"N atributos"** (P3-4#1: `rows.length - 3`, desconta as linhas fixas Ano/Categoria/Motor, com singular/plural).
+- **`buildTableItems(rows)` (novo, P3-4#2):** pré-processa as linhas em itens de render — quando a categoria muda, insere **uma linha de cabeçalho de grupo** (fundo `#F5F8FC`, caixa alta) e as linhas de spec **não repetem mais a categoria** na coluna esquerda (só o label).
+- **JSX:** `ScrollView horizontal` envolvendo a grade:
+  - Linha de cabeçalho: "ITEM" + um cabeçalho por veículo (**chave de React = `col-${index}`** — posição, não identidade; P2-1) + `numberOfLines={2}`;
+  - Itens: grupos → linha de categoria única; linhas → label à esquerda + célula por veículo com o valor já formatado (`N/A`, `Sim`/`Não`, número, `3.0 L`). Separações `border-b` sutis.
 
 ### 5.30 `components/RadarChart.tsx` (109 linhas)
 
@@ -712,16 +721,16 @@ Gráfico radar desenhado à mão em `react-native-svg` (sem lib de charts).
 - **L1-18:** imports + tipo `RadarSeries` (`name, color, dotClassName, values`).
 - **L20-26 — `point(center, radius, index, total)`:** converte (raio, índice do eixo) em coordenadas cartesianas; o `- Math.PI/2` gira para o 1º eixo apontar para cima.
 - **L28-36 — `polygonPoints(values, center, maxRadius)`:** mapa cada métrica (0-100) para um ponto a `value/100 * maxRadius` do centro → string "x,y x,y ..." para o `<Polygon>`.
-- **L38-108 — componente:**
-  - L40-43: `metrics` dos valores da primeira série (todos os veículos usam os mesmos 6 eixos), `center = size/2`, `maxRadius = size*0.31`, níveis de grade `[0.25, 0.5, 0.75, 1]`;
-  - L45-50: **se < 2 séries ou sem métricas → placeholder "Selecione dois veículos"**;
-  - L52-107: `<Svg width height>` com: 4 **círculos concêntricos** de grade (`stroke #D8E3F2`); por eixo: linha do centro até a borda + `SvgText` do label a `maxRadius+30` (ex.: "Perf.", "Segurança"); por série: `<Polygon>` preenchido com `fillOpacity 0.12` e borda 2px na cor da série.
+- **Componente:**
+  - `metrics` dos valores da primeira série (todos os veículos usam os mesmos 6 eixos), `center = size/2`, `maxRadius = size*0.31`, níveis de grade `[0.25, 0.5, 0.75, 1]`;
+  - **se < 2 séries ou sem métricas → placeholder (atualizado 2026-09-27, P3-4#3):** com 0 séries → **"Selecione um veículo"**; com 1 → **"Selecione um segundo veículo para comparar"** (o radar continua só em comparação de 2+ — decisão do P0-1);
+  - `<Svg width height>` com: 4 **círculos concêntricos** de grade (`stroke #D8E3F2`); por eixo: linha do centro até a borda + `SvgText` do label a `maxRadius+30` (ex.: "Perf.", "Segurança"); por série: `<Polygon>` preenchido com `fillOpacity 0.12` e borda 2px na cor da série (**chave = `serie-${index}`** — posição, P2-1).
 
 ### 5.31 `components/VehicleLegend.tsx` (37 linhas)
 
-- **L1-13:** imports + props `{ series: {name, dotClassName}[], className? }`.
-- **L15:** se < 2 séries → `null` (legenda só existe em comparação).
-- **L17-36:** título "VEÍCULOS" + um item por série: pontinho colorido (a `dotClassName` corresponde à cor do polígono) + "N. Modelo - Versão" (máx. 2 linhas).
+- **Props:** `{ series: {name, dotClassName}[], className? }`.
+- Se < 2 séries → `null` (legenda só existe em comparação).
+- Título "VEÍCULOS" + um item por série: pontinho colorido (a `dotClassName` corresponde à cor do polígono) + "N. Modelo - Versão" (máx. 2 linhas). Chave de React = `legenda-${index}` (posição, P2-1 de 2026-09-27).
 
 ### 5.32 `components/VehicleTypeDrawer.tsx` (75 linhas)
 
@@ -729,20 +738,19 @@ Seletor de tipo no **celular** (modal lateral).
 
 - **L1-16:** imports + props `{ visible, categories, selectedCategory, onClose, onSelect }`.
 - **L18-23:** `isTablet`; `drawerWidth` = 35% (tablet) / 86% (celular) da largura; `options = [null, ...categories]` (`null` = "Todos").
-- **L25-74 (JSX):** modal transparente; painel branco ancorado à esquerda com título "Tipo", "Fechar", e `ScrollView` de botões — o ativo fica azul Ford preenchido com texto branco, os demais claros; tocar na área escura à direita (`Pressable flex-1`) fecha. `onSelect(category)` recebe `null` para "Todos".
+- **JSX:** modal transparente; painel branco ancorado à esquerda com título "Tipo", "Fechar" (com `accessibilityRole`/`Label` — 2026-09-27), e `ScrollView` de botões — o ativo fica azul Ford preenchido com texto branco, os demais claros (cada botão com `accessibilityRole="button"` + `accessibilityLabel="Tipo de veículo: ${label}"` + `accessibilityState={{ selected }}`); tocar na área escura à direita (`Pressable flex-1`, com `accessibilityLabel="Fechar"`) fecha. `onSelect(category)` recebe `null` para "Todos".
 
 ### 5.33 `components/VehicleTypePanel.tsx` (91 linhas)
 
 Seletor de tipo no **tablet** (painel fixo, recolhível).
 
-- **L1-13:** imports + props `{ width, expanded, categories, selectedCategory, onToggle, onSelect }`.
-- **L15-16:** `options = [null, ...categories]`.
-- **L18-44 — estado recolhido:** faixa estreita (76px) azul-marinho com botão "Tipos" (expande) e o nome da categoria ativa (máx. 2 linhas, cor `#8FB3FF`).
-- **L46-90 — estado expandido:** painel `#00142E` com título "Tipos" + "Ocultar" (recolhe), e `ScrollView` de botões (ativo: branco com texto azul; inativos: `bg-white/5` com borda branca 10%).
+- **Props:** `{ width, expanded, categories, selectedCategory, onToggle, onSelect }`; `options = [null, ...categories]`.
+- **Estado recolhido:** faixa estreita (76px) azul-marinho com botão "Tipos" (expande; com `accessibilityRole`/`Label` — 2026-09-27) e o nome da categoria ativa (máx. 2 linhas, cor `#8FB3FF`).
+- **Estado expandido:** painel `#00142E` com título "Tipos" + "Ocultar" (recolhe; com `accessibilityRole`/`Label`), e `ScrollView` de botões (ativo: branco com texto azul; inativos: `bg-white/5` com borda branca 10%; cada botão com `accessibilityRole="button"` + `accessibilityLabel` + `accessibilityState`).
 
 ### 5.34 `assets/`
 
-- `icon.png` (ícone do app), `adaptive-icon.png` (foreground Android), `splash-icon.png` (splash), `favicon.png` (web). Referenciados por `app.json`. (`assets/react-icon.png`, citado no `App.tsx.bkp`, **não existe**.)
+- `icon.png` (ícone do app), `adaptive-icon.png` (foreground Android), `splash-icon.png` (splash), `favicon.png` (web). Referenciados por `app.json`. (`assets/react-icon.png`, citado no antigo `App.tsx.bkp` removido, nunca existiu no repositório.)
 
 ### 5.35 `.expo/devices.json`
 
@@ -750,28 +758,32 @@ Metadado local do Expo (`{"devices": []}`) — lista de dispositivos pareados; n
 
 ---
 
-## 6. Rastreio do caso de validação: "Ford Ranger Raptor"
+## 6. Rastreio do caso de validação: "Ford Ranger Raptor" (atualizado 2026-09-27 — fluxo CORRIGIDO)
 
-Passo a passo do que acontece hoje se o avaliador seguir o `Pedido_Desafio.txt`:
+Passo a passo do que acontece se o avaliador seguir o `Pedido_Desafio.txt`:
 
 1. Login (Firebase) → Home.
 2. Slot A: Marca `FORD` → Modelo `Ranger Raptor` → Versão `3.0 V6 EcoBoost`. (Slot B: vazio.)
-3. `useEffect [slots]` → `findVehicle({brand:'FORD', model:'Ranger Raptor', version:'3.0 V6 EcoBoost'})` → `findVariant` normaliza e acha o id `ford-ranger-raptor-3-0-v6-ecoboost-2026` (vehicles.json:888) → `resolveVehicle` herda as 264 specs do base `ford_nova_ranger_4x4_ltd_2026` (o **LTD**, primeiro id duplicado) e aplica as 19 sobrescritas → `vehicles` tem **1** veículo.
-4. `comparisonRows = getComparisonRows([raptor])` → **`[]`** (regra `< 2`).
-5. `ComparisonTable` → placeholder "Selecione dois veículos"; `RadarChart` → placeholder; `VehicleLegend` → `null`.
-6. **Resultado: nenhuma especificação é exibida.** A validação do desafio falha na UI, ainda que os dados estejam corretos no JSON.
+3. `useEffect [slots]` → `findVehicle({brand:'FORD', model:'Ranger Raptor', version:'3.0 V6 EcoBoost'})` → `findVariant` normaliza e acha o id `ford-ranger-raptor-3-0-v6-ecoboost-2026` → `resolveVehicle` herda as 263 specs do base `ford_nova_ranger_4x4_ltd_2026` (o **LTD** — id agora único e determinístico, P1-1) e aplica as 20 chaves declaradas → `vehicles` tem **1** veículo.
+4. `comparisonRows = getComparisonRows([raptor])` → **286 linhas** (3 fixas + 283 specs; regra `=== 0` desde o P0-1).
+5. `ComparisonTable` → **exibe a lista padronizada completa** com 1 coluna (Raptor): grupos por categoria com cabeçalho único, `N/A` nos vazios, `Não` nos booleans falsos, `3.0 L` na cilindrada. `RadarChart` → placeholder "Selecione um segundo veículo para comparar"; `VehicleLegend` → `null` (decisão de produto: radar só em 2+).
+6. **Resultado: a lista obrigatória é exibida.** ✔️ (antes: `[]` + placeholder → validação falhava na UI).
 
-Valores que o Raptor resolveria (confirmado simulando `resolveVehicle`): potência 397, torque 583, peso 2475 kg, cilindrada "3", economia 8.3, biturbo Sim, diesel Não, AWD Sim, Trail Control Sim, suspensão Fox Live Valve Sim, Terrain Management Sim, 7 airbags, multimídia 12", câmera 360 Sim, ACC Sim, BLIS Sim, INMETRO "E", pneus ATR 60/40 Sim, rodas 17. Dos 283 campos: 123 com valor, 152 `false` ("Não"), 8 `null` ("N/A"). **É preciso conferir esses números contra o slide oficial da Ranger Raptor** (o slide não está no repositório).
+Caso alternativo: marcar um subconjunto nos "Atributos" (ex.: Potência, Torque, Airbag, Câmera 360) → a tabela mostra 3 fixas + só as 4 marcadas, no mesmo formato. Comparação de 2 veículos continua igual (2 colunas).
+
+Valores que o Raptor resolve (confirmado simulando `resolveVehicle` e travados no `scripts/validate.mjs`): potência 397, torque 583, peso 2475, cilindrada 3 → exibida **"3.0 L"**, economia 8.3, biturbo Sim, diesel Não, AWD Sim, Trail Control Sim, suspensão Fox Live Valve Sim, Terrain Management Sim, 7 airbags, multimídia 12", câmera 360 Sim, ACC Sim, BLIS Sim, INMETRO "E", pneus ATR 60/40 Sim, rodas 17. Dos 283 campos: 124 com valor, 151 `false` ("Não"), 8 `null` ("N/A"). **Única pendência: conferir esses números contra o slide oficial** (o slide não está no repositório — pendência 1 do §0; o `npm run validate` garante que a demo não mude sem aviso).
 
 ---
 
-## 7. Resumo do que existe e do que não funciona (ponte para o Update.md)
+## 7. Resumo do estado do projeto (atualizado 2026-09-27)
 
-| Categoria | Itens |
+| Categoria | Estado |
 |---|---|
-| **Bloqueia a validação do desafio** | Tabela/radar exigem 2 veículos; caso de validação é 1 veículo |
-| **Integridade de dados** | IDs duplicados (LTD/LTD+); 9 specs numéricas como string; `cilindrada: "3"` ambíguo; Raptor herdando de um Ranger mockado |
-| **Código morto** | `app/details.tsx`, `components/Dropdown.tsx`, `App.tsx.bkp`, CRUD do `vehicleService` (`create/update/delete/getById`), `getSpecKey`, `getCurrentUser`, `isAuthenticated` (só pela tela órfã), `colors/fontFamily` do tema, `expo-status-bar`, `nativewind-env.d.ts` duplicado |
-| **Inconsistências menores** | `tailwind.config.js` aponta `./App.tsx` inexistente; filtro do service usa `!==` onde o resto usa `normalize`; key de React duplicada se o mesmo veículo for escolhido 2×; `handleCategorySelect` zera os slots até ao re-selecionar o mesmo tipo |
+| **Bloqueio da validação** | ✅ Resolvido (P0-1): a lista sai com 1 veículo; radar continua 2+ (decisão de produto) |
+| **Dados do Raptor** | ⚠️ 20 valores declarados travados no `validate.mjs`; **conferência final contra o slide oficial pendente** (slide fora do repositório) |
+| **Integridade de dados** | ✅ IDs únicos (LTD+ renomeado); ✅ números tipados (61 conversões); ✅ `cilindrada` 3.0 L com unidade; herança do Raptor agora determinística (LTD). Pendência: confirmar com o time a base dos 3 Titanium (P1-1 passo 2) |
+| **Código morto** | ✅ Tudo removido (P3-1): `details.tsx`, `Dropdown.tsx`, `App.tsx.bkp`, CRUD do service, `getSpecKey`, `getCurrentUser`, `isAuthenticated`, `colors`/`fontFamily`, `nativewind-env.d.ts` duplicado; `expo-status-bar` agora é usada (P3-2) |
+| **Inconsistências menores** | ✅ `tailwind.config.js` corrigido; ✅ filtro único via `filterVehicles`; ✅ keys de React por posição + bloqueio de veículo duplicado; ✅ slots só zeram quando o tipo muda |
+| **Testes** | ✅ `npm run validate` (ids, specs × schema, heranças, Raptor); `tsc --noEmit` limpo |
 
-Detalhe, prioridade e como corrigir cada item: **Update.md**.
+O plano original com prioridade e racional de cada item: **Update.md**. O que foi feito e o que ficou pendente: **§0 (Log de alterações)**.

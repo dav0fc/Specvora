@@ -59,6 +59,9 @@ export function SearchSelect({
 
       <TouchableOpacity
         activeOpacity={disabled ? 1 : 0.82}
+        accessibilityRole="button"
+        accessibilityLabel={`${label}: ${value ?? 'Selecionar'}`}
+        accessibilityState={{ disabled }}
         onPress={open}
         className={`rounded-2xl border px-4 ${
           compact ? 'py-3' : 'py-4'
@@ -87,7 +90,11 @@ export function SearchSelect({
           >
             <View className="mb-4 flex-row items-center justify-between">
               <Text className="text-lg font-bold text-[#00142E]">{label}</Text>
-              <TouchableOpacity onPress={close}>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Fechar"
+                onPress={close}
+              >
                 <Text className="text-sm font-bold text-[#00095B]">Fechar</Text>
               </TouchableOpacity>
             </View>
@@ -99,6 +106,7 @@ export function SearchSelect({
               value={term}
               onChangeText={setTerm}
               autoCapitalize="none"
+              accessibilityLabel={`Buscar ${label.toLowerCase()}`}
             />
 
             <FlatList
@@ -117,6 +125,9 @@ export function SearchSelect({
                 return (
                   <Pressable
                     className="py-4"
+                    accessibilityRole="button"
+                    accessibilityLabel={item}
+                    accessibilityState={{ selected }}
                     onPress={() => {
                       onSelect(item);
                       close();

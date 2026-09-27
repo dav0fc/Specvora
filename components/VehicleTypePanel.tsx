@@ -27,6 +27,8 @@ export function VehicleTypePanel({
       >
         <TouchableOpacity
           activeOpacity={0.82}
+          accessibilityRole="button"
+          accessibilityLabel="Expandir lista de tipos de veículo"
           onPress={onToggle}
           className="w-full rounded-2xl bg-white px-2 py-4"
         >
@@ -53,7 +55,11 @@ export function VehicleTypePanel({
       <View className="mb-6 flex-row items-center justify-between">
         <Text className="text-2xl font-bold text-white">Tipos</Text>
 
-        <TouchableOpacity onPress={onToggle}>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Recolher painel de tipos"
+          onPress={onToggle}
+        >
           <Text className="text-sm font-bold text-[#8FB3FF]">Ocultar</Text>
         </TouchableOpacity>
       </View>
@@ -67,6 +73,9 @@ export function VehicleTypePanel({
             <TouchableOpacity
               key={label}
               activeOpacity={0.82}
+              accessibilityRole="button"
+              accessibilityLabel={`Tipo de veículo: ${label}`}
+              accessibilityState={{ selected: active }}
               onPress={() => onSelect(category)}
               className={`mb-2 rounded-2xl border px-4 py-4 ${
                 active

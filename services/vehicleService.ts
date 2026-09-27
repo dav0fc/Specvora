@@ -1,14 +1,13 @@
 import {
+  filterVehicles,
   findVariant,
   getBrands,
   getModels,
   getVehicleCategories,
   getVersions,
-  makeVehicleId,
   resolveVehicles,
   Vehicle,
   VehicleFilters,
-  VehicleInput,
   VehicleRecord,
   VehicleSearchParams,
   vehicleSeed,
@@ -45,13 +44,7 @@ export async function listVehicles(filters?: VehicleFilters) {
 
   const source = vehiclesFromApi ?? getLocalVehicles();
 
-  return source.filter((vehicle) => {
-    if (filters?.category && vehicle.vehicleCategory !== filters.category) return false;
-    if (filters?.brand && vehicle.brand !== filters.brand) return false;
-    if (filters?.model && vehicle.model !== filters.model) return false;
-
-    return true;
-  });
+  return filterVehicles(source, filters);
 }
 
 export async function listVehicleCategories() {
@@ -87,68 +80,4 @@ export async function findVehicle(params: VehicleSearchParams) {
   if (vehicleFromApi) return vehicleFromApi;
 
   return findVariant(params, getLocalVehicles());
-}
-
-export async function getVehicleById(vehicleId: string) {
-  const vehicleFromApi = await request<Vehicle>(`/vehicles/${vehicleId}`);
-
-  if (vehicleFromApi) return vehicleFromApi;
-
-  return getLocalVehicles().find((vehicle) => vehicle.id === vehicleId) ?? null;
-}
-
-export async function createVehicle(input: VehicleInput) {
-  const createdFromApi = await request<Vehicle>('/vehicles', {
-    method: 'POST',
-    body: JSON.stringify(input),
-  });
-
-  if (createdFromApi) return createdFromApi;
-
-  const id = input.id ?? makeVehicleId(input);
-  const newVehicle: VehicleRecord = {
-    ...input,
-    id,
-  };
-
-  localVehicles = [...localVehicles, newVehicle];
-
-  return getVehicleById(id);
-}
-
-export async function updateVehicle(vehicleId: string, input: Partial<VehicleInput>) {
-  const updatedFromApi = await request<Vehicle>(`/vehicles/${vehicleId}`, {
-    method: 'PUT',
-    body: JSON.stringify(input),
-  });
-
-  if (updatedFromApi) return updatedFromApi;
-
-  localVehicles = localVehicles.map((vehicle) =>
-    vehicle.id === vehicleId
-      ? {
-          ...vehicle,
-          ...input,
-          id: vehicleId,
-          specs: {
-            ...vehicle.specs,
-            ...(input.specs ?? {}),
-          },
-        }
-      : vehicle
-  );
-
-  return getVehicleById(vehicleId);
-}
-
-export async function deleteVehicle(vehicleId: string) {
-  const deletedFromApi = await request<{ ok: boolean }>(`/vehicles/${vehicleId}`, {
-    method: 'DELETE',
-  });
-
-  if (deletedFromApi) return deletedFromApi.ok;
-
-  localVehicles = localVehicles.filter((vehicle) => vehicle.id !== vehicleId);
-
-  return true;
 }

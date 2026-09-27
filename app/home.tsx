@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -8,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AttributeSelector } from '../components/AttributeSelector';
 import { ComparisonTable } from '../components/ComparisonTable';
@@ -21,6 +23,7 @@ import {
   getAttributeOptions,
   getComparisonRows,
   getRadarMetrics,
+  normalize,
   Vehicle,
 } from '../data/vehicles';
 import { logoutUser, waitForAuthState } from '../services/authService';
@@ -53,6 +56,7 @@ function getUserName(displayName?: string | null, email?: string | null) {
 export default function HomeScreen() {
   const router = useRouter();
   const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   const isTablet = width >= 768;
 
@@ -142,14 +146,36 @@ export default function HomeScreen() {
   );
 
   function updateSlot(slotId: string, nextSlot: ComparisonSlot) {
+    const isComplete = Boolean(nextSlot.brand && nextSlot.model && nextSlot.version);
+    const other = slots.find(
+      (slot) => slot.id !== slotId && slot.brand && slot.model && slot.version
+    );
+
+    if (isComplete && nextSlot.brand && nextSlot.model && nextSlot.version && other) {
+      const isSameVehicle =
+        normalize(nextSlot.brand) === normalize(other.brand!) &&
+        normalize(nextSlot.model) === normalize(other.model!) &&
+        normalize(nextSlot.version) === normalize(other.version!);
+
+      if (isSameVehicle) {
+        Alert.alert('Veículo duplicado', `Este veículo já está selecionado no ${other.label}.`);
+        return;
+      }
+    }
+
     setSlots((currentSlots) =>
       currentSlots.map((slot) => (slot.id === slotId ? nextSlot : slot))
     );
   }
 
   function handleCategorySelect(category: string | null) {
+    const changed = category !== selectedCategory;
     setSelectedCategory(category);
-    setSlots([createSlot(0), createSlot(1)]);
+
+    if (changed) {
+      setSlots([createSlot(0), createSlot(1)]);
+    }
+
     setDrawerVisible(false);
   }
 
@@ -182,7 +208,10 @@ export default function HomeScreen() {
           className="h-full border-r border-[#D8E3F2] bg-white"
           style={{ width: selectorWidth }}
         >
-          <View className="border-b border-[#D8E3F2] px-5 pb-5 pt-7">
+          <View
+            className="border-b border-[#D8E3F2] px-5 pb-5"
+            style={{ paddingTop: insets.top + 28 }}
+          >
             <View className="flex-row items-center justify-between gap-4">
               <Text className="flex-1 text-2xl font-bold text-[#00142E]" numberOfLines={1}>
                 {userName}
@@ -190,6 +219,8 @@ export default function HomeScreen() {
 
               <TouchableOpacity
                 activeOpacity={0.82}
+                accessibilityRole="button"
+                accessibilityLabel="Sair da conta"
                 onPress={handleLogout}
                 className="rounded-full border border-[#D8E3F2] px-4 py-3"
               >
@@ -248,7 +279,10 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-[#F5F8FC]">
-      <View className="border-b border-[#D8E3F2] bg-white px-4 pb-4 pt-5">
+      <View
+        className="border-b border-[#D8E3F2] bg-white px-4 pb-4"
+        style={{ paddingTop: insets.top + 20 }}
+      >
         <View className="flex-row items-center justify-between gap-3">
           <Text className="flex-1 text-2xl font-bold text-[#00142E]" numberOfLines={1}>
             {userName}
@@ -257,6 +291,8 @@ export default function HomeScreen() {
           <View className="flex-row items-center gap-2">
             <TouchableOpacity
               activeOpacity={0.82}
+              accessibilityRole="button"
+              accessibilityLabel="Sair da conta"
               onPress={handleLogout}
               className="rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3"
             >
@@ -265,6 +301,8 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               activeOpacity={0.82}
+              accessibilityRole="button"
+              accessibilityLabel={`Tipo de veículo atual: ${selectedCategory ?? 'Todos'}. Toque para trocar.`}
               onPress={() => setDrawerVisible(true)}
               className="rounded-2xl border border-[#D8E3F2] bg-[#F5F8FC] px-4 py-3"
             >

@@ -73,6 +73,8 @@ export function AttributeSelector({
 
         <TouchableOpacity
           activeOpacity={0.82}
+          accessibilityRole="button"
+          accessibilityLabel="Selecionar atributos"
           onPress={() => setVisible(true)}
           className="rounded-2xl bg-[#00095B] px-4 py-3"
         >
@@ -81,7 +83,12 @@ export function AttributeSelector({
       </View>
 
       {selectedKeys.length > 0 && (
-        <TouchableOpacity activeOpacity={0.82} onPress={clearSelection}>
+        <TouchableOpacity
+          activeOpacity={0.82}
+          accessibilityRole="button"
+          accessibilityLabel="Mostrar todos os atributos"
+          onPress={clearSelection}
+        >
           <Text className="text-sm font-bold text-[#00095B]">Mostrar todos</Text>
         </TouchableOpacity>
       )}
@@ -100,7 +107,11 @@ export function AttributeSelector({
                 </Text>
               </View>
 
-              <TouchableOpacity onPress={close}>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="Fechar"
+                onPress={close}
+              >
                 <Text className="text-sm font-bold text-[#00095B]">Fechar</Text>
               </TouchableOpacity>
             </View>
@@ -112,11 +123,14 @@ export function AttributeSelector({
               value={term}
               onChangeText={setTerm}
               autoCapitalize="none"
+              accessibilityLabel="Buscar equipamento ou atributo"
             />
 
             <View className="mb-3 flex-row gap-2">
               <TouchableOpacity
                 activeOpacity={0.82}
+                accessibilityRole="button"
+                accessibilityLabel="Selecionar todos os atributos"
                 onPress={() => onChange(options.map((option) => option.key))}
                 className="flex-1 rounded-2xl border border-[#D8E3F2] bg-[#F5F8FC] px-4 py-3"
               >
@@ -127,6 +141,8 @@ export function AttributeSelector({
 
               <TouchableOpacity
                 activeOpacity={0.82}
+                accessibilityRole="button"
+                accessibilityLabel="Limpar seleção de atributos"
                 onPress={clearSelection}
                 className="flex-1 rounded-2xl border border-[#D8E3F2] bg-white px-4 py-3"
               >
@@ -152,6 +168,9 @@ export function AttributeSelector({
                 return (
                   <Pressable
                     className="flex-row items-center py-4"
+                    accessibilityRole="checkbox"
+                    accessibilityLabel={`${item.label}, categoria ${item.category}`}
+                    accessibilityState={{ selected }}
                     onPress={() => toggleAttribute(item.key)}
                   >
                     <View

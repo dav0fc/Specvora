@@ -25,11 +25,11 @@ Transformar uma base de dados técnica em uma ferramenta clara para consulta, co
 - Lista livre de atributos técnicos/equipamentos desejados
   
 ## Saída da aplicação
-- Lista padronizada de especificações técnicas
+- Lista padronizada de especificações técnicas (com 1 ou 2 veículos)
 - Campos claros, organizados e comparáveis
 - Exibição explícita de informações indisponíveis como `N/A`
 - Comparação entre dois veículos
-- Gráfico radar como visualização complementar
+- Gráfico radar como visualização complementar (somente na comparação de 2 veículos)
 
 ## Tecnologias utilizadas
 - React Native
@@ -78,3 +78,8 @@ w  # Web (quando aplicável)
 - `npm run android`: abre no emulador Android
 - `npm run ios`: abre no simulador iOS
 - `npm run web`: abre no navegador (quando aplicável)
+- `npm run validate`: valida o banco de dados (ids únicos, specs × schema, heranças e os valores do Ranger Raptor usados na validação do desafio) — rode antes de qualquer demo
+
+### Observações sobre o Firebase
+- As credenciais em `firebase/config.ts` são do app **web** do projeto `specvoraauth` no Firebase Console (chave de cliente, pública por natureza). Funciona no React Native, mas o ideal para um app dedicado é criar um app **React Native** no console (appId com sufixo `rn:`) e trocar as credenciais.
+- A **recuperação de senha** depende de um endereço de email de contato configurado no Firebase Console (Authentication → Settings). Sem ele, o link de recuperação não é entregue.

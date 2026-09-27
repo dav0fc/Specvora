@@ -36,7 +36,11 @@ export function VehicleTypeDrawer({
           <View className="mb-6 flex-row items-center justify-between">
             <Text className="text-2xl font-bold text-[#00142E]">Tipo</Text>
 
-            <TouchableOpacity onPress={onClose}>
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel="Fechar"
+              onPress={onClose}
+            >
               <Text className="text-sm font-bold text-[#00095B]">Fechar</Text>
             </TouchableOpacity>
           </View>
@@ -50,6 +54,9 @@ export function VehicleTypeDrawer({
                 <TouchableOpacity
                   key={label}
                   activeOpacity={0.82}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Tipo de veículo: ${label}`}
+                  accessibilityState={{ selected: active }}
                   onPress={() => onSelect(category)}
                   className={`mb-3 rounded-2xl border px-4 py-4 ${
                     active
@@ -68,7 +75,7 @@ export function VehicleTypeDrawer({
           </ScrollView>
         </View>
 
-        <Pressable className="flex-1" onPress={onClose} />
+        <Pressable className="flex-1" accessibilityLabel="Fechar" onPress={onClose} />
       </View>
     </Modal>
   );

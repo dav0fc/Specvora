@@ -43,9 +43,14 @@ export function RadarChart({ series, size = 300 }: RadarChartProps) {
   const levels = [0.25, 0.5, 0.75, 1];
 
   if (series.length < 2 || metrics.length === 0) {
+    const placeholder =
+      series.length === 0
+        ? 'Selecione um veículo'
+        : 'Selecione um segundo veículo para comparar';
+
     return (
       <View className="h-72 items-center justify-center rounded-3xl bg-[#F5F8FC]">
-        <Text className="text-sm font-bold text-[#7C93AF]">Selecione dois veículos</Text>
+        <Text className="text-sm font-bold text-[#7C93AF]">{placeholder}</Text>
       </View>
     );
   }
@@ -93,9 +98,9 @@ export function RadarChart({ series, size = 300 }: RadarChartProps) {
           );
         })}
 
-        {series.map((item) => (
+        {series.map((item, index) => (
           <Polygon
-            key={item.name}
+            key={`serie-${index}`}
             points={polygonPoints(item.values, center, maxRadius)}
             fill={item.color}
             fillOpacity={0.12}
