@@ -1,0 +1,19 @@
+O que deve ser criado
+Desenvolver uma ferramenta / modelo / solução que permita receber dados técnicos da concorrência a partir de uma entrada simples e gerar uma lista padronizada de especificações.
+A abordagem técnica é livre(IA, modelos híbridos, regras, automação, outras soluções).
+Entradas obrigatórias
+A ferramenta deve permitir que o usuário defina livremente a lista de equipamentos / atributos técnicos que deseja pesquisar.
+Juntamente com:
+Marca
+Modelo
+Versão
+Saída obrigatória
+Uma lista de especificações técnicas
+O formato da lista deve ser sempre o mesmo, independentemente do veículo
+Os campos devem ser claros, organizados e comparáveis
+Caso alguma informação não exista, isso deve ficar explícito (ex: vazio / não disponível)
+Validação da solução
+Para validar se a solução funciona corretamente:
+Utilizem a Ford Ranger Raptor
+A solução deve conseguir entregar corretamente todas as especificações técnicas apresentadas no slide da Ranger Raptor
+Se os dados forem entregues de forma clara, organizada e consistente, entendemos que a solução está operando corretamente

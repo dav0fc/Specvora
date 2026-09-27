@@ -54,7 +54,7 @@ Transformar uma base de dados técnica em uma ferramenta clara para consulta, co
 ### Pré-requisitos
 - Node.js LTS instalado
 - Expo CLI (opcional) ou npx
-- iOS Simulator/Xcode ou Android Studio/Emulador, ou o aplicativo Expo Go no celular
+- iOS Simulator/Xcode ou Android Studio/Emulador, ou o aplicativo Expo Go SDK 53 no celular
 
 ### Como iniciar
 1. Instale as dependências:
