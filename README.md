@@ -1,3 +1,6 @@
+# LINK DO APK
+https://mega.nz/file/j41BWQAR#uhXVsxZ_UcRuyzoEleKUTTD_qhOr5dLfLSAnOKIFmno
+
 # SPECVORA — Sprint Mobile Development and IoT
 ## Integrantes do grupo
 
